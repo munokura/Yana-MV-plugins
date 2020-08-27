@@ -11,10 +11,12 @@
 //
 
 var Imported = Imported || {};
-Imported['BeforeCommon'] = 1.01;
+Imported['BeforeCommon'] = 1.02;
 
 /*:
- * @plugindesc ver1.01/スキルやアイテムの発動前に、スキルやアイテムに設定されたコモンイベントを発生させます。
+ * @target MZ MV
+ * @url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Battle/BeforeCommon.js
+ * @plugindesc ver1.02/スキルやアイテムの発動前に、スキルやアイテムに設定されたコモンイベントを発生させます。
  * @author Yana
  *
  * @param IndexVariableID
@@ -60,6 +62,8 @@ Imported['BeforeCommon'] = 1.01;
  * 素材利用は自己責任でお願いします。
  * ------------------------------------------------------
  * 更新履歴:
+ * ver1.02:
+ * RPGツクールMZでの動作を確認。
  * ver1.01:
  * 対象を保存する変数の設定を追加。
  * ver1.00:
@@ -80,15 +84,15 @@ Imported['BeforeCommon'] = 1.01;
     ////////////////////////////////////////////////////////////////////////////////////
 
     DataManager.isBeforeCommon = function(item) {
-        if (!item){ return false }
-        if (item.meta['発動前コモン']){ return true }
-        if (item.meta['BeforeCommon']){ return true }
+        if (!item) { return false }
+        if (item.meta['発動前コモン']) { return true }
+        if (item.meta['BeforeCommon']) { return true }
         return false;
     };
-    
+
     DataManager.beforeCommonEffect = function(item) {
         var effects = [];
-        if (item.meta['発動前コモン']){ 
+        if (item.meta['発動前コモン']) {
             effects = Number(item.meta['発動前コモン']);
         } else if (item.meta['BeforeCommon']) {
             effects = Number(item.meta['BeforeCommon']);
@@ -97,7 +101,7 @@ Imported['BeforeCommon'] = 1.01;
     };
 
     ////////////////////////////////////////////////////////////////////////////////////
-    
+
     var __BManager_startAction = BattleManager.startAction;
     BattleManager.startAction = function() {
         var action = this._subject.currentAction();
@@ -107,11 +111,11 @@ Imported['BeforeCommon'] = 1.01;
     };
 
     BattleManager.checkBeforeCommon = function(action) {
-        if (action && !this._execBeforeCommon && DataManager.isBeforeCommon(action.item())){
+        if (action && !this._execBeforeCommon && DataManager.isBeforeCommon(action.item())) {
             this._execBeforeCommon = true;
             var beforeCommon = DataManager.beforeCommonEffect(action.item());
             $gameTemp.reserveCommonEvent(beforeCommon);
-            var sId =  this._subject.index();
+            var sId = this._subject.index();
             var tId = action._targetIndex;
             if (this._subject.isEnemy()) sId += 1000;
             if (this._subject.isActor() && action.isForOpponent() && tId >= 0) tId += 1000;
@@ -128,8 +132,8 @@ Imported['BeforeCommon'] = 1.01;
     ////////////////////////////////////////////////////////////////////////////////////
 
     var __GBattler_removeCurrentAction = Game_Battler.prototype.removeCurrentAction;
-    Game_Battler.prototype.removeCurrentAction = function () {
-        if (!BattleManager._execBeforeCommon){
+    Game_Battler.prototype.removeCurrentAction = function() {
+        if (!BattleManager._execBeforeCommon) {
             __GBattler_removeCurrentAction.call(this);
         }
     };
