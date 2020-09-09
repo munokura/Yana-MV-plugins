@@ -1,5 +1,5 @@
 //
-//  陣形 ver1.04
+//  陣形 ver1.05
 //
 // ------------------------------------------------------
 // Copyright (c) 2016 Yana
@@ -11,9 +11,9 @@
 //
 
 var Imported = Imported || {};
-Imported['BattleFormation'] = 1.04;
+Imported['BattleFormation'] = 1.05;
 /*:
- * @plugindesc ver1.04/陣形の仕組みを追加します。
+ * @plugindesc ver1.05/陣形の仕組みを追加します。
  * @author Yana
  *
  * @param
@@ -342,6 +342,9 @@ Imported['BattleFormation'] = 1.04;
  * 素材利用は自己責任でお願いします。
  * ------------------------------------------------------
  * 更新履歴:
+ * 継承元をWindow_Selectableにするべき場所をWindow_Baseにしているバグを修正。
+ * by しぐれん
+ * ver1.05:
  * ver1.04:
  * 入手インフォメーションの機能追加に合わせて、一部の処理を修正。
  * ver1.03:
@@ -1040,7 +1043,8 @@ Imported['BattleFormation'] = 1.04;
         this.initialize.apply(this, arguments);
     }
 
-    Window_BFParameter.prototype = Object.create(Window_Base.prototype);
+//    Window_BFParameter.prototype = Object.create(Window_Base.prototype);
+    Window_BFParameter.prototype = Object.create(Window_Selectable.prototype);	//shigureya
     Window_BFParameter.prototype.constructor = Window_BFParameter;
 
     Window_BFParameter.prototype.initialize = function() {
