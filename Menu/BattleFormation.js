@@ -1,5 +1,5 @@
 //
-//  陣形 ver1.05
+//  陣形 ver1.06
 //
 // ------------------------------------------------------
 // Copyright (c) 2016 Yana
@@ -11,9 +11,9 @@
 //
 
 var Imported = Imported || {};
-Imported['BattleFormation'] = 1.05;
+Imported['BattleFormation'] = 1.06;
 /*:
- * @plugindesc ver1.05/陣形の仕組みを追加します。
+ * @plugindesc ver1.06/陣形の仕組みを追加します。
  * @author Yana
  *
  * @param
@@ -342,9 +342,12 @@ Imported['BattleFormation'] = 1.05;
  * 素材利用は自己責任でお願いします。
  * ------------------------------------------------------
  * 更新履歴:
- * 継承元をWindow_Selectableにするべき場所をWindow_Baseにしているバグを修正。
+ * ver1.06:
+ * Scene_BattleFormation.prototype.isBottomHelpMode を追加。
  * by しぐれん
  * ver1.05:
+ * 継承元をWindow_Selectableにするべき場所をWindow_Baseにしているバグを修正。
+ * by しぐれん
  * ver1.04:
  * 入手インフォメーションの機能追加に合わせて、一部の処理を修正。
  * ver1.03:
@@ -359,7 +362,7 @@ Imported['BattleFormation'] = 1.05;
  * 公開
  */
 
-(function() {
+(function () {
     ////////////////////////////////////////////////////////////////////////////////////
 
     var parameters = PluginManager.parameters('BattleFormation');
@@ -372,7 +375,7 @@ Imported['BattleFormation'] = 1.05;
     var showParamWindow = parameters['ShowParamWindow'] === 'true';
     var paramWindowWidth = Number(parameters['ParamWindowWidth']) || 220;
     var menuBattleFormationTitle = parameters['MenuBattleFormationTitle'];
-    var basicWinExp = parseInt(parameters['BasicWinExp'],10);
+    var basicWinExp = parseInt(parameters['BasicWinExp'], 10);
     var masterText = parameters['MasterText'];
     var levelUpText = parameters['LevelUpText'];
     var masterFormText = parameters['MasterFormText'];
@@ -387,28 +390,28 @@ Imported['BattleFormation'] = 1.05;
     var expGaugeColor2 = parameters['ExpGaugeColor2'] || 'rgba(0,0,255,1.0)';
     var basicFormations = [];
     var paramVocab = [];
-    
-    for (var i=1;i<=10;i++) {
+
+    for (var i = 1; i <= 10; i++) {
         var key = 'HomePosition' + i;
-        basicFormations[i-1] = parameters[key].split(' ');
+        basicFormations[i - 1] = parameters[key].split(' ');
     }
 
-    for (var i=1;i<=7;i++) {
+    for (var i = 1; i <= 7; i++) {
         var key = 'ParamText' + i;
-        paramVocab[i-1] = parameters[key].split(',');
+        paramVocab[i - 1] = parameters[key].split(',');
     }
 
     ////////////////////////////////////////////////////////////////////////////////////
-    
-    DataManager.formationStatus = function(item) {
+
+    DataManager.formationStatus = function (item) {
         if (!item) return this.basicFormation();
         if (item._formationStatus) return item._formationStatus;
         item._formationStatus = [];
         var texts = item.note.split('\n');
-        for (var i=0,max=texts.length;i<max;i++) {
+        for (var i = 0, max = texts.length; i < max; i++) {
             var text = texts[i];
             if (text.match(/^<陣形設定>/)) {
-                for (var j=i;j<max;j++) {
+                for (var j = i; j < max; j++) {
                     var stext = texts[j];
                     if (stext.match(/<\/陣形設定>/)) {
                         i = j;
@@ -416,10 +419,10 @@ Imported['BattleFormation'] = 1.05;
                     }
                     if (stext.match(/(\d+),(\d+),(\d+),?(.+)?/)) {
                         var obj = {
-                            x:parseInt(RegExp.$1,10),
-                            y:parseInt(RegExp.$2,10),
-                            classId:parseInt(RegExp.$3,10),
-                            cond:RegExp.$4
+                            x: parseInt(RegExp.$1, 10),
+                            y: parseInt(RegExp.$2, 10),
+                            classId: parseInt(RegExp.$3, 10),
+                            cond: RegExp.$4
                         };
                         item._formationStatus.push(obj);
                     }
@@ -429,7 +432,7 @@ Imported['BattleFormation'] = 1.05;
         return item._formationStatus;
     };
 
-    DataManager.bfExps = function(item) {
+    DataManager.bfExps = function (item) {
         if (!item) return [];
         var ary = [];
         if (item && item.meta['陣形経験値設定'] || item.meta['FormationExpSetting']) {
@@ -438,21 +441,21 @@ Imported['BattleFormation'] = 1.05;
                     return parseInt(n, 10)
                 });
             } else if (item.meta['FormationExpSetting']) {
-                ary = item.meta['FormationExpSetting'].split(',').map(function(n){
-                    return parseInt(n,10)
+                ary = item.meta['FormationExpSetting'].split(',').map(function (n) {
+                    return parseInt(n, 10)
                 });
             }
         }
         return ary;
     };
 
-    DataManager.basicFormation = function() {
+    DataManager.basicFormation = function () {
         var size = $gameParty.battleMembers().length;
-        var homes = basicFormations[size-1];
+        var homes = basicFormations[size - 1];
         var ary = [];
-        for (var i=0;i<size;i++) {
-            var home = homes[i].split(',').map(function(n){ return parseInt(n,10) });
-            ary.push({x:home[0],y:home[1],classId:0});
+        for (var i = 0; i < size; i++) {
+            var home = homes[i].split(',').map(function (n) { return parseInt(n, 10) });
+            ary.push({ x: home[0], y: home[1], classId: 0 });
         }
         return ary;
     };
@@ -460,18 +463,18 @@ Imported['BattleFormation'] = 1.05;
     ////////////////////////////////////////////////////////////////////////////////////
 
     var __BManager_startBattle = BattleManager.startBattle;
-    BattleManager.startBattle = function() {
+    BattleManager.startBattle = function () {
         __BManager_startBattle.call(this);
     };
 
     var __BManager_startInput = BattleManager.startInput;
-    BattleManager.startInput = function() {
+    BattleManager.startInput = function () {
         __BManager_startInput.call(this);
         $gameParty.checkBattleFormation();
     };
 
     var __BManager_processVictory = BattleManager.processVictory;
-    BattleManager.processVictory = function() {
+    BattleManager.processVictory = function () {
         var lv = $gameParty.currentBfLevel();
         $gameParty.increaseFormationExp();
         this._upBfLevel = $gameParty.currentBfLevel() - lv;
@@ -479,18 +482,18 @@ Imported['BattleFormation'] = 1.05;
     };
 
     var __BManager_displayRewards = BattleManager.displayRewards;
-    BattleManager.displayRewards = function() {
+    BattleManager.displayRewards = function () {
         __BManager_displayRewards.call(this);
         if (this._upBfLevel) this.displayBfLevel();
     };
 
-    BattleManager.displayBfLevel = function() {
+    BattleManager.displayBfLevel = function () {
         var item = $gameParty.battleFormation();
         var text = '';
         if ($gameParty.isMaxBfLevel(item.id)) {
-            text = masterFormText.replace(/_name/,item.name);
+            text = masterFormText.replace(/_name/, item.name);
         } else {
-            text = levelUpText.replace(/_name/,item.name);
+            text = levelUpText.replace(/_name/, item.name);
         }
         $gameMessage.add('\\.' + text);
     };
@@ -499,7 +502,7 @@ Imported['BattleFormation'] = 1.05;
     ////////////////////////////////////////////////////////////////////////////////////
 
     var __GInterpreter_pluginCommand = Game_Interpreter.prototype.pluginCommand;
-    Game_Interpreter.prototype.pluginCommand = function(command, args) {
+    Game_Interpreter.prototype.pluginCommand = function (command, args) {
         __GInterpreter_pluginCommand.call(this, command, args);
         if (command === '陣形' || command === 'BattleFormation') {
             switch (args[0]) {
@@ -509,21 +512,21 @@ Imported['BattleFormation'] = 1.05;
                     break;
                 case '設定':
                 case 'Set':
-                    var id = parseInt(args[1],10);
+                    var id = parseInt(args[1], 10);
                     var item = $dataItems[id];
                     $gameParty.setBattleFormation(item);
             }
         }
     };
 
-    Game_Interpreter.prototype.callSceneBattleFormation = function() {
+    Game_Interpreter.prototype.callSceneBattleFormation = function () {
         SceneManager.push(Scene_BattleFormation);
     };
 
     ////////////////////////////////////////////////////////////////////////////////////
 
     var __GActor_paramPlus = Game_Actor.prototype.paramPlus;
-    Game_Actor.prototype.paramPlus = function(paramId) {
+    Game_Actor.prototype.paramPlus = function (paramId) {
         var value = __GActor_paramPlus.call(this, paramId);
         if ($gameParty.formationEnable() && this._bfClass) {
             var cl = $dataClasses[this._bfClass];
@@ -535,7 +538,7 @@ Imported['BattleFormation'] = 1.05;
     };
 
     var __GActor_traitObjects = Game_Actor.prototype.traitObjects;
-    Game_Actor.prototype.traitObjects = function() {
+    Game_Actor.prototype.traitObjects = function () {
         var result = __GActor_traitObjects.call(this);
         if ($gameParty.formationEnable() && this._bfClass) {
             var cl = $dataClasses[this._bfClass];
@@ -545,16 +548,16 @@ Imported['BattleFormation'] = 1.05;
     };
 
     var __GActor_skills = Game_Actor.prototype.skills;
-    Game_Actor.prototype.skills = function() {
+    Game_Actor.prototype.skills = function () {
         var result = __GActor_skills.call(this);
         return result.concat(this.bfClassSkills());
     };
 
-    Game_Actor.prototype.bfClassSkills = function() {
+    Game_Actor.prototype.bfClassSkills = function () {
         var result = [];
         if ($gameParty.formationEnable() && this._bfClass) {
             var cl = $dataClasses[this._bfClass];
-            for (var i=0,max=cl.learnings.length;i<max;i++) {
+            for (var i = 0, max = cl.learnings.length; i < max; i++) {
                 var l = cl.learnings[i];
                 if ($gameParty.currentBfLevel() >= l.level) {
                     result.push($dataSkills[l.skillId]);
@@ -564,10 +567,11 @@ Imported['BattleFormation'] = 1.05;
         return result;
     };
 
-    Game_Actor.prototype.checkFormationEnable = function(cond, id) {
+    Game_Actor.prototype.checkFormationEnable = function (cond, id) {
         if (this.isDead()) return false;
-        if (this.traitObjects().some(function(t){
-            return (t.meta['陣形無効'] || t.meta['InvalidFormation']) })) return false;
+        if (this.traitObjects().some(function (t) {
+            return (t.meta['陣形無効'] || t.meta['InvalidFormation'])
+        })) return false;
         var pf = $gameParty.battleFormation();
         if (pf && id === pf.id) cond = this._bfCond;
         if (!cond) return true;
@@ -578,7 +582,7 @@ Imported['BattleFormation'] = 1.05;
 
     if (Imported['yPassiveSkill']) {
         var __GActor_enableSkills = Game_Actor.prototype.enableSkills;
-        Game_Actor.prototype.enableSkills = function() {
+        Game_Actor.prototype.enableSkills = function () {
             var skills = __GActor_enableSkills.call(this);
             return skills.concat(this.bfClassSkills());
         }
@@ -586,19 +590,19 @@ Imported['BattleFormation'] = 1.05;
 
     ////////////////////////////////////////////////////////////////////////////////////
 
-    Game_Party.prototype.refreshBattleFormation = function() {
+    Game_Party.prototype.refreshBattleFormation = function () {
         var formation = this.battleFormation();
         this.setBattleFormation(formation);
         this.checkBattleFormation();
     };
 
-    Game_Party.prototype.battleFormation = function() {
+    Game_Party.prototype.battleFormation = function () {
         if (!this._battleFormation) this._battleFormation = [];
         var id = this._battleFormation[this.battleMembers().length];
         return $dataItems[id];
     };
 
-    Game_Party.prototype.setBattleFormation = function(formation) {
+    Game_Party.prototype.setBattleFormation = function (formation) {
         if (!this._battleFormation) this._battleFormation = [];
         var members = this.battleMembers();
         var size = members.length;
@@ -618,14 +622,14 @@ Imported['BattleFormation'] = 1.05;
         }
     };
 
-    Game_Party.prototype.checkBattleFormation = function() {
+    Game_Party.prototype.checkBattleFormation = function () {
         this._formationEnable = this.isEnableBattleFormation();
     };
 
-    Game_Party.prototype.isEnableBattleFormation = function(id) {
+    Game_Party.prototype.isEnableBattleFormation = function (id) {
         var members = this.battleMembers();
         var status = DataManager.formationStatus($dataItems[id]);
-        for (var i=0,max=members.length;i<max;i++) {
+        for (var i = 0, max = members.length; i < max; i++) {
             var member = members[i];
             if (!member.checkFormationEnable(status[i].cond, id)) {
                 return false;
@@ -634,44 +638,44 @@ Imported['BattleFormation'] = 1.05;
         return true;
     };
 
-    Game_Party.prototype.formationEnable = function() {
+    Game_Party.prototype.formationEnable = function () {
         return this.inBattle() && this._formationEnable;
     };
 
-    Game_Party.prototype.bfLevel = function(id) {
+    Game_Party.prototype.bfLevel = function (id) {
         if (!this._bfExps) return 1;
         if (!this._bfExps[id]) return 1;
         return this.levelForBfExp(id);
     };
 
-    Game_Party.prototype.currentBfLevel = function() {
+    Game_Party.prototype.currentBfLevel = function () {
         var item = this.battleFormation();
         if (!item) return 1;
         return this.bfLevel(item.id);
     };
 
-    Game_Party.prototype.levelForBfExp = function(id) {
+    Game_Party.prototype.levelForBfExp = function (id) {
         var item = $dataItems[id];
         var exps = DataManager.bfExps(item);
         var exp = this._bfExps[item.id];
         var value = 0;
-        for (var i=0,max=exps.length;i<max;i++) {
+        for (var i = 0, max = exps.length; i < max; i++) {
             value += exps[i];
-            if (exp < value) return i+1;
+            if (exp < value) return i + 1;
         }
-        return i+1;
+        return i + 1;
     };
 
-    Game_Party.prototype.bfExpForLevel = function(id, level) {
+    Game_Party.prototype.bfExpForLevel = function (id, level) {
         var item = $dataItems[id];
         var exps = DataManager.bfExps(item);
         var value = 0;
-        var max = Math.min(level-1, exps.length);
-        for (var i=0;i<max;i++) value += exps[i];
+        var max = Math.min(level - 1, exps.length);
+        for (var i = 0; i < max; i++) value += exps[i];
         return value;
     };
 
-    Game_Party.prototype.increaseFormationExp = function() {
+    Game_Party.prototype.increaseFormationExp = function () {
         if (!this.battleFormation()) return;
         var id = this.battleFormation().id;
         var count = this.winExp();
@@ -679,39 +683,39 @@ Imported['BattleFormation'] = 1.05;
         this._bfExps[id] = bfExp + count;
     };
 
-    Game_Party.prototype.bfExp = function(id) {
+    Game_Party.prototype.bfExp = function (id) {
         if (!this._bfExps) this._bfExps = {};
         if (!this._bfExps[id]) this._bfExps[id] = 0;
         return this._bfExps[id];
     };
 
-    Game_Party.prototype.isMaxBfLevel = function(id) {
+    Game_Party.prototype.isMaxBfLevel = function (id) {
         var item = $dataItems[id];
         var exps = DataManager.bfExps(item);
         var maxLevel = exps.length + 1;
         return this.bfLevel(id) >= maxLevel;
     };
 
-    Game_Party.prototype.winExp = function() {
+    Game_Party.prototype.winExp = function () {
         if (!this.isEnableBattleFormation(this.battleFormation().id)) return 0;
         var value = basicWinExp;
-        $gameTroop.members().forEach(function(e){
-            if (e.enemy().meta['陣形経験値']) value += parseInt(e.enemy().meta['陣形経験値'],10);
-            if (e.enemy().meta['BattleFormationExp']) value += parseInt(e.enemy().meta['BattleFormationExp'],10);
+        $gameTroop.members().forEach(function (e) {
+            if (e.enemy().meta['陣形経験値']) value += parseInt(e.enemy().meta['陣形経験値'], 10);
+            if (e.enemy().meta['BattleFormationExp']) value += parseInt(e.enemy().meta['BattleFormationExp'], 10);
         }.bind(this));
-        $gameParty.battleMembers().forEach(function(m){
-            m.traitObjects().forEach(function(t){
+        $gameParty.battleMembers().forEach(function (m) {
+            m.traitObjects().forEach(function (t) {
                 if (t.meta['陣形経験値倍率'] !== undefined) value *= Number(t.meta['陣形経験値倍率']);
                 if (t.meta['BattleFormationExpRate'] !== undefined) value *= Number(t.meta['BattleFormationExpRate']);
             }.bind(this));
         }.bind(this));
         return value;
     };
-    
+
     ////////////////////////////////////////////////////////////////////////////////////
 
     var __SActor_setActorHome = Sprite_Actor.prototype.setActorHome;
-    Sprite_Actor.prototype.setActorHome = function(index) {
+    Sprite_Actor.prototype.setActorHome = function (index) {
         __SActor_setActorHome.call(this, index);
         if (!this._actor._bfHome) $gameParty.setBattleFormation(null);
         var home = this._actor._bfHome;
@@ -730,7 +734,7 @@ Imported['BattleFormation'] = 1.05;
     Window_BFFormationList.prototype = Object.create(Window_Command.prototype);
     Window_BFFormationList.prototype.constructor = Window_BFFormationList;
 
-    Window_BFFormationList.prototype.initialize = function(y) {
+    Window_BFFormationList.prototype.initialize = function (y) {
         if ($gameParty.battleFormation() === undefined) $gameParty.setBattleFormation(null);
         //this._oy = y;
         Window_Command.prototype.initialize.call(this, 0, y);
@@ -740,50 +744,50 @@ Imported['BattleFormation'] = 1.05;
         this.selectExt($gameParty.battleFormation());
     };
 
-    Window_BFFormationList.prototype.windowWidth = function() {
+    Window_BFFormationList.prototype.windowWidth = function () {
         return formationListWidth;
     };
-    
-    Window_BFFormationList.prototype.makeCommandList = function() {
-        this.addCommand(basicFormationText,'set',true);
+
+    Window_BFFormationList.prototype.makeCommandList = function () {
+        this.addCommand(basicFormationText, 'set', true);
         var items = $gameParty.items();
-        for (var i=0,max=items.length;i<max;i++) {
+        for (var i = 0, max = items.length; i < max; i++) {
             var item = items[i];
             if (item.meta['陣形設定']) {
                 var data = DataManager.formationStatus(item);
                 if (data.length === $gameParty.battleMembers().length) {
-                    this.addCommand(item.name,'set',true,item);
+                    this.addCommand(item.name, 'set', true, item);
                 }
             }
         }
     };
 
-    Window_BFFormationList.prototype.lineHeight = function() {
+    Window_BFFormationList.prototype.lineHeight = function () {
         return 48;
     };
 
-    Window_BFFormationList.prototype.offsetHeight = function() {
+    Window_BFFormationList.prototype.offsetHeight = function () {
         return 0;
     };
 
-    Window_BFFormationList.prototype.maxPageItems = function() {
+    Window_BFFormationList.prototype.maxPageItems = function () {
         var hw = this._helpWindow ? this._helpWindow.height : 108;
         var max = ((Graphics.boxHeight - hw) - this.standardPadding() * 2) / this.lineHeight();
         return Math.floor(max);
     };
 
-    Window_BFFormationList.prototype.refresh = function() {
+    Window_BFFormationList.prototype.refresh = function () {
         this.clearCommandList();
         this.makeCommandList();
-        var l = Math.min(this._list.length,this.maxPageRows());
+        var l = Math.min(this._list.length, this.maxPageRows());
         var mh = this.lineHeight() * this.maxPageItems() + this.standardPadding() * 2;
-        this.height = Math.min(l * this.lineHeight() + this.standardPadding() * 2 + this.offsetHeight(),mh);
+        this.height = Math.min(l * this.lineHeight() + this.standardPadding() * 2 + this.offsetHeight(), mh);
         this._upArrowSprite.y += this.offsetHeight();
         this.createContents();
         Window_Selectable.prototype.refresh.call(this);
     };
 
-    Window_BFFormationList.prototype.drawItem = function(index) {
+    Window_BFFormationList.prototype.drawItem = function (index) {
         var rect = this.itemRectForText(index);
         var align = this.itemTextAlign();
         var item = this._list[index].ext;
@@ -808,23 +812,23 @@ Imported['BattleFormation'] = 1.05;
             var next = $gameParty.bfExpForLevel(id, lv + 1);
             var crt = $gameParty.bfExpForLevel(id, lv);
             var max = exps.length + 1;
-            var rate = next - crt > 0 ? Math.min((exp - crt) / (next - crt),1.0) : 1.0;
-            this.drawFormationLevel(rect,lv,max,item);
+            var rate = next - crt > 0 ? Math.min((exp - crt) / (next - crt), 1.0) : 1.0;
+            this.drawFormationLevel(rect, lv, max, item);
             var gc1 = item.meta['経験値ゲージカラー1'] || item.meta['ExpGaugeColor1'] || expGaugeColor1;
             var gc2 = item.meta['経験値ゲージカラー2'] || item.meta['ExpGaugeColor2'] || expGaugeColor2;
-            this.drawGauge(rect.x + 172, rect.y + 8, rect.width - 168, rate, gc1,gc2);
+            this.drawGauge(rect.x + 172, rect.y + 8, rect.width - 168, rate, gc1, gc2);
             if ($gameParty.isMaxBfLevel(id)) {
-                this.drawText(masterText,rect.x + 172, rect.y + 22, rect.width - 168, 'center');
+                this.drawText(masterText, rect.x + 172, rect.y + 22, rect.width - 168, 'center');
             } else {
                 this.changeTextColor('rgba(180,180,255,1.0)');
-                this.drawText('Next',rect.x + 172, rect.y + 22, rect.width - 168);
+                this.drawText('Next', rect.x + 172, rect.y + 22, rect.width - 168);
                 this.resetTextColor();
-                this.drawText((exp-crt)+'/'+(next-crt),rect.x + 172, rect.y + 22, rect.width - 168, 'right');
+                this.drawText((exp - crt) + '/' + (next - crt), rect.x + 172, rect.y + 22, rect.width - 168, 'right');
             }
         }
     };
 
-    Window_BFFormationList.prototype.drawFormationLevel = function(rect, lv, max, item) {
+    Window_BFFormationList.prototype.drawFormationLevel = function (rect, lv, max, item) {
         var symbol = item.meta['LevelSymbol'] || item.meta['レベルシンボル'] || levelSymbol;
         var color = Number(item.meta['SymbolColor'] || item.meta['シンボルカラー'] || levelColor);
         color = this.textColor(color);
@@ -853,11 +857,11 @@ Imported['BattleFormation'] = 1.05;
         this.resetTextColor();
     };
 
-    Window_BFFormationList.prototype.formation = function() {
+    Window_BFFormationList.prototype.formation = function () {
         return DataManager.formationStatus(this.currentExt());
     };
 
-    Window_BFFormationList.prototype.updateHelp = function() {
+    Window_BFFormationList.prototype.updateHelp = function () {
         var item = this.currentExt();
         if (item) {
             this.setHelpWindowItem(item);
@@ -867,7 +871,7 @@ Imported['BattleFormation'] = 1.05;
     };
 
 
-    Window_BFFormationList.prototype.cursorRight = function(wrap) {
+    Window_BFFormationList.prototype.cursorRight = function (wrap) {
         if (this.currentExt()) {
             SoundManager.playOk();
             this.callHandler('right');
@@ -886,7 +890,7 @@ Imported['BattleFormation'] = 1.05;
     Window_BFStatus.prototype = Object.create(Window_Selectable.prototype);
     Window_BFStatus.prototype.constructor = Window_BFStatus;
 
-    Window_BFStatus.prototype.initialize = function(x,y) {
+    Window_BFStatus.prototype.initialize = function (x, y) {
         this._frameCount = 0;
         this._lockIndex = -1;
         var w = Graphics.boxWidth - x;
@@ -894,11 +898,11 @@ Imported['BattleFormation'] = 1.05;
         Window_Selectable.prototype.initialize.call(this, x, y, w, h);
         this._actorSprites = [];
         var members = $gameParty.battleMembers();
-        for (var i=0,max=members.length;i<max;i++) {
+        for (var i = 0, max = members.length; i < max; i++) {
             var actor = members[i];
             var bitmap = ImageManager.loadSvActor(actor._battlerName);
             var sprite = new Sprite(bitmap);
-            sprite.setFrame(0,0,64,64);
+            sprite.setFrame(0, 0, 64, 64);
             sprite._actor = actor;
             sprite.ox = 0;
             sprite.oy = 0;
@@ -909,50 +913,50 @@ Imported['BattleFormation'] = 1.05;
         //this.openness = 0;
     };
 
-    Window_BFStatus.prototype.standardFontSize = function() {
+    Window_BFStatus.prototype.standardFontSize = function () {
         return 20;
     };
 
-    Window_BFStatus.prototype.standardPadding = function() {
+    Window_BFStatus.prototype.standardPadding = function () {
         return 8;
     };
 
-    Window_BFStatus.prototype.maxItems = function() {
+    Window_BFStatus.prototype.maxItems = function () {
         return $gameParty.battleMembers().length;
     };
 
-    Window_BFStatus.prototype.itemRect = function(index) {
+    Window_BFStatus.prototype.itemRect = function (index) {
         var fr = this._commandWindow.formation()[index];
         var xx = fr.x - 420;
         var yy = fr.y - 48;
-        return { x:xx, y:yy, width:64, height:64 };
+        return { x: xx, y: yy, width: 64, height: 64 };
     };
 
-    Window_BFStatus.prototype.refresh = function() {
+    Window_BFStatus.prototype.refresh = function () {
         Window_Selectable.prototype.refresh.call(this);
         var text = this.active ? activeHelpText : deactiveHelpText;
         this.resetTextColor();
-        this.drawTextEx(text, 0, this.contentsHeight() - 28, this.contentsWidth(),'right');
+        this.drawTextEx(text, 0, this.contentsHeight() - 28, this.contentsWidth(), 'right');
     };
 
-    Window_BFStatus.prototype.drawItem  = function(index) {
+    Window_BFStatus.prototype.drawItem = function (index) {
         if (this._commandWindow) {
             this.resetTextColor();
             var rect = this.itemRect(index);
             var item = this._commandWindow.currentExt();
             if (index === this._lockIndex) {
                 var color = 'rgba(180,180,180,0.5)';
-                this.contents.fillRect(rect.x,rect.y,rect.width,rect.height,color);
+                this.contents.fillRect(rect.x, rect.y, rect.width, rect.height, color);
             }
             if (this.isFixed(index)) {
                 var color = 'rgba(255,128,128,0.5)';
-                this.contents.fillRect(rect.x,rect.y,rect.width,rect.height,color);
+                this.contents.fillRect(rect.x, rect.y, rect.width, rect.height, color);
             }
             var actor = this._actorSprites[index]._actor;
             var status = DataManager.formationStatus(item);
-            if (item && !actor.checkFormationEnable(status[index].cond)){
+            if (item && !actor.checkFormationEnable(status[index].cond)) {
                 this.changeTextColor(this.textColor(2));
-                this.drawText('×',rect.x + 64, rect.y + 32);
+                this.drawText('×', rect.x + 64, rect.y + 32);
                 this._actorSprites[index].ox = 6;
                 this._actorSprites[index].oy = 2;
             } else {
@@ -961,23 +965,23 @@ Imported['BattleFormation'] = 1.05;
             }
             this._actorSprites[index].x = rect.x + 8;
             this._actorSprites[index].y = rect.y + 8;
-            this.drawText(index+1,rect.x + 64, rect.y);
+            this.drawText(index + 1, rect.x + 64, rect.y);
         }
     };
 
-    Window_BFStatus.prototype.setCommandWindow = function(window) {
+    Window_BFStatus.prototype.setCommandWindow = function (window) {
         this._commandWindow = window;
         this.refresh();
     };
 
-    Window_BFStatus.prototype.update = function() {
+    Window_BFStatus.prototype.update = function () {
         Window_Selectable.prototype.update.call(this);
         if (this._frameCount % 12 === 0) this.updateSprite();
         this._frameCount++;
     };
 
-    Window_BFStatus.prototype.updateSprite = function() {
-        for (var i=0,max=this._actorSprites.length;i<max;i++) {
+    Window_BFStatus.prototype.updateSprite = function () {
+        for (var i = 0, max = this._actorSprites.length; i < max; i++) {
             var sprite = this._actorSprites[i];
             var frame = Math.floor(this._frameCount / 12) % 3;
             var sw = sprite.bitmap.width / 9;
@@ -989,27 +993,27 @@ Imported['BattleFormation'] = 1.05;
         }
     };
 
-    Window_BFStatus.prototype.isLock = function() {
+    Window_BFStatus.prototype.isLock = function () {
         return this._lockIndex >= 0;
     };
 
-    Window_BFStatus.prototype.setLock = function() {
+    Window_BFStatus.prototype.setLock = function () {
         this._lockIndex = this._index;
         this.refresh();
     };
 
-    Window_BFStatus.prototype.clearLock = function() {
+    Window_BFStatus.prototype.clearLock = function () {
         this._lockIndex = -1;
         this.refresh();
     };
 
-    Window_BFStatus.prototype.changeActorFormation = function() {
+    Window_BFStatus.prototype.changeActorFormation = function () {
         if (!this.isLock()) return;
         $gameParty.swapOrder(this._index, this._lockIndex);
         var ary = [];
         var members = $gameParty.battleMembers();
-        for (var i=0,max=members.length;i<max;i++) {
-            for (var j=0,jmax=this._actorSprites.length;j<jmax;j++) {
+        for (var i = 0, max = members.length; i < max; i++) {
+            for (var j = 0, jmax = this._actorSprites.length; j < jmax; j++) {
                 if (this._actorSprites[j]._actor === members[i]) {
                     ary.push(this._actorSprites[j]);
                     break;
@@ -1019,16 +1023,16 @@ Imported['BattleFormation'] = 1.05;
         this._actorSprites = ary;
     };
 
-    Window_BFStatus.prototype.cursorLeft = function(wrap) {
+    Window_BFStatus.prototype.cursorLeft = function (wrap) {
         SoundManager.playCancel();
         this.callHandler('cancel');
     };
 
-    Window_BFStatus.prototype.isCurrentItemEnabled = function() {
+    Window_BFStatus.prototype.isCurrentItemEnabled = function () {
         return !this.isFixed(this._index);
     };
 
-    Window_BFStatus.prototype.isFixed = function(index) {
+    Window_BFStatus.prototype.isFixed = function (index) {
         if (Imported['SceneFormation']) {
             var actor = $gameParty.battleMembers()[index];
             if (actor._fixed === undefined) actor._fixed = actor.initFixed();
@@ -1043,36 +1047,36 @@ Imported['BattleFormation'] = 1.05;
         this.initialize.apply(this, arguments);
     }
 
-//    Window_BFParameter.prototype = Object.create(Window_Base.prototype);
-    Window_BFParameter.prototype = Object.create(Window_Selectable.prototype);	//shigureya
+    //    Window_BFParameter.prototype = Object.create(Window_Base.prototype);
+    Window_BFParameter.prototype = Object.create(Window_Selectable.prototype);	//しぐれん
     Window_BFParameter.prototype.constructor = Window_BFParameter;
 
-    Window_BFParameter.prototype.initialize = function() {
-        Window_Selectable.prototype.initialize.call(this, 0,0,144,50);
+    Window_BFParameter.prototype.initialize = function () {
+        Window_Selectable.prototype.initialize.call(this, 0, 0, 144, 50);
         this.openness = 0;
     };
 
-    Window_BFParameter.prototype.standardPadding = function() {
+    Window_BFParameter.prototype.standardPadding = function () {
         return 6;
     };
 
-    Window_BFParameter.prototype.standardFontSize = function() {
+    Window_BFParameter.prototype.standardFontSize = function () {
         return 16;
     };
 
-    Window_BFParameter.prototype.setStatusWindow = function(window) {
+    Window_BFParameter.prototype.setStatusWindow = function (window) {
         this._statusWindow = window;
     };
 
-    Window_BFParameter.prototype.setCommandWindow = function(window) {
+    Window_BFParameter.prototype.setCommandWindow = function (window) {
         this._commandWindow = window;
     };
 
-    Window_BFParameter.prototype.lineHeight = function() {
+    Window_BFParameter.prototype.lineHeight = function () {
         return 24;
     };
 
-    Window_BFParameter.prototype.refresh = function() {
+    Window_BFParameter.prototype.refresh = function () {
         if (showParamWindow && this._commandWindow && this._statusWindow) {
             var item = this._commandWindow.currentExt();
             var status = DataManager.formationStatus(item);
@@ -1084,7 +1088,7 @@ Imported['BattleFormation'] = 1.05;
             var ary2 = [];
             var texts = c.note.split(',');
             var level = $gameParty.bfLevel(id);
-            for (var i=0,max=texts.length;i<max;i++) {
+            for (var i = 0, max = texts.length; i < max; i++) {
                 var text = texts[i];
                 if (text.match(/<(?:陣形効果テキスト追加|AddFormationEffectText):([前後FL]):?(?:Lv(\d+))?:(.+)>/)) {
                     if (!RegExp.$2 || Number(RegExp.$2) <= level) {
@@ -1096,22 +1100,22 @@ Imported['BattleFormation'] = 1.05;
                     }
                 }
             }
-            for (var i=0,max=c.learnings.length;i<max;i++) {
+            for (var i = 0, max = c.learnings.length; i < max; i++) {
                 var l = c.learnings[i];
                 var s = $dataSkills[l.skillId];
                 if (s && l.level <= level && !(l.note.includes('<陣形非表示>') || l.note.includes('<HideFormation>'))) {
-                    var text = '\\C['+color[1]+']' + addSkillText + '\\C['+color[0]+']' + s.name;
+                    var text = '\\C[' + color[1] + ']' + addSkillText + '\\C[' + color[0] + ']' + s.name;
                     ary.push(text);
                 }
 
             }
-            for (var i=0;i<8;i++) {
+            for (var i = 0; i < 8; i++) {
                 var value = c.params[i][$gameParty.bfLevel(id)];
                 if (value > 1) {
-                    ary.push([i,value]);
+                    ary.push([i, value]);
                 }
             }
-            for (var i=0,max=c.traits.length;i<max;i++) {
+            for (var i = 0, max = c.traits.length; i < max; i++) {
                 var trait = c.traits[i];
                 if (!(trait.code === 23 && trait.dataId === 10) && !(trait.code === 55 && trait.dataId === 0)) {
                     ary.push(trait);
@@ -1124,56 +1128,56 @@ Imported['BattleFormation'] = 1.05;
             if (ary.length > 0) this.height += 4;
             this.createContents();
             this.contents.fontSize = 20;
-            this.drawText(c.name,0,1,this.contentsWidth(),'center');
-            if (ary.length > 0) this.contents.fillRect(4,25,this.contentsWidth()-8,2,'rgba(255,255,255,0.5)');
+            this.drawText(c.name, 0, 1, this.contentsWidth(), 'center');
+            if (ary.length > 0) this.contents.fillRect(4, 25, this.contentsWidth() - 8, 2, 'rgba(255,255,255,0.5)');
             this.contents.fontSize = size;
             var n = 0;
-            for (var i=0,max=ary.length;i<max;i++) {
+            for (var i = 0, max = ary.length; i < max; i++) {
                 if (typeof ary[i] === 'string') {
-                    this.drawTextEx(ary[i], 4, (size+2) * n + 30);
+                    this.drawTextEx(ary[i], 4, (size + 2) * n + 30);
                     n++;
                 } else if (ary[i][1]) {
-                    var text = '\\C['+color[1]+']' + TextManager.param(ary[i][0]) + '\\C['+color[2]+']+' + ary[i][1];
-                    this.drawTextEx(text, 4, (size+2) * n + 30);
+                    var text = '\\C[' + color[1] + ']' + TextManager.param(ary[i][0]) + '\\C[' + color[2] + ']+' + ary[i][1];
+                    this.drawTextEx(text, 4, (size + 2) * n + 30);
                     n++;
                 } else {
                     var trait = ary[i];
-                    if (this.drawTraits(trait,4, (size+2) * n + 30)) n++;
+                    if (this.drawTraits(trait, 4, (size + 2) * n + 30)) n++;
                 }
             }
             this.height = (n * (size + 2)) + this.lineHeight() + this.standardPadding() * 2 + 8;
         }
     };
 
-    Window_BFParameter.prototype.drawTraits = function(trait, x, y) {
+    Window_BFParameter.prototype.drawTraits = function (trait, x, y) {
         var vocab = paramVocab;
         var color = paramColor;
         var text = '';
         var dataId = trait.dataId;
         var value = trait.value;
-        var sys = '\\C['+color[1]+']';
-        var cl = '\\C['+color[0]+']';
-        var ud = value > 1.0 ? '\\C['+color[2]+']' : '\\C['+color[3]+']';
+        var sys = '\\C[' + color[1] + ']';
+        var cl = '\\C[' + color[0] + ']';
+        var ud = value > 1.0 ? '\\C[' + color[2] + ']' : '\\C[' + color[3] + ']';
         var sym = value > 0 ? '+' : '';
         switch (trait.code) {
             case 11:
                 if (vocab[0][0]) {
                     var ele = $dataSystem.elements[dataId];
-                    ud = value < 1.0 ? '\\C['+color[2]+']' : '\\C['+color[3]+']';
+                    ud = value < 1.0 ? '\\C[' + color[2] + ']' : '\\C[' + color[3] + ']';
                     text = cl + ele + sys + vocab[0][0] + ud + 'x' + Math.floor(value * 100) + '%';
                 }
                 break;
             case 12:
                 if (vocab[0][1]) {
                     var param = TextManager.param(dataId);
-                    ud = value < 1.0 ? '\\C['+color[2]+']' : '\\C['+color[3]+']';
+                    ud = value < 1.0 ? '\\C[' + color[2] + ']' : '\\C[' + color[3] + ']';
                     text = cl + param + sys + vocab[0][1] + ud + 'x' + Math.floor(value * 100) + '%';
                 }
                 break;
             case 13:
                 if (vocab[0][0]) {
                     var state = $dataStates[dataId].name;
-                    ud = value < 1.0 ? '\\C['+color[2]+']' : '\\C['+color[3]+']';
+                    ud = value < 1.0 ? '\\C[' + color[2] + ']' : '\\C[' + color[3] + ']';
                     text = cl + state + sys + vocab[0][0] + ud + 'x' + Math.floor(value * 100) + '%';
                 }
                 break;
@@ -1195,7 +1199,7 @@ Imported['BattleFormation'] = 1.05;
                     if (dataId === 7 && xparam) xparam = TextManager.hpA + xparam;
                     if (dataId === 8 && xparam) xparam = TextManager.mpA + vocab[1][7];
                     if (dataId === 9 && xparam) xparam = TextManager.tpA + vocab[1][7];
-                    ud = value > 0 ? '\\C['+color[2]+']' : '\\C['+color[3]+']';
+                    ud = value > 0 ? '\\C[' + color[2] + ']' : '\\C[' + color[3] + ']';
                     text = sys + xparam + ud + sym + Math.floor(value * 100) + '%';
                 }
                 break;
@@ -1203,9 +1207,9 @@ Imported['BattleFormation'] = 1.05;
                 var sparam = vocab[2][dataId];
                 if (sparam) {
                     if (dataId === 0) ud = cl;
-                    if (dataId === 4) { sparam = TextManager.mpA + sparam; ud = value < 1.0 ? '\\C['+color[2]+']' : '\\C['+color[3]+']'; }
+                    if (dataId === 4) { sparam = TextManager.mpA + sparam; ud = value < 1.0 ? '\\C[' + color[2] + ']' : '\\C[' + color[3] + ']'; }
                     if (dataId === 5) TextManager.tpA + sparam;
-                    if (dataId === 6 || dataId === 7 || dataId === 8) ud = value < 1.0 ? '\\C['+color[2]+']' : '\\C['+color[3]+']';
+                    if (dataId === 6 || dataId === 7 || dataId === 8) ud = value < 1.0 ? '\\C[' + color[2] + ']' : '\\C[' + color[3] + ']';
                     text = sys + sparam + ud + 'x' + Math.floor(value * 100) + '%';
                 }
                 break;
@@ -1260,12 +1264,12 @@ Imported['BattleFormation'] = 1.05;
                 break;
             case 61:
                 if (vocab[6][0]) {
-                    ud = value > 0 ? '\\C['+color[2]+']' : '\\C['+color[3]+']';
+                    ud = value > 0 ? '\\C[' + color[2] + ']' : '\\C[' + color[3] + ']';
                     text = sys + vocab[6][0] + ud + sym + (value * 100) + '%';
                 }
                 break;
             case 62:
-                if (vocab[6][1+dataId]) {
+                if (vocab[6][1 + dataId]) {
                     if (dataId === 2) text = TextManager.tpA + text;
                     text = sys + vocab[6][1 + dataId];
                 }
@@ -1274,24 +1278,24 @@ Imported['BattleFormation'] = 1.05;
                 if (vocab[6][5]) text = sys + vocab[6][5] + defeatText[dataId];
                 break;
             case 64:
-                if (vocab[6][6+dataId]) text = sys + vocab[6][6+dataId];
+                if (vocab[6][6 + dataId]) text = sys + vocab[6][6 + dataId];
                 break;
         }
 
-        if(text) this.drawTextEx(text, x, y);
+        if (text) this.drawTextEx(text, x, y);
         return !!text;
     };
 
-    Window_BFParameter.prototype.updatePosition = function() {
+    Window_BFParameter.prototype.updatePosition = function () {
         if (this._statusWindow && this._statusWindow.active) {
             var index = this._statusWindow._index;
             var rect = this._statusWindow.itemRect(index);
             this.x = rect.x - this.width + this._statusWindow.x;
-            if (this._statusWindow.x > this.x){
+            if (this._statusWindow.x > this.x) {
                 this.x = rect.x + this._statusWindow.x + 80;
             }
             var y = rect.y - this.height / 2 + this._statusWindow.y + (rect.height / 2);
-            y = y.clamp(this._statusWindow.y,Graphics.boxHeight - this.height);
+            y = y.clamp(this._statusWindow.y, Graphics.boxHeight - this.height);
             this.y = y;
             if (index !== this._index) {
                 this.refresh();
@@ -1309,42 +1313,42 @@ Imported['BattleFormation'] = 1.05;
     Window_BFInfo.prototype = Object.create(Window_Base.prototype);
     Window_BFInfo.prototype.constructor = Window_BFInfo;
 
-    Window_BFInfo.prototype.initialize = function(x,y,w,h) {
-        Window_Base.prototype.initialize.call(this, x,y,w,h);
+    Window_BFInfo.prototype.initialize = function (x, y, w, h) {
+        Window_Base.prototype.initialize.call(this, x, y, w, h);
         this.refresh();
     };
 
-    Window_BFInfo.prototype.standardPadding = function() {
+    Window_BFInfo.prototype.standardPadding = function () {
         return 6;
     };
 
-    Window_BFInfo.prototype.refresh = function() {
+    Window_BFInfo.prototype.refresh = function () {
         var text = $gameParty.battleFormation() ? $gameParty.battleFormation().name : basicFormationText;
         this.contents.fontSize = 22;
         this.changeTextColor(this.textColor(4));
-        this.drawText(menuBattleFormationTitle,8,0,this.contentsWidth()-16,'center');
-        this.contents.fillRect(4,32,this.contentsWidth()-8,2,'rgba(255,255,255,0.5)');
+        this.drawText(menuBattleFormationTitle, 8, 0, this.contentsWidth() - 16, 'center');
+        this.contents.fillRect(4, 32, this.contentsWidth() - 8, 2, 'rgba(255,255,255,0.5)');
         this.changeTextColor(this.normalColor());
-        this.drawText(text,8,32,this.contentsWidth()-16,'center');
+        this.drawText(text, 8, 32, this.contentsWidth() - 16, 'center');
     };
 
     ////////////////////////////////////////////////////////////////////////////////////
 
     var __WMCommand_addOriginalCommands = Window_MenuCommand.prototype.addOriginalCommands;
-    Window_MenuCommand.prototype.addOriginalCommands = function() {
+    Window_MenuCommand.prototype.addOriginalCommands = function () {
         __WMCommand_addOriginalCommands.call(this);
-        if (addMenuBattleFormation){
+        if (addMenuBattleFormation) {
             this.addCommand(menuBattleFormationTitle, 'battleFormation', true);
         }
     };
 
     var __SMenu_create = Scene_Menu.prototype.create;
-    Scene_Menu.prototype.create = function() {
+    Scene_Menu.prototype.create = function () {
         __SMenu_create.call(this);
         this.createFormationInfoWindow();
     };
 
-    Scene_Menu.prototype.createFormationInfoWindow = function() {
+    Scene_Menu.prototype.createFormationInfoWindow = function () {
         var cw = this._commandWindow;
         var sw = this._statusWindow;
         var gw = this._goldWindow;
@@ -1354,17 +1358,17 @@ Imported['BattleFormation'] = 1.05;
         var w = this._goldWindow.width;
         var x = eval(battleFormationInfoX) || 0;
         var y = eval(battleFormationInfoY) || 0;
-        this._fInfoWindow = new Window_BFInfo(x,y,w,h);
+        this._fInfoWindow = new Window_BFInfo(x, y, w, h);
         this.addWindow(this._fInfoWindow);
     };
 
     var __SMenu_createCommandWindow = Scene_Menu.prototype.createCommandWindow;
-    Scene_Menu.prototype.createCommandWindow = function() {
+    Scene_Menu.prototype.createCommandWindow = function () {
         __SMenu_createCommandWindow.call(this);
-        this._commandWindow.setHandler('battleFormation',   this.commandBattleFormation.bind(this));
+        this._commandWindow.setHandler('battleFormation', this.commandBattleFormation.bind(this));
     };
 
-    Scene_Menu.prototype.commandBattleFormation = function() {
+    Scene_Menu.prototype.commandBattleFormation = function () {
         SceneManager.push(Scene_BattleFormation);
     };
 
@@ -1377,11 +1381,11 @@ Imported['BattleFormation'] = 1.05;
     Scene_BattleFormation.prototype = Object.create(Scene_MenuBase.prototype);
     Scene_BattleFormation.prototype.constructor = Scene_BattleFormation;
 
-    Scene_BattleFormation.prototype.initialize = function() {
+    Scene_BattleFormation.prototype.initialize = function () {
         Scene_MenuBase.prototype.initialize.call(this);
     };
 
-    Scene_BattleFormation.prototype.create = function() {
+    Scene_BattleFormation.prototype.create = function () {
         Scene_MenuBase.prototype.create.call(this);
         this.createBackSprite();
         this.createWindowLayer();
@@ -1391,16 +1395,16 @@ Imported['BattleFormation'] = 1.05;
         this.createParameterWindow();
     };
 
-    Scene_BattleFormation.prototype.createBackSprite = function() {
+    Scene_BattleFormation.prototype.createBackSprite = function () {
         var back1 = new Sprite(ImageManager.loadBattleback1($gameMap._battleback1Name));
-        back1.move(-92,-58);
+        back1.move(-92, -58);
         var back2 = new Sprite(ImageManager.loadBattleback2($gameMap._battleback2Name));
-        back2.move(-92,-58);
+        back2.move(-92, -58);
         this.addChild(back1);
         this.addChild(back2);
     };
 
-    Scene_BattleFormation.prototype.update = function() {
+    Scene_BattleFormation.prototype.update = function () {
         if (!this.isBusy()) {
             this._commandWindow.open();
         }
@@ -1413,15 +1417,15 @@ Imported['BattleFormation'] = 1.05;
         this._paramWindow.updatePosition();
     };
 
-    Scene_BattleFormation.prototype.isBusy = function() {
+    Scene_BattleFormation.prototype.isBusy = function () {
         return this._commandWindow.isClosing() || Scene_MenuBase.prototype.isBusy.call(this);
     };
 
-    Scene_BattleFormation.prototype.terminate = function() {
+    Scene_BattleFormation.prototype.terminate = function () {
         Scene_MenuBase.prototype.terminate.call(this);
     };
 
-    Scene_BattleFormation.prototype.createCommandWindow = function() {
+    Scene_BattleFormation.prototype.createCommandWindow = function () {
         var y = this._helpWindow.y + this._helpWindow.height;
         this._commandWindow = new Window_BFFormationList(y);
         this._commandWindow.setHandler('cancel', this.popScene.bind(this));
@@ -1431,30 +1435,30 @@ Imported['BattleFormation'] = 1.05;
         this._commandWindow.setHelpWindow(this._helpWindow);
     };
 
-    Scene_BattleFormation.prototype.createStatusWindow = function() {
+    Scene_BattleFormation.prototype.createStatusWindow = function () {
         var x = this._commandWindow.x + this._commandWindow.width;
         var y = this._helpWindow.y + this._helpWindow.height;
-        this._statusWindow = new Window_BFStatus(x,y);
+        this._statusWindow = new Window_BFStatus(x, y);
         this._statusWindow.setHandler('cancel', this.onCancelStatus.bind(this));
         this._statusWindow.setHandler('ok', this.onOkStatus.bind(this));
         this._statusWindow.setCommandWindow(this._commandWindow);
         this.addWindow(this._statusWindow);
     };
 
-    Scene_BattleFormation.prototype.createParameterWindow = function() {
+    Scene_BattleFormation.prototype.createParameterWindow = function () {
         this._paramWindow = new Window_BFParameter();
         this._paramWindow.setStatusWindow(this._statusWindow);
         this._paramWindow.setCommandWindow(this._commandWindow);
         this.addChild(this._paramWindow);
     };
-    
-    Scene_BattleFormation.prototype.setFormation = function() {
+
+    Scene_BattleFormation.prototype.setFormation = function () {
         $gameParty.setBattleFormation(this._commandWindow.currentExt());
         this._commandWindow.refresh();
         this._commandWindow.activate();
     };
 
-    Scene_BattleFormation.prototype.commandStatus = function() {
+    Scene_BattleFormation.prototype.commandStatus = function () {
         this._commandWindow.deactivate();
         this._statusWindow.activate();
         this._statusWindow.select(0);
@@ -1462,7 +1466,7 @@ Imported['BattleFormation'] = 1.05;
         this._paramWindow.refresh();
     };
 
-    Scene_BattleFormation.prototype.onCancelStatus = function() {
+    Scene_BattleFormation.prototype.onCancelStatus = function () {
         this._paramWindow.close();
         this._statusWindow.clearLock();
         this._statusWindow.deselect();
@@ -1471,7 +1475,7 @@ Imported['BattleFormation'] = 1.05;
         this._commandWindow.activate();
     };
 
-    Scene_BattleFormation.prototype.onOkStatus = function() {
+    Scene_BattleFormation.prototype.onOkStatus = function () {
         if (!this._statusWindow.isLock()) {
             this._statusWindow.setLock();
             this._statusWindow.activate();
@@ -1486,49 +1490,53 @@ Imported['BattleFormation'] = 1.05;
         }
     };
 
+    //しぐれん
+    Scene_BattleFormation.prototype.isBottomHelpMode = function () {
+        return false;
+    };
     ////////////////////////////////////////////////////////////////////////////////////
 
     var __SBattle_initialize = Scene_Battle.prototype.initialize;
-    Scene_Battle.prototype.initialize = function() {
+    Scene_Battle.prototype.initialize = function () {
         $gameParty.refreshBattleFormation();
         __SBattle_initialize.call(this);
     };
 
-    Scene_Battle.prototype.resetActorPosition = function() {
-        this._spriteset._actorSprites.forEach(function(actor){
-            actor.startMove(0,0);
+    Scene_Battle.prototype.resetActorPosition = function () {
+        this._spriteset._actorSprites.forEach(function (actor) {
+            actor.startMove(0, 0);
         }.bind(this));
     };
 
     if (Imported['SceneFormation']) {
 
         var __SBattle_onMemberOk = Scene_Battle.prototype.onMemberOk;
-        Scene_Battle.prototype.onMemberOk = function() {
+        Scene_Battle.prototype.onMemberOk = function () {
             __SBattle_onMemberOk.call(this);
-            if (this._scopeIndex === null){
+            if (this._scopeIndex === null) {
                 $gameParty.refreshBattleFormation();
                 this.resetActorPosition();
             }
         };
 
         var __SBattle_onStandOk = Scene_Battle.prototype.onStandOk;
-        Scene_Battle.prototype.onStandOk = function() {
+        Scene_Battle.prototype.onStandOk = function () {
             __SBattle_onStandOk.call(this);
-            if (this._scopeIndex === null){
+            if (this._scopeIndex === null) {
                 $gameParty.refreshBattleFormation();
                 this.resetActorPosition();
             }
         };
 
         var __SBattle_onRelease = Scene_Battle.prototype.onRelease;
-        Scene_Battle.prototype.onRelease = function() {
+        Scene_Battle.prototype.onRelease = function () {
             __SBattle_onRelease.call(this);
             $gameParty.refreshBattleFormation();
             this.resetActorPosition();
         };
 
         var __SBattle_onAdd = Scene_Battle.prototype.onAdd;
-        Scene_Battle.prototype.onAdd = function() {
+        Scene_Battle.prototype.onAdd = function () {
             __SBattle_onAdd.call(this);
             $gameParty.refreshBattleFormation();
             this.resetActorPosition();
