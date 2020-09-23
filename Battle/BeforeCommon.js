@@ -11,12 +11,10 @@
 //
 
 var Imported = Imported || {};
-Imported['BeforeCommon'] = 1.02;
+Imported['BeforeCommon'] = 1.01;
 
 /*:
- * @target MZ MV
- * @url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Battle/BeforeCommon.js
- * @plugindesc ver1.02/スキルやアイテムの発動前に、スキルやアイテムに設定されたコモンイベントを発生させます。
+ * @plugindesc ver1.01/スキルやアイテムの発動前に、スキルやアイテムに設定されたコモンイベントを発生させます。
  * @author Yana
  *
  * @param IndexVariableID
@@ -62,8 +60,8 @@ Imported['BeforeCommon'] = 1.02;
  * 素材利用は自己責任でお願いします。
  * ------------------------------------------------------
  * 更新履歴:
- * ver1.02:
- * RPGツクールMZでの動作を確認。
+ * RPGツクールMZでの一部動作を確認。
+ * 対象のインデックスを変数に代入する機能はMZでは機能していない。
  * ver1.01:
  * 対象を保存する変数の設定を追加。
  * ver1.00:
