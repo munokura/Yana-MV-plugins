@@ -13,6 +13,8 @@
 var Imported = Imported || {};
 Imported['EraseLetter'] = 1.00;
 /*:
+ * @target MZ MV
+ * @url https://raw.githubusercontent.com/munokura/MNKR-MZ-plugins/master/MNKR_VariableCommand.js
  * @plugindesc ver1.00/エネミーのレター(A､Bなど)を消去します。
  * @author Yana
  * 
@@ -32,7 +34,12 @@ Imported['EraseLetter'] = 1.00;
  * ver1.00:
  * 公開
  */
+(() => {
 
-Game_Enemy.prototype.name = function() {
-    return this.originalName();//+ (this._plural ? this._letter : '');
-};
+    "use strict";
+
+    Game_Enemy.prototype.name = function () {
+        return this.originalName();//+ (this._plural ? this._letter : '');
+    };
+
+})();
