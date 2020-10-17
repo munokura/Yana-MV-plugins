@@ -13,10 +13,13 @@
 var Imported = Imported || {};
 Imported['EquipSlotAddTrait'] = 1.02;
 /*:
+ * @target MZ MV
+ * @url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Item_Skill/EquipSlotAddTrait.js
  * @plugindesc ver1.02/装備スロットを追加する特徴を設定できるようにします。
  * @author Yana
  * 
- * @help ------------------------------------------------------
+ * @help
+ * ------------------------------------------------------
  * 使用方法
  * ------------------------------------------------------
  * 特徴を持ったオブジェクトのメモ欄に
@@ -37,7 +40,8 @@ Imported['EquipSlotAddTrait'] = 1.02;
  * 二次配布も制限はしませんが、サポートは行いません。
  * 著作表示は任意です。行わなくても利用できます。
  * 要するに、特に規約はありません。
- * バグ報告や使用方法等のお問合せはネ実ツクールスレ、または、Twitterにお願いします。
+ * バグ報告や使用方法等のお問合せはネ実ツクールスレ、
+ * または、Twitterにお願いします。
  * https://twitter.com/yanatsuki_
  * 素材利用は自己責任でお願いします。
  * ------------------------------------------------------
@@ -45,72 +49,73 @@ Imported['EquipSlotAddTrait'] = 1.02;
  * ver1.02:
  * 装備欄の数が変化したとき、エラーが出る可能性のあるバグを修正。
  * ver1.01:
- * 初期装備に反映される形で設定を行った場合、装備可能な初期装備まで消えることのあるバグを修正
+ * 初期装備に反映される形で設定を行った場合、
+ * 装備可能な初期装備まで消えることのあるバグを修正
  * ver1.00:
  * 公開
  */
-(function(){
+(function () {
     ////////////////////////////////////////////////////////////////////////////////////
 
     'use strict';
 
     var parameters = PluginManager.parameters('EquipSlotAddTrait');
-    
+
     ////////////////////////////////////////////////////////////////////////////////////
-    
-    DataManager.addEquipSlots = function(item) {
-        if (!item){ return [] }
-        if (item._addEquipSlots === undefined){
+
+    DataManager.addEquipSlots = function (item) {
+        if (!item) { return [] }
+        if (item._addEquipSlots === undefined) {
             item._addEquipSlots = [];
             var texts = item.note.split('\n');
-            for (var i=0,max=texts.length;i<max;i++){
+            for (var i = 0, max = texts.length; i < max; i++) {
                 var text = texts[i];
-                if (text.match(/<(?:装備スロット|AddEquipSlot):(\d+)([+-]\d+)>/)){
-                    item._addEquipSlots.push([Number(RegExp.$1),Number(RegExp.$2)]);
+                if (text.match(/<(?:装備スロット|AddEquipSlot):(\d+)([+-]\d+)>/)) {
+                    item._addEquipSlots.push([Number(RegExp.$1), Number(RegExp.$2)]);
                 }
             }
         }
         return item._addEquipSlots;
     };
-    
+
     var __DManager_loadGame = DataManager.loadGame;
-    DataManager.loadGame = function(savefileId) {
-        var result = __DManager_loadGame.call(this,savefileId);
-        if (result){ $gameParty.allMembers().forEach(function(m){ m.refresh() })}
+    DataManager.loadGame = function (savefileId) {
+        var result = __DManager_loadGame.call(this, savefileId);
+        if (result) { $gameParty.allMembers().forEach(function (m) { m.refresh() }) }
         return result;
     };
-    
+
     ////////////////////////////////////////////////////////////////////////////////////
-    
+
     var __GActor_equipSlots = Game_Actor.prototype.equipSlots;
-    Game_Actor.prototype.equipSlots = function() {
+    Game_Actor.prototype.equipSlots = function () {
         var slots = __GActor_equipSlots.call(this);
         var objects = this.traitObjects().clone();
-        return objects.reduce(function(r,to){
+        return objects.reduce(function (r, to) {
             var addSlots = DataManager.addEquipSlots(to);
-            for (var i=0,max=addSlots.length;i<max;i++){
+            for (var i = 0, max = addSlots.length; i < max; i++) {
                 var addSlot = addSlots[i];
-                for (var j=0;j<addSlot[1];j++){
-                    if (!this._equips[r.length]){
+                for (var j = 0; j < addSlot[1]; j++) {
+                    if (!this._equips[r.length]) {
                         this._equips[r.length] = new Game_Item();
                     }
                     r = r.concat(addSlot[0]);
                 }
-                for (var j=0;j<-addSlot[1];j++){
+                for (var j = 0; j < -addSlot[1]; j++) {
                     var index = r.indexOf(addSlot[0]);
-                    if (index >= 0){ r.splice(index,1) }
+                    if (index >= 0) { r.splice(index, 1) }
                 }
             }
             return r;
-        }.bind(this),slots);
+        }.bind(this), slots);
     };
 
     var __GActor_initEquips = Game_Actor.prototype.initEquips;
-    Game_Actor.prototype.initEquips = function(equips) {
+    Game_Actor.prototype.initEquips = function (equips) {
         var slots = this.equipSlots();
         var ary = [];
-        for (var i=0,max=equips.length;i<max;i++) {
-            if (equips[i] === 0 || i === 0 || i === 1 && this.isDualWield()){
+        for (var i = 0, max = equips.length; i < max; i++) {
+            if (equips[i] === 0 || i === 0 || i === 1 && this.isDualWield()) {
                 ary.push(equips[i]);
                 continue;
             }
@@ -122,19 +127,19 @@ Imported['EquipSlotAddTrait'] = 1.02;
 
 
     var __GActor_changeClass = Game_Actor.prototype.changeClass;
-    Game_Actor.prototype.changeClass = function(classId, keepExp) {
+    Game_Actor.prototype.changeClass = function (classId, keepExp) {
         __GActor_changeClass.call(this, classId, keepExp);
         var es = this.equipSlots();
-        for (var i=0,max=es.length;i<max;i++) {
-            if (!this._equips[es[i]-1]) this._equips[es[i]-1] = new Game_Item();
+        for (var i = 0, max = es.length; i < max; i++) {
+            if (!this._equips[es[i] - 1]) this._equips[es[i] - 1] = new Game_Item();
         }
     };
-    
+
     ////////////////////////////////////////////////////////////////////////////////////
-    
+
     var __WESlot_refresh = Window_EquipSlot.prototype.refresh;
-    Window_EquipSlot.prototype.refresh = function(){
-        if (this._actor){ this._actor.refresh() }
+    Window_EquipSlot.prototype.refresh = function () {
+        if (this._actor) { this._actor.refresh() }
         __WESlot_refresh.call(this);
     };
 }());
