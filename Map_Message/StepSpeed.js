@@ -14,7 +14,7 @@ var Imported = Imported || {};
 Imported['StepSpeed'] = 1.00;
 /*:
  * @target MZ MV
- * @url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Battle/StepSpeed.js
+ * @url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Map_Message/StepSpeed.js
  * @plugindesc ver1.00/イベントの足踏み速度を変更します。
  * @author Yana
  * 

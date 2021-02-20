@@ -15,7 +15,7 @@ Imported['MoveRoutePlus'] = 1.00;
 
 /*:
  * @target MZ MV
- * @url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Battle/MoveRoutePlus.js
+ * @url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Map_Message/MoveRoutePlus.js
  * @plugindesc ver1.00/移動ルートの設定を拡張します。
  * @author Yana
  *

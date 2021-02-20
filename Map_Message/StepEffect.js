@@ -15,7 +15,7 @@ Imported['StepEffect'] = 1.00;
 
 /*:
  * @target MZ MV
- * @url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Battle/StepEffect.js
+ * @url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Map_Message/StepEffect.js
  * @plugindesc ver1.00/足跡などのエフェクトを追加します。
  * @author Yana
  * 
