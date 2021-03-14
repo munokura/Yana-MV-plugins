@@ -16,265 +16,373 @@ Imported['EquipAndShopStatusR'] = 1.09;
 /*:
  * @plugindesc ver1.09/装備&ショップシーンのステータス表示を改造します。
  * @author Yana
+ * @target MV
  *
- * @param 【ステータスの設定】
- *
+ * @param status
+ * @text 【ステータスの設定】
+ * 
  * @param Stand Opacity
+ * @text 表示ピクチャ透明度
  * @desc 表示するピクチャの透明度です。
  * @type number
  * @min 0
  * @max 256
  * @default 128
- *
+ * @parent status
+ * 
  * @param Font Size
+ * @text フォントサイズ
  * @desc ステータス欄のフォントサイズです。
  * @type number
  * @default 24
- *
+ * @parent status
+ * 
  * @param Top Space
+ * @text 表示部分の上部スペース
  * @desc ステータス欄の表示部分の上部スペースです。
  * @type number
  * @default 0
- *
+ * @parent status
+ * 
  * @param Page Icon Offset Y
+ * @text ページ表示位置補正Y値
  * @desc ステータス欄のページ表示の表示位置補正Y値です。
  * @type number
  * @default -12
- *
+ * @parent status
+ * 
  * @param Line Spacing
+ * @text 1行毎のスペース
  * @desc 1行毎のスペースです。
  * @type number
  * @default 4
- *
+ * @parent status
+ * 
  * @param Max Page Line
+ * @text 1ページ最大項目数
  * @desc 1ページに表示する最大項目数です。
  * @type number
  * @default 14
- *
+ * @parent status
+ * 
  * @param Slot Height
+ * @text 装備ウィンドウ高
  * @desc SlotWindowの高さです。
  * @type number
  * @default 224
- *
+ * @parent status
+ * 
  * @param Equip Status Help Text
+ * @text ヘルプのテキスト
  * @desc 装備ステータスの下に表示するヘルプのテキストです。
  * 装備のときにこの項目のヘルプが使用されます。
  * @default ←→:ページの切替 QW:キャラの切替
- *
+ * @parent status
+ * 
  * @param Equip Status Help Text2
+ * @text ヘルプのテキスト2
  * @desc 装備ステータスの下に表示するヘルプのテキスト2です。
  * アイテムウィンドウがアクティブな時にこの項目が使用されます。
  * @default ←→:ページの切替
- *
+ * @parent status
+ * 
  * @param Use Slot Compact
+ * @text 装備ウィンドウ縮小有効化
  * @desc itemWindowがアクティブになった時、slotWindowを縮小する設定です。
  * @type boolean
  * @default true
- *
- * @param
- * @param 【内容の設定】
- *
+ * @parent status
+ * 
+ * @param display
+ * @text 【内容の設定】
+ * 
  * @param Basic Params
+ * @text 基本ステータス表示内容
  * @desc 基本ステータスの欄に表示する内容です。
  * @default name,level,class,l
- *
+ * @parent display
+ * 
  * @param Page1
+ * @text 1ページ目表示内容
  * @desc 1ページ目に表示する内容です。
  * @default hp,mp,l,atk,def,mat,mdf,agi,luk
- *
+ * @parent display
+ * 
  * @param Page2
+ * @text 2ページ目表示内容
  * @desc 2ページ目に表示する内容です。
  * @default hit,eva,cri,mev,mrf,cev,cnt,hrg,mrg,trg
- *
+ * @parent display
+ * 
  * @param Page3
+ * @text 3ページ目表示内容
  * @desc 3ページ目に表示する内容です。
  * @default tgr,grd,rec,pha,mcr,tcr,pdr,mdr,fdr,exr
- *
+ * @parent display
+ * 
  * @param Page4
+ * @text 4ページ目表示内容
  * @desc 4ページ目に表示する内容です。
  * @default e1,e2,e3,e4,e5,e6,e7,e8,e9
- *
+ * @parent display
+ * 
  * @param Page5
+ * @text 5ページ目表示内容
  * @desc 5ページ目に表示する内容です。
  * @default s4,s5,s6,s7,s8,s9,s10
- *
+ * @parent display
+ * 
  * @param Page6
+ * @text 6ページ目表示内容
  * @desc 6ページ目に表示する内容です。
  * @default d0,d1,d2,d3,d4,d5,d6,d7
- *
- * @param
- * @param 【ショップの設定】
- *
+ * @parent display
+ * 
+ * @param shopDisplay
+ * @text 【ショップの設定】
+ * 
  * @param Is Refine Shop Status
+ * @text ショップ表示変更有効化
  * @desc ショップステータスも改造するかの設定です。
  * true/falseで指定してください。
  * @type boolean
  * @default true
- *
+ * @parent shopDisplay
+ * 
  * @param Max Shop Equip Page Line
- * @desc ショップステータスの装備の場合の
- * 1ページ当たりの表示行数です。
+ * @text 1ページの表示行数
+ * @desc ショップステータスの装備の場合の1ページ当たりの表示行数です。
  * @type number
  * @default 7
- *
+ * @parent shopDisplay
+ * 
  * @param Max Shop Item Page Line
- * @desc ショップステータスのアイテムの場合の
- * 1ページ当たりの表示行数です。
+ * @text アイテム1ページ表示行数
+ * @desc ショップステータスのアイテムの場合の1ページ当たりの表示行数です。
  * @type number
  * @default 13
- *
+ * @parent shopDisplay
+ * 
  * @param Shop Info
+ * @text アイテム表示内容
  * @desc ショップステータスのアイテムに表示する内容です。
  * @default type,price,consume,dmg,scope,occasion,l,effects
- *
+ * @parent shopDisplay
+ * 
  * @param Equip Info
+ * @text 装備表示内容
  * @desc ショップステータスの装備に表示する内容です。
  * 空欄にすると、非表示になります。
  * @default etype,type,price
- *
+ * @parent shopDisplay
+ * 
  * @param Page Icon Color
+ * @text 表示ページアイコン色
  * @desc アクティブなページアイコン矩形のカラー設定です。
  * rgb(Red,Green,Blue)の書式で記述してください。
  * @default rgb(192,255,192)
- *
+ * @parent shopDisplay
+ * 
  * @param Item Help Text
- * @desc ショップステータスの下に表示するヘルプのテキストです。
- * アイテムのときにこの項目のヘルプが使用されます。
+ * @text アイテムヘルプのテキスト
+ * @desc ショップステータスの下に表示するヘルプのテキストです。アイテムのときにこの項目のヘルプが使用されます。
  * @default ←→:ページの切替
- *
+ * @parent shopDisplay
+ * 
  * @param Equip Help Text
- * @desc ショップステータスの下に表示するヘルプのテキストです。
- * 装備のときにこの項目のヘルプが使用されます。
+ * @text 装備ヘルプのテキスト
+ * @desc ショップステータスの下に表示するヘルプのテキストです。装備のときにこの項目のヘルプが使用されます。
  * @default ←→:ページの切替 QW:キャラの切替
- *
+ * @parent shopDisplay
+ * 
  * @param Performance Icon Position Y
+ * @text 能力上下アイコンのYオフセット
  * @desc ショップステータスで表示される能力の上下を表すアイコンのY座標補正値です。
  * @type number
  * @default 18
- *
+ * @parent shopDisplay
+ * 
  * @param Performance Icon Up
+ * @text 能力上下アイコン増加表示
  * @desc ショップステータスで表示される能力の上下を表すアイコンの能力値が上がる場合の表示です。
  * @default ▲
- *
+ * @parent shopDisplay
+ * 
  * @param Performance Icon Down
+ * @text 能力上下アイコン減少表示
  * @desc ショップステータスで表示される能力の上下を表すアイコンの能力値が下がる場合の表示です。
  * @default ▼
- *
+ * @parent shopDisplay
+ * 
  * @param Performance Icon Equal
+ * @text 能力上下アイコン無変化表示
  * @desc ショップステータスで表示される能力の上下を表すアイコンの同じ能力の場合の表示です。
  * @default ＝
- *
+ * @parent shopDisplay
+ * 
  * @param Performance Icon Equipped
+ * @text 能力上下アイコン装備中表示
  * @desc ショップステータスで表示される能力の上下を表すアイコンの装備中の表示です。
  * @default E
- *
- * @param
- * @param 【用語の設定】
- *
+ * @parent shopDisplay
+ * 
+ * @param word
+ * @text 【用語の設定】
+ * 
  * @param Effect Name
+ * @text 有効度の名称
  * @desc 有効度の名称です。
  * @default 有効度
- *
+ * @parent word
+ * 
  * @param Down Name
+ * @text デバフ有効度の名称
  * @desc デバフ有効度の名称です。
  * @default 低下有効度
- *
+ * @parent word
+ * 
  * @param Item Type Text
+ * @text アイテムタイプの名称
  * @desc アイテムタイプの名称です。
  * @default アイテムタイプ
- *
+ * @parent word
+ * 
  * @param Consume Text
+ * @text 消耗の名称
  * @desc 消耗の名称です。
  * @default 消耗
- *
+ * @parent word
+ * 
  * @param Damage Type Text
+ * @text ダメージタイプの名称
  * @desc ダメージタイプの名称です。
  * @default ダメージタイプ
- *
+ * @parent word
+ * 
  * @param Price Text
+ * @text 値段の名称
  * @desc 値段の名称です。
  * @default 価値
- *
+ * @parent word
+ * 
  * @param Scope Text
+ * @text 効果範囲の名称
  * @desc 効果範囲の名称です。
  * @default 効果範囲
- *
+ * @parent word
+ * 
  * @param Occasion Text
+ * @text 使用可能時の名称
  * @desc 使用可能時の名称です。
  * @default 使用可能時
- *
+ * @parent word
+ * 
  * @param Repeat Text
+ * @text 連続回数で使用される名称
  * @desc 連続回数で使用される名称です。
  * @default 発動回数
- *
+ * @parent word
+ * 
  * @param TpGain Text
+ * @text 得TPで使用される名称
  * @desc 得TPで使用される名称です。
  * @default 得ＴＰ
- *
+ * @parent word
+ * 
  * @param Equip Type Text
+ * @text 装備タイプの名称
  * @desc 装備タイプの名称です。
  * @default 装備タイプ
- *
+ * @parent word
+ * 
  * @param Weapon Type Text
+ * @text 武器タイプの名称
  * @desc 武器タイプの名称です。
  * @default 武器タイプ
- *
+ * @parent word
+ * 
  * @param Armor Type Text
+ * @text 防具タイプの名称
  * @desc 防具タイプの名称です。
  * @default 防具タイプ
- *
+ * @parent word
+ * 
  * @param Turn Text
+ * @text ターンの名称
  * @desc バフなどに使用されるターンの名称です。
  * @default ターン
- *
+ * @parent word
+ * 
  * @param Escape Text
- * @desc 特殊効果　逃げるの名称です。
+ * @text 逃げるの名称
+ * @desc 特殊効果  逃げるの名称です。
  * @default 逃げる
- *
+ * @parent word
+ * 
  * @param Scope Vocab
+ * @text 効果範囲の名称
  * @desc 効果範囲で使用される各範囲の名称です。
  * @default なし,敵単体,敵全体,敵1体 ランダム,敵2体 ランダム,敵3体 ランダム,敵4体 ランダム,味方単体,味方全体,味方単体(戦闘不能),味方全体(戦闘不能),使用者
- *
+ * @parent word
+ * 
  * @param Item Type Vocab
+ * @text アイテムタイプの名称
  * @desc アイテムタイプで使用される各名称です。
  * @default 通常アイテム,貴重品,隠しアイテムA,隠しアイテムB
- *
+ * @parent word
+ * 
  * @param Consume Vocab
+ * @text 消耗の名称
  * @desc 消耗で使用される各名称です。
  * @default 消耗する,消耗しない
- *
+ * @parent word
+ * 
  * @param Occasion Vocab
+ * @text 使用可能時の名称
  * @desc 使用可能時で使用される各名称です。
  * @default 常時,バトル,メニュー,使用不可
- *
+ * @parent word
+ * 
  * @param Damage Vocab
+ * @text ダメージタイプの名称
  * @desc ダメージタイプで使用される各名称です。
  * @default なし,HPダメージ,MPダメージ,HP回復,MP回復,HP吸収,MP吸収
- *
+ * @parent word
+ * 
  * @param Xparam Names
+ * @text 追加能力値の名称
  * @desc 追加能力値の名称です。
  * @default 命中,回避,会心率,会心回避,魔法回避,魔法反射,反撃,HP再生率,MP再生率,TP再生率
- *
+ * @parent word
+ * 
  * @param Sparam Names
+ * @text 特殊能力値の名称
  * @desc 特殊能力値の名称です。
  * @default 狙われ率,防御効果率,回復効果率,薬の知識,MP消費率,TPチャージ率,物理ダメージ率,魔法ダメージ率,床ダメージ率,経験値獲得率
- *
+ * @parent word
+ * 
  * @param Effects Names
+ * @text 使用効果の名称
  * @desc 使用効果の各効果の名称です。
  * @default HP回復,HPダメージ,MP回復,MPダメージ,TP増加,ステート付与,ステート解除,強化付与,弱体付与,強化解除,弱体解除,特殊効果,成長,スキル習得,コモン
- *
- * @param
- * @param 【オプション】
+ * @parent word
+ * 
+ * @param option
+ * @text 【オプション】
  * @param Use Equip Command
+ * @text 装備コマンド有効化
  * @desc 装備コマンドを使用するかの設定です。
  * @type boolean
  * @default true
- *
+ * @parent option
+ * 
  * @param Equipped Limit Color
+ * @text 装備制限の表示色
  * @desc 装備制限表示や追加表示で表示される項目のカラーです。
  * @type number
  * @default 6
- *
+ * @parent option
+ * 
  * @noteParam StatusPicture
  * @noteRequire 1
  * @noteDir img/pictures/
@@ -287,7 +395,8 @@ Imported['EquipAndShopStatusR'] = 1.09;
  * @noteType file
  * @noteData actors
  * 
- * @help------------------------------------------------------
+ * @help
+ * ------------------------------------------------------
  *  プラグインコマンドはありません。
  * ------------------------------------------------------
  * ------------------------------------------------------ 
