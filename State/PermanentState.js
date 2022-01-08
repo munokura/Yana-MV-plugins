@@ -13,10 +13,11 @@
 var Imported = Imported || {};
 Imported['PermanentState'] = 1.00;
 /*:
+ * @target MZ MV
  * @plugindesc ver1.00/戦闘不能や全回復で解除されないステートを設定できるようにします。
  * @author Yana
  * 
- * @help ------------------------------------------------------
+ * @help
  * 使用方法
  * ------------------------------------------------------
  * ステートのメモ欄に
@@ -31,48 +32,43 @@ Imported['PermanentState'] = 1.00;
  * 利用規約
  * ------------------------------------------------------
  * 当プラグインはMITライセンスで公開されています。
+ * http://opensource.org/licenses/mit-license.php
+ * 
  * 使用に制限はありません。商用、アダルト、いずれにも使用できます。
  * 二次配布も制限はしませんが、サポートは行いません。
  * 著作表示は任意です。行わなくても利用できます。
- * 要するに、特に規約はありません。
- * バグ報告や使用方法等のお問合せはネ実ツクールスレ、または、Twitterにお願いします。
- * https://twitter.com/yanatsuki_
  * 素材利用は自己責任でお願いします。
- * ------------------------------------------------------
- * 更新履歴:
- * ver1.00:
- * 公開
  */
 
-(function(){
+(function () {
 	////////////////////////////////////////////////////////////////////////////////////
-	
+
 	var parameters = PluginManager.parameters('PermanentState');
-	
+
 	////////////////////////////////////////////////////////////////////////////////////
-		
-	DataManager.isPermanent = function(state) {
-		if (!state){ return false }
+
+	DataManager.isPermanent = function (state) {
+		if (!state) { return false }
 		return !!state.meta['永続ステート'] || !!state.meta['Permanent'];
 	};
-	
+
 	////////////////////////////////////////////////////////////////////////////////////
-	
+
 	var __GBBase_clearStates = Game_BattlerBase.prototype.clearStates;
-	Game_BattlerBase.prototype.clearStates = function() {
+	Game_BattlerBase.prototype.clearStates = function () {
 		var states = this._states ? this._states.clone() : [];
 		var turns = this._stateTurns ? JsonEx.makeDeepCopy(this._stateTurns) : {};
 		__GBBase_clearStates.call(this);
-		if (states.length < 1){ return }
-		states.forEach(function(stateId){
+		if (states.length < 1) { return }
+		states.forEach(function (stateId) {
 			var state = $dataStates[stateId];
-			if (DataManager.isPermanent(state)){
+			if (DataManager.isPermanent(state)) {
 				this._states.push(state.id);
 				this._stateTurns[state.id] = turns[state.id]
 			}
 		}.bind(this));
 	};
-	
+
 	////////////////////////////////////////////////////////////////////////////////////
-	
+
 }());
