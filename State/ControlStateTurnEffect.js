@@ -13,20 +13,24 @@
 var Imported = Imported || {};
 Imported['ControlStateTurnEffect'] = 1.01;
 /*:
+ * @target MZ MV
  * @plugindesc ver1.01/ステートや強化弱体の効果ターンを操作する効果を設定できるようにします。
  * @author Yana
  *
  * @param StateTurnMax
+ * @text ステートターン最大値
  * @desc ステートの加算されるターン数の最大値です。
  * このプラグインで追加されたターンはこの数値以上にはなりません。
  * @default 10
  *
  * @param BuffTurnMax
+ * @text 強化ターン最大値
  * @desc 強化の加算されるターン数の最大値です。
  * このプラグインで追加されたターンはこの数値以上にはなりません。
  * @default 10
  *
  * @param DebuffTurnMax
+ * @text 弱体ターン最大値
  * @desc 弱体の加算されるターン数の最大値です。
  * このプラグインで追加されたターンはこの数値以上にはなりません。
  * @default 10
@@ -76,7 +80,7 @@ Imported['ControlStateTurnEffect'] = 1.01;
  * ver1.00:
  * 公開
  */
-(function() {
+(function () {
     ////////////////////////////////////////////////////////////////////////////////////
 
     var parameters = PluginManager.parameters('ControlStateTurnEffect');
@@ -86,11 +90,11 @@ Imported['ControlStateTurnEffect'] = 1.01;
 
     ////////////////////////////////////////////////////////////////////////////////////
 
-    DataManager.controlStateTurnEffect = function(item) {
+    DataManager.controlStateTurnEffect = function (item) {
         if (item._ctrlStateTurnEffect) { return item._ctrlStateTurnEffect }
         var texts = item.note.split('\n');
         item._ctrlStateTurnEffect = {};
-        for (var i=0,max=texts.length;i<max;i++) {
+        for (var i = 0, max = texts.length; i < max; i++) {
             if (texts[i].match(/<(?:ステートターン追加|AddStateTurn):(\d+),([+-]?\d+)(?:ターン|Turn)?>/i)) {
                 item._ctrlStateTurnEffect[Number(RegExp.$1)] = Number(RegExp.$2);
             }
@@ -98,11 +102,11 @@ Imported['ControlStateTurnEffect'] = 1.01;
         return item._ctrlStateTurnEffect;
     };
 
-    DataManager.controlBuffTurnEffect = function(item) {
+    DataManager.controlBuffTurnEffect = function (item) {
         if (item._ctrlBuffTurnEffect) { return item._ctrlBuffTurnEffect }
         var texts = item.note.split('\n');
         item._ctrlBuffTurnEffect = {};
-        for (var i=0,max=texts.length;i<max;i++) {
+        for (var i = 0, max = texts.length; i < max; i++) {
             if (texts[i].match(/<(?:強化ターン追加|AddBuffTurn):(-?\d+),([+-]?\d+)(?:ターン|Turn)?>/i)) {
                 item._ctrlBuffTurnEffect[Number(RegExp.$1)] = Number(RegExp.$2);
             }
@@ -110,11 +114,11 @@ Imported['ControlStateTurnEffect'] = 1.01;
         return item._ctrlBuffTurnEffect;
     };
 
-    DataManager.controlDebuffTurnEffect = function(item) {
+    DataManager.controlDebuffTurnEffect = function (item) {
         if (item._ctrlDebuffTurnEffect) { return item._ctrlDebuffTurnEffect }
         var texts = item.note.split('\n');
         item._ctrlDebuffTurnEffect = {};
-        for (var i=0,max=texts.length;i<max;i++) {
+        for (var i = 0, max = texts.length; i < max; i++) {
             if (texts[i].match(/<(?:弱体ターン追加|AddDebuffTurn):(-?\d+),([+-]?\d+)(?:ターン|Turn)?>/i)) {
                 item._ctrlDebuffTurnEffect[Number(RegExp.$1)] = Number(RegExp.$2);
             }
@@ -125,7 +129,7 @@ Imported['ControlStateTurnEffect'] = 1.01;
     ////////////////////////////////////////////////////////////////////////////////////
 
     var __GAction_hasItemAnyValidEffects = Game_Action.prototype.hasItemAnyValidEffects;
-    Game_Action.prototype.hasItemAnyValidEffects = function(target) {
+    Game_Action.prototype.hasItemAnyValidEffects = function (target) {
         if (__GAction_hasItemAnyValidEffects.call(this, target)) { return true }
         if (this.checkStateTurnEffectValid(target)) { return true }
         if (this.checkBuffTurnEffectValid(target)) { return true }
@@ -133,43 +137,43 @@ Imported['ControlStateTurnEffect'] = 1.01;
         return false;
     };
 
-    Game_Action.prototype.checkStateTurnEffectValid = function(target) {
+    Game_Action.prototype.checkStateTurnEffectValid = function (target) {
         var ctrlStateTurnEffect = DataManager.controlStateTurnEffect(this.item());
         for (var key in ctrlStateTurnEffect) {
             var id = Number(key);
             if (id === 0 && target._stateTurns !== {}) {
                 return true;
-            } else  if (target.isStateAffected(id)){
+            } else if (target.isStateAffected(id)) {
                 return true;
             }
         }
         return false;
     };
 
-    Game_Action.prototype.checkBuffTurnEffectValid = function(target) {
+    Game_Action.prototype.checkBuffTurnEffectValid = function (target) {
         var ctrlBuffTurnEffect = DataManager.controlBuffTurnEffect(this.item());
         for (var key in ctrlBuffTurnEffect) {
             var id = Number(key);
             if (id === -1) {
-                for (var i=0;i<8;i++){
-                    if (target._buffs[i] > 0){ return true }
+                for (var i = 0; i < 8; i++) {
+                    if (target._buffs[i] > 0) { return true }
                 }
-            } else  if (target.isBuffAffected(id)){
+            } else if (target.isBuffAffected(id)) {
                 return true;
             }
         }
         return false;
     };
 
-    Game_Action.prototype.checkDebuffTurnEffectValid = function(target) {
+    Game_Action.prototype.checkDebuffTurnEffectValid = function (target) {
         var ctrlDebuffTurnEffect = DataManager.controlDebuffTurnEffect(this.item());
         for (var key in ctrlDebuffTurnEffect) {
             var id = Number(key);
             if (id === -1) {
-                for (var i=0;i<8;i++) {
-                    if (target._buffs[i] < 0){ return true }
+                for (var i = 0; i < 8; i++) {
+                    if (target._buffs[i] < 0) { return true }
                 }
-            } else  if (target.isDebuffAffected(id)){
+            } else if (target.isDebuffAffected(id)) {
                 return true;
             }
         }
@@ -177,8 +181,8 @@ Imported['ControlStateTurnEffect'] = 1.01;
     };
 
     var __GAction_apply = Game_Action.prototype.apply;
-    Game_Action.prototype.apply = function(target) {
-        __GAction_apply.call(this,target);
+    Game_Action.prototype.apply = function (target) {
+        __GAction_apply.call(this, target);
         var result = target.result();
         if (result.isHit()) {
             this.applyStateTurnEffect(target);
@@ -187,20 +191,20 @@ Imported['ControlStateTurnEffect'] = 1.01;
         }
     };
 
-    Game_Action.prototype.applyStateTurnEffect = function(target) {
+    Game_Action.prototype.applyStateTurnEffect = function (target) {
         var ctrlStateTurnEffect = DataManager.controlStateTurnEffect(this.item());
         for (var key in ctrlStateTurnEffect) {
             var id = Number(key);
             if (id === 0) {
                 for (var key2 in target._stateTurns) {
                     target._stateTurns[key2] += ctrlStateTurnEffect[key];
-                    target._stateTurns[key2] = Math.min(target._stateTurns[key2],stateTurnMax);
+                    target._stateTurns[key2] = Math.min(target._stateTurns[key2], stateTurnMax);
                     this.makeSuccess(target);
                 }
             } else {
                 if (target.isStateAffected(id) && target._stateTurns[id]) {
                     target._stateTurns[id] += ctrlStateTurnEffect[id];
-                    target._stateTurns[id] = Math.min(target._stateTurns[id],stateTurnMax);
+                    target._stateTurns[id] = Math.min(target._stateTurns[id], stateTurnMax);
                     this.makeSuccess(target);
                 }
             }
@@ -213,52 +217,52 @@ Imported['ControlStateTurnEffect'] = 1.01;
     };
 
 
-    Game_Action.prototype.applyBuffTurnEffect = function(target) {
+    Game_Action.prototype.applyBuffTurnEffect = function (target) {
         var ctrlBuffTurnEffect = DataManager.controlBuffTurnEffect(this.item());
         for (var key in ctrlBuffTurnEffect) {
             var id = Number(key);
             if (id === -1) {
-                for (var i=0;i<8;i++) {
-                    if (target.isBuffAffected(i)){
+                for (var i = 0; i < 8; i++) {
+                    if (target.isBuffAffected(i)) {
                         target._buffTurns[i] += ctrlBuffTurnEffect[id];
-                        target._buffTurns[i] = Math.min(target._buffTurns[i],buffTurnMax);
+                        target._buffTurns[i] = Math.min(target._buffTurns[i], buffTurnMax);
                         this.makeSuccess(target);
                     }
                 }
             } else {
                 if (target.isBuffAffected(id)) {
                     target._buffTurns[id] += ctrlBuffTurnEffect[id];
-                    target._buffTurns[id] = Math.min(target._buffTurns[id],buffTurnMax);
+                    target._buffTurns[id] = Math.min(target._buffTurns[id], buffTurnMax);
                     this.makeSuccess(target);
                 }
             }
         }
-        for (var i=0;i<8;i++) {
+        for (var i = 0; i < 8; i++) {
             if (target._buffTurns[i] <= 0) { target.removeBuff(i) }
         }
     };
 
-    Game_Action.prototype.applyDebuffTurnEffect = function(target) {
+    Game_Action.prototype.applyDebuffTurnEffect = function (target) {
         var ctrlDebuffTurnEffect = DataManager.controlDebuffTurnEffect(this.item());
         for (var key in ctrlDebuffTurnEffect) {
             var id = Number(key);
             if (id === -1) {
-                for (var i=0;i<8;i++) {
-                    if (target.isDebuffAffected(i)){
+                for (var i = 0; i < 8; i++) {
+                    if (target.isDebuffAffected(i)) {
                         target._buffTurns[i] += ctrlDebuffTurnEffect[id];
-                        target._buffTurns[i] = Math.min(target._buffTurns[i],debuffTurnMax);
+                        target._buffTurns[i] = Math.min(target._buffTurns[i], debuffTurnMax);
                         this.makeSuccess(target);
                     }
                 }
             } else {
                 if (target.isDebuffAffected(id)) {
                     target._buffTurns[id] += ctrlDebuffTurnEffect[id];
-                    target._buffTurns[id] = Math.min(target._buffTurns[id],debuffTurnMax);
+                    target._buffTurns[id] = Math.min(target._buffTurns[id], debuffTurnMax);
                     this.makeSuccess(target);
                 }
             }
         }
-        for (var i=0;i<8;i++) {
+        for (var i = 0; i < 8; i++) {
             if (target._buffTurns[i] <= 0) { target.removeBuff(i) }
         }
     };
