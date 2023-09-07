@@ -123,8 +123,9 @@ Imported['BeforeCommon'] = 1.01;
 
     BattleManager.checkBeforeCommon = function (action) {
         if (action && !this._execBeforeCommon && DataManager.isBeforeCommon(action.item())) {
-            this._execBeforeCommon = true;
             var beforeCommon = DataManager.beforeCommonEffect(action.item());
+            if (beforeCommon <= 0) return false;
+            this._execBeforeCommon = true;
             $gameTemp.reserveCommonEvent(beforeCommon);
             var sId = this._subject.index();
             var tId = action._targetIndex;
@@ -134,6 +135,7 @@ Imported['BeforeCommon'] = 1.01;
             if (action.isForUser()) tId = sId;
             if (indexVariableId) $gameVariables._data[indexVariableId] = sId;
             if (targetIndexVariableId) $gameVariables._data[targetIndexVariableId] = tId;
+            if (this.isForcedTurn()) this._actionForcedBattler = this._subject;
             this._phase = 'turn';
             return true;
         }
