@@ -32,13 +32,6 @@ Imported['BeforeCommon'] = 1.01;
  * @desc 対象のインデックスを保存する変数IDです。
  * 対象が2体以上の場合は変数の値は-1が設定されます。
  * @default 12
- * 
- * @param nullNumberCommonReserve
- * @text 0番コモンイベントを予約する
- * @type boolean
- * @desc 0番のコモンイベントを指定した場合でも予約動作を行う。
- * ※旧バージョンとの互換性確保のための項目
- * @default true
  *
  * @help
  * ムノクラ追記
@@ -98,7 +91,6 @@ Imported['BeforeCommon'] = 1.01;
     var parameters = PluginManager.parameters('BeforeCommon');
     var indexVariableId = Number(parameters['IndexVariableID']);
     var targetIndexVariableId = Number(parameters['TargetIndexVariableID']) || 0;
-    var nullNumberCommonReserve = (parameters['nullNumberCommonReserve'] == 'false');
 
     ////////////////////////////////////////////////////////////////////////////////////
 
@@ -131,9 +123,8 @@ Imported['BeforeCommon'] = 1.01;
 
     BattleManager.checkBeforeCommon = function (action) {
         if (action && !this._execBeforeCommon && DataManager.isBeforeCommon(action.item())) {
-            var beforeCommon = DataManager.beforeCommonEffect(action.item());
-            if (nullNumberCommonReserve && beforeCommon <= 0) return false;
             this._execBeforeCommon = true;
+            var beforeCommon = DataManager.beforeCommonEffect(action.item());
             $gameTemp.reserveCommonEvent(beforeCommon);
             var sId = this._subject.index();
             var tId = action._targetIndex;
@@ -143,7 +134,6 @@ Imported['BeforeCommon'] = 1.01;
             if (action.isForUser()) tId = sId;
             if (indexVariableId) $gameVariables._data[indexVariableId] = sId;
             if (targetIndexVariableId) $gameVariables._data[targetIndexVariableId] = tId;
-            if (this.isForcedTurn()) this._actionForcedBattler = this._subject;
             this._phase = 'turn';
             return true;
         }
