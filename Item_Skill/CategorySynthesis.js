@@ -1,5 +1,5 @@
 //
-//  カテゴリ合成 ver1.02
+//  カテゴリ合成 ver1.03
 //
 // ------------------------------------------------------
 // Copyright (c) 2016 Yana
@@ -11,10 +11,10 @@
 //
 
 var Imported = Imported || {};
-Imported['CategorySythesis'] = 1.02;
+Imported['CategorySythesis'] = 1.03;
 
 /*:
- * @plugindesc ver1.02/アイテムを合成する機能を追加します。【SecondaryCategories必須】
+ * @plugindesc ver1.03/アイテムを合成する機能を追加します。【SecondaryCategories必須】
  * @author Yana
  *
  * @param DefaultSynthesisName
@@ -197,6 +197,8 @@ Imported['CategorySythesis'] = 1.02;
  * 素材利用は自己責任でお願いします。
  * ------------------------------------------------------
  * 更新履歴:
+ * ver1.03:230921
+ * アイテム重量制と併用時、空欄を選択して決定するとエラーで停止するバグを修正。
  * ver1.02:190212
  * 合成結果で変化したアイテムの最大合成数が正常に処理されていなかったバグを修正。
  * アイテム重量制と併用時、所持重量がオーバーしているときは合成できないように変更。
@@ -584,12 +586,15 @@ Imported['CategorySythesis'] = 1.02;
     };
 
     Window_Recipe.prototype.isEnabled = function(item) {
-        var result = (item && this.price(item) <= this._money && !$gameParty.hasMaxItems(item));
-        result = result && this.checkEnableRecipe(DataManager.itemRecipe(item));
-        if (Imported['LimitPossession']) {
-            if ((this._allWeight + item._weight) > $gameParty.maxWeight()) return false;
+        if (!item) {
+            return false;
         }
-        return result;
+        if (Imported['LimitPossession'] && this._allWeight + item._weight > $gameParty.maxWeight()) {
+            return false;
+        }
+        return this.price(item) <= this._money
+            && !$gameParty.hasMaxItems(item)
+            && this.checkEnableRecipe(DataManager.itemRecipe(item));
     };
 
     Window_Recipe.prototype.checkEnableRecipe = function(recipe) {
