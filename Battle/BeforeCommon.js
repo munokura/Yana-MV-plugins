@@ -11,13 +11,13 @@
 //
 
 var Imported = Imported || {};
-Imported['BeforeCommon'] = 1.01;
+Imported['BeforeCommon'] = 1.02;
 
 /*:
  * @target MZ MV
  * @url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Battle/BeforeCommon.js
- * @plugindesc ver1.01/スキルやアイテムの発動前に、スキルやアイテムに設定されたコモンイベントを発生させます。
- * @author Yana
+ * @plugindesc ver1.02/スキルやアイテムの発動前に、スキルやアイテムに設定されたコモンイベントを発生させます。
+ * @author Yana (改変:ムノクラ)
  *
  * @param IndexVariableID
  * @text 発動者インデックス変数ID
@@ -82,6 +82,9 @@ Imported['BeforeCommon'] = 1.01;
  * 
  * ------------------------------------------------------
  * 更新履歴:
+ * ver1.02:
+ * MZでエラーが出るケースの対応。
+ * 
  * ver1.01:
  * 対象を保存する変数の設定を追加。
  * ver1.00:
@@ -99,6 +102,7 @@ Imported['BeforeCommon'] = 1.01;
     var indexVariableId = Number(parameters['IndexVariableID']);
     var targetIndexVariableId = Number(parameters['TargetIndexVariableID']) || 0;
     var nullNumberCommonReserve = (parameters['nullNumberCommonReserve'] == 'false');
+    var useMz = Utils.RPGMAKER_NAME === "MZ";
 
     ////////////////////////////////////////////////////////////////////////////////////
 
@@ -143,7 +147,11 @@ Imported['BeforeCommon'] = 1.01;
             if (action.isForUser()) tId = sId;
             if (indexVariableId) $gameVariables._data[indexVariableId] = sId;
             if (targetIndexVariableId) $gameVariables._data[targetIndexVariableId] = tId;
-            if (this.isForcedTurn()) this._actionForcedBattler = this._subject;
+            if (useMz) {
+                if (this.isActionForced()) this._actionForcedBattler = this._subject;
+            } else {
+                if (this.isForcedTurn()) this._actionForcedBattler = this._subject;
+            }
             this._phase = 'turn';
             return true;
         }
