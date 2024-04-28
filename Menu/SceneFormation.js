@@ -1,4 +1,4 @@
-//  並び替えシーン ver1.094
+//  並び替えシーン ver1.095
 //
 // ------------------------------------------------------
 // Copyright (c) 2016 Yana
@@ -13,10 +13,10 @@
  * deprecated. 余計な記述のため、次のメジャーバージョンアップで削除する
  */
 var Imported = Imported || {};
-Imported['SceneFormation'] = 1.094;
+Imported['SceneFormation'] = 1.095;
 
 /*:
- * @plugindesc ver1.094/並び替えシーンを追加します。
+ * @plugindesc ver1.095/並び替えシーンを追加します。
  * @author Yana
  *
  * @param Stand Members Size
@@ -112,6 +112,8 @@ Imported['SceneFormation'] = 1.094;
  * http://opensource.org/licenses/mit-license.php
  * ------------------------------------------------------
  * 更新履歴:
+ * ver1.095:240429
+ * 最大レベルのアクターを扱えない不具合を修正
  * ver1.094:210725
  * 大規模リファクタ by Dark Plasma
  * ver1.093:200516
@@ -693,12 +695,8 @@ Imported['SceneFormation'] = 1.094;
             const lineHeight = this.lineHeight();
             const expTotal = TextManager.expTotal.format(TextManager.exp);
             const expNext = TextManager.expNext.format(TextManager.level);
-            const value1 = this._actor.currentExp();
-            const value2 = this._actor.nextRequiredExp();
-            if (this._actor.isMaxLevel()) {
-                value1 = '-------';
-                value2 = '-------';
-            }
+            const value1 = this._actor.isMaxLevel() ? '-------' : this._actor.currentExp();
+            const value2 = this._actor.isMaxLevel() ? '-------' : this._actor.nextRequiredExp();
             this.changeTextColor(this.systemColor());
             this.drawText(expTotal, x, y + lineHeight * 0, statusBlockWidth);
             this.drawText(expNext, x, y + lineHeight * 1, statusBlockWidth);
