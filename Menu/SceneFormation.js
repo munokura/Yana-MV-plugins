@@ -1,4 +1,4 @@
-//  並び替えシーン ver1.095
+//  並び替えシーン ver1.096
 //
 // ------------------------------------------------------
 // Copyright (c) 2016 Yana
@@ -9,14 +9,8 @@
 // author Yana
 //
 
-/**
- * deprecated. 余計な記述のため、次のメジャーバージョンアップで削除する
- */
-var Imported = Imported || {};
-Imported['SceneFormation'] = 1.095;
-
 /*:
- * @plugindesc ver1.095/並び替えシーンを追加します。
+ * @plugindesc ver1.096/並び替えシーンを追加します。
  * @author Yana
  *
  * @param Stand Members Size
@@ -52,8 +46,7 @@ Imported['SceneFormation'] = 1.095;
  *
  * @param Use Battle Formation Switch ID
  * @text 戦闘中並び替えスイッチID
- * @desc 戦闘時にパーティコマンドに並び替えの項目の
- * 追加を許可を設定するスイッチのIDです。
+ * @desc 戦闘時にパーティコマンドに並び替え項目追加を許可するスイッチのIDです。なしの場合、追加しません。
  * @default 20
  * @type switch
  *
@@ -106,14 +99,22 @@ Imported['SceneFormation'] = 1.095;
  * ※戦闘中は変更できません！
  *
  * ------------------------------------------------------
+ * 並び替えの注意点
+ * ------------------------------------------------------
+ * 戦闘メンバー内に生存アクターがいない状態では、
+ * 並び替えシーンから抜けることが出来ません。
+ * 
+ * ------------------------------------------------------
  * 利用規約
  * ------------------------------------------------------
  * 当プラグインはMITライセンスで公開されています。
  * http://opensource.org/licenses/mit-license.php
  * ------------------------------------------------------
  * 更新履歴:
+ * ver1.096:240825
+ * アクターの入れ替え条件を修正
  * ver1.095:240429
- * 最大レベルのアクターを扱えない不具合を修正
+ * 最大レベルのアクターを扱えない不具合を修正 by Dark Plasma
  * ver1.094:210725
  * 大規模リファクタ by Dark Plasma
  * ver1.093:200516
@@ -213,6 +214,15 @@ Imported['SceneFormation'] = 1.095;
     const FORMATION_WINDOW_TYPE_STAND = 'stand';
 
     class Window_Formation extends Window_Selectable {
+        processCancel() {
+            const scopeIndex = this.scopeIndex();
+            if ($gameParty.aliveBattleMembers().length > 0 || scopeIndex !== null) {
+                super.processCancel();
+            } else {
+                this.playBuzzerSound();
+            }
+        };
+
         initialize(type, x, y) {
             this.refreshMembers();
             super.initialize(x, y, this.windowWidth(), this.windowHeight());
@@ -328,27 +338,29 @@ Imported['SceneFormation'] = 1.095;
 
         isCurrentItemEnabled() {
             const scopeIndex = this.scopeIndex();
+            const selectActor = this.actor();
+
+            /**
+             * # scopeIndexに関わる挙動
+             * - 1枠目を選択時はnull
+             * - 2枠目を選択時は1枠目のインデックス（アクター時）
+             * - null < 0 は false
+             */
+
             /**
              * すでに空欄を選択済みの場合、更に空欄を選択できない
              */
-            if (scopeIndex < 0 && !this.actor()) { return false; }
+            if (scopeIndex < 0 && !selectActor) {
+                return false;
+            }
+
             /**
              * 並び替え固定アクターは選択できない
              */
-            if (this.actor() && this.actor().isFixed()) { return false; }
-            if (!this.isAliveOk()) {
-                const isActorDead = !this.actor() || !this.actor().isAlive();
-                /**
-                 * 戦闘メンバーに生存者がいない場合、2回目は生存アクターを選択しなければならない
-                 */
-                if (scopeIndex !== null && isActorDead) { return false; }
-                /**
-                 * 戦闘メンバーに生存者がいない場合、1回目は生存アクターまたは前衛を選択しなければならない
-                 */
-                if (scopeIndex === null) {
-                    if (isActorDead && !this.isBattlerWindow()) { return false; }
-                }
+            if (selectActor && selectActor.isFixed()) {
+                return false;
             }
+
             return true;
         }
 
@@ -758,7 +770,7 @@ Imported['SceneFormation'] = 1.095;
             this._standerWindow.setHandler('up', this.onUp.bind(this));
             this._standerWindow.setHandler('battleOff', this.onBattleOff.bind(this));
             this._standerWindow.setStatusWindow(this._fStatusWindow);
-            this._battlerWindow.setScopeIndexMethod(this.scopeIndex.bind(this));
+            this._standerWindow.setScopeIndexMethod(this.scopeIndex.bind(this));
             this._standerWindow.deactivate();
             this._standerWindow.deselect();
             if (this._standerWindow.height + this._standerWindow.y > this._fStatusWindow.y) {
@@ -847,7 +859,7 @@ Imported['SceneFormation'] = 1.095;
             }
         }
 
-        sceneClass.onStandOk = function() {
+        sceneClass.onStandOk = function () {
             if (this._scopeIndex !== null) {
                 if (this._battlerWindow.size() !== 1 || !!this._standerWindow.actor()) {
                     if (this._scopeIndex >= 0) {
@@ -901,7 +913,7 @@ Imported['SceneFormation'] = 1.095;
             }
         }
 
-        sceneClass.onFormationCancel = function() {
+        sceneClass.onFormationCancel = function () {
             if (this._scopeIndex === null) {
                 this.returnScene();
             } else {
@@ -912,17 +924,17 @@ Imported['SceneFormation'] = 1.095;
             }
         }
 
-        sceneClass.onRelease = function() {
+        sceneClass.onRelease = function () {
             onRelease(this._battlerWindow.actor().actorId());
             this.onFormationChanged(this._battlerWindow);
         }
 
-        sceneClass.onAdd = function() {
+        sceneClass.onAdd = function () {
             onAdd(this._standerWindow.actor().actorId());
             this.onFormationChanged(this._standerWindow);
         }
 
-        sceneClass.onDown = function() {
+        sceneClass.onDown = function () {
             const index = Math.min(this._battlerWindow.index(), this._standerWindow.maxItems() - 1);
             this._battlerWindow.deactivate();
             this._battlerWindow.deselect();
@@ -930,7 +942,7 @@ Imported['SceneFormation'] = 1.095;
             this._standerWindow.select(index);
         }
 
-        sceneClass.onUp = function() {
+        sceneClass.onUp = function () {
             const index = Math.min(this._standerWindow.index(), this._battlerWindow.maxItems() - 1);
             this._standerWindow.deactivate();
             this._standerWindow.deselect();
@@ -938,17 +950,17 @@ Imported['SceneFormation'] = 1.095;
             this._battlerWindow.select(index);
         }
 
-        sceneClass.onStandOff = function() {
+        sceneClass.onStandOff = function () {
             this._standerWindow.deactivate();
             this._standerWindow.deselect();
         }
 
-        sceneClass.onBattleOff = function() {
+        sceneClass.onBattleOff = function () {
             this._battlerWindow.deactivate();
             this._battlerWindow.deselect();
         }
 
-        sceneClass.onFormationChanged = function(lastSelectedWindow) {
+        sceneClass.onFormationChanged = function (lastSelectedWindow) {
             this.clearWindows();
             lastSelectedWindow.activate();
             lastSelectedWindow.select(lastSelectedWindow.index());
@@ -1160,9 +1172,6 @@ Imported['SceneFormation'] = 1.095;
     ////////////////////////////////////////////////////////////////////////////////////
 
     Game_Actor.prototype.isFixed = function () {
-        if (this._fixed === undefined) {
-            this._fixed = this.initFixed();
-        }
         return this._fixed === true;
     };
 
@@ -1172,10 +1181,6 @@ Imported['SceneFormation'] = 1.095;
 
     Game_Actor.prototype.unfixFormation = function () {
         this._fixed = false;
-    };
-
-    Game_Actor.prototype.initFixed = function () {
-        return this.actor().note.match(/<並び替え固定>/) !== null;
     };
 
     Game_Actor.prototype.escape = function () {
