@@ -1,4 +1,4 @@
-//  並び替えシーン ver1.096
+//  並び替えシーン ver1.097
 //
 // ------------------------------------------------------
 // Copyright (c) 2016 Yana
@@ -10,7 +10,7 @@
 //
 
 /*:
- * @plugindesc ver1.096/並び替えシーンを追加します。
+ * @plugindesc ver1.097/並び替えシーンを追加します。
  * @author Yana
  *
  * @param Stand Members Size
@@ -33,6 +33,8 @@
  * 置き換えるかどうかの設定です。true/falseで設定してください。
  * @default true
  * @type boolean
+ * @on 置換する
+ * @off 置換しない
  *
  * @param Formation Scene Battle Name
  * @text 戦闘メンバーのラベル
@@ -67,6 +69,14 @@
  * @desc ステータスウィンドウのパラメータ表示部の横幅です。
  * @default 372
  * @type number
+ *
+ * @param Dead Actor Color
+ * @text 戦闘不能アクター背景色
+ * @desc 戦闘不能アクターの背景色を黄色にします。
+ * @default true
+ * @type boolean
+ * @on 黄色にする
+ * @off 無色にする
  *
  * @help ------------------------------------------------------
  * プラグインコマンド
@@ -111,6 +121,8 @@
  * http://opensource.org/licenses/mit-license.php
  * ------------------------------------------------------
  * 更新履歴:
+ * ver1.096:240827
+ * 戦闘不能アクターの背景色を黄色にするプラグインパラメーターを追加
  * ver1.096:240825
  * アクターの入れ替え条件を修正
  * ver1.095:240429
@@ -170,6 +182,7 @@
     const battleFormationText = String(parameters['Battle Command Formation'] || 'Formation');
     const statusWindowFontSize = Number(parameters['Status Window Font Size'] || 24);
     const statusBlockWidth = Number(parameters['Status Block Width'] || 372);
+    const deadActorColor = parameters['Dead Actor Color'] === 'true';
 
     const _Form_GInterpreter_pluginCommand = Game_Interpreter.prototype.pluginCommand;
     Game_Interpreter.prototype.pluginCommand = function (command, args) {
@@ -401,6 +414,11 @@
             if (this._members[index]) {
                 if (this._members[index].isFixed()) {
                     this.contents.fillRect(x, y - 3, 48, 48, 'rgba(128,0,0,0.5)')
+                }
+                if (deadActorColor) {
+                    if (!this._members[index].isAlive()) {
+                        this.contents.fillRect(x, y - 3, 48, 48, 'rgba(128,128,0,0.5)')
+                    }
                 }
                 this.drawActorCharacter(this._members[index], x + 24, y + 44);
             } else {
