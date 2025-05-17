@@ -10,7 +10,7 @@
 //
 
 /*:
- * @plugindesc ver1.097/並び替えシーンを追加します。
+ * @plugindesc ver1.098/並び替えシーンを追加します。
  * @author Yana
  *
  * @param Stand Members Size
@@ -78,6 +78,14 @@
  * @on 黄色にする
  * @off 無色にする
  *
+ * @param Member Space Add
+ * @text メンバーの空欄
+ * @desc メンバー枠に空欄（－）を追加する。
+ * @default true
+ * @type boolean
+ * @on 追加する
+ * @off 追加しない
+ *
  * @help ------------------------------------------------------
  * プラグインコマンド
  * ------------------------------------------------------
@@ -121,7 +129,9 @@
  * http://opensource.org/licenses/mit-license.php
  * ------------------------------------------------------
  * 更新履歴:
- * ver1.096:240827
+ * ver1.098:250517
+ * 戦闘メンバーの枠から「－」を無くすプラグインパラメーターを追加
+ * ver1.097:240827
  * 戦闘不能アクターの背景色を黄色にするプラグインパラメーターを追加
  * ver1.096:240825
  * アクターの入れ替え条件を修正
@@ -183,6 +193,7 @@
     const statusWindowFontSize = Number(parameters['Status Window Font Size'] || 24);
     const statusBlockWidth = Number(parameters['Status Block Width'] || 372);
     const deadActorColor = parameters['Dead Actor Color'] === 'true';
+    const memberSpaceAdd = parameters['Member Space Add'] === 'true';
 
     const _Form_GInterpreter_pluginCommand = Game_Interpreter.prototype.pluginCommand;
     Game_Interpreter.prototype.pluginCommand = function (command, args) {
@@ -592,7 +603,9 @@
         }
 
         maxItems() {
-            return this.size() + 1;
+            // return this.size() + 1;
+            const battleMemberCount = memberSpaceAdd ? this.size() + 1 : this.size();
+            return battleMemberCount;
         }
 
         maxPageRows() {
