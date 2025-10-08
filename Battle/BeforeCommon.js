@@ -13,6 +13,7 @@
 var Imported = Imported || {};
 Imported['BeforeCommon'] = 1.02;
 /*:
+@target MZ MV
 @plugindesc ver1.02/Before a skill or item is activated, a common event set for the skill or item will occur.
 @author Yana
 @url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Battle/BeforeCommon.js
@@ -74,6 +75,7 @@ Released
 
 
 /*:ja
+@target MZ MV
 @plugindesc ver1.02/スキルやアイテムの発動前に、スキルやアイテムに設定されたコモンイベントを発生させます。
 @author Yana (改変:munokura)
 @url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Battle/BeforeCommon.js
