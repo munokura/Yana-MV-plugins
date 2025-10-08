@@ -13,35 +13,63 @@
 var Imported = Imported || {};
 Imported['AddBattleLogEC'] = 1.00;
 /*:
- * @plugindesc ver1.00/メッセージをバトルログに表示する制御文字を追加します。
- * @author Yana
- * 
- * @help ------------------------------------------------------
- * 使用方法
- * ------------------------------------------------------
- * バトルログにテキストを追加する制御文字を追加します。
- * 
- * 追加制御文字:
- * _ABL
- * これをメッセージの最初に記述すると、メッセージは通常のウィンドウではなく、
- * バトルログに表示されます。
- * 
- * ------------------------------------------------------
- * 利用規約
- * ------------------------------------------------------
- * 当プラグインはMITライセンスで公開されています。
- * 使用に制限はありません。商用、アダルト、いずれにも使用できます。
- * 二次配布も制限はしませんが、サポートは行いません。
- * 著作表示は任意です。行わなくても利用できます。
- * 要するに、特に規約はありません。
- * バグ報告や使用方法等のお問合せはネ実ツクールスレ、または、Twitterにお願いします。
- * https://twitter.com/yanatsuki_
- * 素材利用は自己責任でお願いします。
- * ------------------------------------------------------
- * 更新履歴:
- * ver1.00:
- * 公開
- */
+@plugindesc ver1.00/Adds control characters to display messages in the battle log.
+@author Yana
+@url https://github.com/munokura/Yana-MV-plugins
+@license MIT License
+
+@help
+English Help Translator: munokura
+This is an unofficial English translation of the plugin help,
+created to support global RPG Maker users.
+Feedback is welcome to improve translation quality
+(see: https://github.com/munokura/Yana-MV-plugins ).
+Original plugin by Yana.
+-----
+How to Use
+--------------------------------------------------------------------
+Adds a control character to add text to the battle log.
+
+Additional Control Character:
+_ABL
+If you include this at the beginning of a message, it will be displayed in the battle log instead of a normal window.
+
+------------------------------------------------------
+Terms of Use
+------------------------------------------------------
+This plugin is released under the MIT License.
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+Update History:
+ver1.00:
+Released
+*/
+
+
+/*:ja
+@plugindesc ver1.00/メッセージをバトルログに表示する制御文字を追加します。
+@author Yana
+
+@help
+使用方法
+------------------------------------------------------
+バトルログにテキストを追加する制御文字を追加します。
+
+追加制御文字:
+_ABL
+これをメッセージの最初に記述すると、メッセージは通常のウィンドウではなく、
+バトルログに表示されます。
+
+------------------------------------------------------
+利用規約
+------------------------------------------------------
+当プラグインはMITライセンスで公開されています。
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+更新履歴:
+ver1.00:
+公開
+*/
 
 (function(){
     ////////////////////////////////////////////////////////////////////////////////////

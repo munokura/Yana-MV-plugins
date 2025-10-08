@@ -12,76 +12,135 @@
 
 var Imported = Imported || {};
 Imported['StackBattleLog'] = 1.04;
-
 /*:
- * @plugindesc ver1.04/戦闘ログを蓄積型に変更し、戦闘ログを表示するパーティコマンドを追加します。
- * @author Yana
- * 
- * @param Stack Log UseLog
- * @desc パーティコマンドにログのコマンドを追加するかの設定です。
- * true/falseで設定してください。
- * @default true
- * 
- * @param Stack Log UseStack
- * @desc 戦闘ログを蓄積型に変更するかの設定です。
- * true/falseで設定してください。
- * @default true
- * 
- * @param Stack Log Text
- * @desc パーティコマンドに表示するコマンドの名前です。
- * @default Log
- * 
- * @param Stack Log Start
- * @desc ログウィンドウに表示する戦闘開始のテキストです。
- * @default ------Start Battle------
- * 
- * @param Stack Log TurnEnd
- * @desc ログウィンドウに表示するターン終了のテキストです。
- * %dをターン数に変換します。
- * @default ------ %d Turn End------
- * 
- * @param Stack Log MaxLines
- * @desc 戦闘ログの最大行数です。
- * @default 6
- * 
- * @param Stack Log FontSize
- * @desc 戦闘ログ及びログウィンドウの文字サイズです。
- * @default 24
- *
- * @param Stack Log Size
- * @desc 蓄積するログの行数です。
- * @default 100
- *
- * @help このプラグインにはプラグインコマンドはありません。
- * ------------------------------------------------------
- * 仕様
- * ------------------------------------------------------
- * このプラグインは、同時に以下の制御文字を追加します。
- * 
- * \FS[FontSize]
- * メッセージなど、drawTextExを使用しているテキストの文字サイズを
- * FontSizeに変更します。
- * この制御文字は\{や\}と違い、最小値、最大値を持ちません。
- * ------------------------------------------------------
- * 利用規約
- * ------------------------------------------------------
- * 当プラグインはMITライセンスで公開されています。
- * 使用に制限はありません。商用、アダルト、いずれにも使用できます。
- * 二次配布も制限はしませんが、サポートは行いません。
- * 著作表示は任意です。行わなくても利用できます。
- * 要するに、特に規約はありません。
- * バグ報告や使用方法等のお問合せはネ実ツクールスレ、または、Twitterにお願いします。
- * https://twitter.com/yanatsuki_
- * 素材利用は自己責任でお願いします。
- * ------------------------------------------------------
- * ver1.04:YEP_MessageCoreとの競合を回避
- * ver1.03:制御文字の変換が正常に行われていないバグを修正
- *		  :100行を超えるログを削除する際、正常に削除できていなかったバグを修正
- *		  :残っていたconsole.logを削除
- * ver1.01:パーティコマンドのログを無効化する設定にしていても、正常に動作しないバグを修正
- * ver1.00:公開
- *
- */
+@plugindesc ver1.04/The battle log will be changed to a cumulative type, and a party command will be added to display the battle log.
+@author Yana
+@url https://github.com/munokura/Yana-MV-plugins
+@license MIT License
+
+@help
+English Help Translator: munokura
+This is an unofficial English translation of the plugin help,
+created to support global RPG Maker users.
+Feedback is welcome to improve translation quality
+(see: https://github.com/munokura/Yana-MV-plugins ).
+Original plugin by Yana.
+-----
+------------------------------------------------------
+Specifications
+------------------------------------------------------
+This plugin also adds the following control characters:
+
+\FS[FontSize]
+Changes the font size of text using drawTextEx, such as messages, to FontSize.
+
+Unlike \{ and \}, this control character does not have a minimum or maximum value.
+------------------------------------------------------
+Terms of Use
+------------------------------------------------------
+This plugin is released under the MIT License.
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+ver 1.04: Avoids conflicts with YEP_MessageCore
+ver 1.03: Fixed a bug where control character conversion was not performed correctly.
+: Fixed a bug where deleting logs over 100 lines was not performed correctly.
+: Deleted remaining console.log files.
+ver 1.01: Fixed a bug where party command logging would not function properly even when disabled.
+ver 1.00: Released
+
+@param Stack Log UseLog
+@desc This setting determines whether to add a log command to the party command. Set this to true or false.
+@default true
+
+@param Stack Log UseStack
+@desc This setting determines whether to change the battle log to a cumulative type. Set this to true or false.
+@default true
+
+@param Stack Log Text
+@desc The name of the command to display in the party commands.
+@default Log
+
+@param Stack Log Start
+@desc This is the battle start text to display in the log window.
+@default ------Start Battle------
+
+@param Stack Log TurnEnd
+@desc End of turn text to display in the log window. Converts %d to the number of turns.
+@default ------ %d Turn End------
+
+@param Stack Log MaxLines
+@desc Maximum number of lines in the battle log.
+@default 6
+
+@param Stack Log FontSize
+@desc Font size for the battle log and log window.
+@default 24
+
+@param Stack Log Size
+@desc The number of log lines to accumulate.
+@default 100
+*/
+
+
+/*:ja
+@plugindesc ver1.04/戦闘ログを蓄積型に変更し、戦闘ログを表示するパーティコマンドを追加します。
+@author Yana
+
+@help
+------------------------------------------------------
+仕様
+------------------------------------------------------
+このプラグインは、同時に以下の制御文字を追加します。
+
+\FS[FontSize]
+メッセージなど、drawTextExを使用しているテキストの文字サイズを
+FontSizeに変更します。
+この制御文字は\{や\}と違い、最小値、最大値を持ちません。
+------------------------------------------------------
+利用規約
+------------------------------------------------------
+当プラグインはMITライセンスで公開されています。
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+ver1.04:YEP_MessageCoreとの競合を回避
+ver1.03:制御文字の変換が正常に行われていないバグを修正
+	  :100行を超えるログを削除する際、正常に削除できていなかったバグを修正
+	  :残っていたconsole.logを削除
+ver1.01:パーティコマンドのログを無効化する設定にしていても、正常に動作しないバグを修正
+ver1.00:公開
+
+@param Stack Log UseLog
+@desc パーティコマンドにログのコマンドを追加するかの設定です。 true/falseで設定してください。
+@default true
+
+@param Stack Log UseStack
+@desc 戦闘ログを蓄積型に変更するかの設定です。 true/falseで設定してください。
+@default true
+
+@param Stack Log Text
+@desc パーティコマンドに表示するコマンドの名前です。
+@default Log
+
+@param Stack Log Start
+@desc ログウィンドウに表示する戦闘開始のテキストです。
+@default ------Start Battle------
+
+@param Stack Log TurnEnd
+@desc ログウィンドウに表示するターン終了のテキストです。 %dをターン数に変換します。
+@default ------ %d Turn End------
+
+@param Stack Log MaxLines
+@desc 戦闘ログの最大行数です。
+@default 6
+
+@param Stack Log FontSize
+@desc 戦闘ログ及びログウィンドウの文字サイズです。
+@default 24
+
+@param Stack Log Size
+@desc 蓄積するログの行数です。
+@default 100
+*/
 
 (function() {
 	

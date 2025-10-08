@@ -13,32 +13,58 @@
 var Imported = Imported || {};
 Imported['ExtendDamageFormula'] = 1.00;
 /*:
- * @plugindesc ver1.00/ダメージ計算式にほかのスキルの式を追加する機能を追加します。
- * @author Yana
- * 
- * @help ------------------------------------------------------
- * 使用方法
- * ------------------------------------------------------
- * ダメージ計算式に、
- * _sd(x)
- * と記述すると、その部分はIDx番のスキルのダメージ計算式に置き換わります。
- * 
- * ------------------------------------------------------
- * 利用規約
- * ------------------------------------------------------
- * 当プラグインはMITライセンスで公開されています。
- * 使用に制限はありません。商用、アダルト、いずれにも使用できます。
- * 二次配布も制限はしませんが、サポートは行いません。
- * 著作表示は任意です。行わなくても利用できます。
- * 要するに、特に規約はありません。
- * バグ報告や使用方法等のお問合せはネ実ツクールスレ、または、Twitterにお願いします。
- * https://twitter.com/yanatsuki_
- * 素材利用は自己責任でお願いします。
- * ------------------------------------------------------
- * 更新履歴:
- * ver1.00:
- * 公開
- */
+@plugindesc ver1.00/Adds the ability to add formulas for other skills to the damage calculation formula.
+@author Yana
+@url https://github.com/munokura/Yana-MV-plugins
+@license MIT License
+
+@help
+English Help Translator: munokura
+This is an unofficial English translation of the plugin help,
+created to support global RPG Maker users.
+Feedback is welcome to improve translation quality
+(see: https://github.com/munokura/Yana-MV-plugins ).
+Original plugin by Yana.
+-----
+How to Use
+--------------------------------------------------------------------
+If you write
+_sd(x)
+in the damage calculation formula, that part will be replaced with the damage calculation formula for the skill with ID number x.
+
+------------------------------------------------------
+Terms of Use
+------------------------------------------------------
+This plugin is released under the MIT License.
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+Update History:
+ver1.00:
+Released
+*/
+
+
+/*:ja
+@plugindesc ver1.00/ダメージ計算式にほかのスキルの式を追加する機能を追加します。
+@author Yana
+
+@help
+使用方法
+------------------------------------------------------
+ダメージ計算式に、
+_sd(x)
+と記述すると、その部分はIDx番のスキルのダメージ計算式に置き換わります。
+
+------------------------------------------------------
+利用規約
+------------------------------------------------------
+当プラグインはMITライセンスで公開されています。
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+更新履歴:
+ver1.00:
+公開
+*/
 
 (function(){
 	////////////////////////////////////////////////////////////////////////////////////

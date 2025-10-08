@@ -12,85 +12,125 @@
 
 var Imported = Imported || {};
 Imported['BeforeCommon'] = 1.02;
-
 /*:
- * @target MZ MV
- * @url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Battle/BeforeCommon.js
- * @plugindesc ver1.02/スキルやアイテムの発動前に、スキルやアイテムに設定されたコモンイベントを発生させます。
- * @author Yana (改変:ムノクラ)
- *
- * @param IndexVariableID
- * @text 発動者インデックス変数ID
- * @type variable
- * @desc 発動者のインデックスを保存する変数IDです。
- * 発動者がエネミーの場合は値に+1000されます。
- * @default 11
- *
- * @param TargetIndexVariableID
- * @text 対象インデックス変数ID
- * @type variable
- * @desc 対象のインデックスを保存する変数IDです。
- * 対象が2体以上の場合は変数の値は-1が設定されます。
- * @default 12
- * 
- * @param nullNumberCommonReserve
- * @text 0番コモンイベントを予約する
- * @type boolean
- * @desc 0番のコモンイベントを指定した場合でも予約動作を行う。
- * ※旧バージョンとの互換性確保のための項目
- * @default true
- *
- * @help
- * ムノクラ追記
- * ------------------------------------------------------
- * RPGツクールMZでの動作を確認。
- * 
- * ------------------------------------------------------
- *  プラグインコマンドはありません。
- * ------------------------------------------------------
- * ------------------------------------------------------
- * 設定方法
- * ------------------------------------------------------
- *
- * スキルやアイテムのメモ欄に
- * <発動前コモン:x>
- * または、
- * <BeforeCommon:x>
- * と記述することで、スキルやアイテムが発生する前に、
- * IDがx番のコモンイベントの実行を予約します。
- *
- * また、IndexVariableID(発動者インデックス変数ID)で指定した番号の変数に、
- * 行動者のインデックスが、
- * TargetIndexVariableID(対象インデックス変数ID)で指定した番号の変数に、
- * 対象のインデックスが格納されます。
- * ただし、対象のインデックスは対象が単体の時しか格納されず、かつ、
- * エネミーの行動では、コモンを実行するタイミングで対象が決定していないため、
- * 対象には-1(特定不可)が設定されます。
- *
- * ------------------------------------------------------
- * 利用規約
- * ------------------------------------------------------
- * 当プラグインはMITライセンスで公開されています。
- * 使用に制限はありません。商用、アダルト、いずれにも使用できます。
- * 二次配布も制限はしませんが、サポートは行いません。
- * 著作表示は任意です。行わなくても利用できます。
- * 要するに、特に規約はありません。
- * バグ報告や使用方法等のお問合せはネ実ツクールスレ、
- * または、Twitterにお願いします。
- * https://twitter.com/yanatsuki_/
- * 素材利用は自己責任でお願いします。
- * 
- * ------------------------------------------------------
- * 更新履歴:
- * ver1.02:
- * MZでエラーが出るケースの対応。
- * 
- * ver1.01:
- * 対象を保存する変数の設定を追加。
- * ver1.00:
- * 公開
- */
+@plugindesc ver1.02/Before a skill or item is activated, a common event set for the skill or item will occur.
+@author Yana
+@url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Battle/BeforeCommon.js
+@license MIT License
 
+@help
+English Help Translator: munokura
+This is an unofficial English translation of the plugin help,
+created to support global RPG Maker users.
+Feedback is welcome to improve translation quality
+(see: https://github.com/munokura/Yana-MV-plugins ).
+Original plugin by Yana.
+-----
+------------------------------------------------------
+How to Set Up
+------------------------------------------------------
+
+By writing
+<BeforeCommon: x>
+in the Note field of a skill or item, you can schedule the execution of a common event with ID x before the skill or item is activated.
+
+The variable specified by IndexVariableID (activator index variable ID) stores the index of the actor, and the variable specified by TargetIndexVariableID (target index variable ID) stores the index of the target.
+However, the target index is only stored when there is a single target, and
+for enemy actions, the target is not determined at the time the common action is executed, so the target is set to -1 (unspecified).
+
+-----------------------------------------------------
+Terms of Use
+------------------------------------------------------
+This plugin is released under the MIT License.
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+Update History:
+ver. 1.02:
+Fixed an error that occurred with MZ.
+
+ver. 1.01:
+Added a variable setting to save the target.
+ver. 1.00:
+Released
+
+@param IndexVariableID
+@text Invoker index variable ID
+@desc This is the variable ID that stores the index of the triggerer. If the triggerer is an enemy, the value will be increased by +1000.
+@default 11
+@type variable
+
+@param TargetIndexVariableID
+@text Target index variable ID
+@desc This is the ID variable that stores the target index. If there are two or more targets, the variable value is set to -1.
+@default 12
+@type variable
+
+@param nullNumberCommonReserve
+@text Book a common event #0
+@desc The reservation action will be performed even if common event number 0 is specified. *Item to ensure compatibility with older versions
+@default true
+@type boolean
+*/
+
+
+/*:ja
+@plugindesc ver1.02/スキルやアイテムの発動前に、スキルやアイテムに設定されたコモンイベントを発生させます。
+@author Yana (改変:munokura)
+@url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Battle/BeforeCommon.js
+
+@help
+------------------------------------------------------
+設定方法
+------------------------------------------------------
+
+スキルやアイテムのメモ欄に
+<発動前コモン:x>
+または、
+<BeforeCommon:x>
+と記述することで、スキルやアイテムが発生する前に、
+IDがx番のコモンイベントの実行を予約します。
+
+また、IndexVariableID(発動者インデックス変数ID)で指定した番号の変数に、
+行動者のインデックスが、
+TargetIndexVariableID(対象インデックス変数ID)で指定した番号の変数に、
+対象のインデックスが格納されます。
+ただし、対象のインデックスは対象が単体の時しか格納されず、かつ、
+エネミーの行動では、コモンを実行するタイミングで対象が決定していないため、
+対象には-1(特定不可)が設定されます。
+
+------------------------------------------------------
+利用規約
+------------------------------------------------------
+当プラグインはMITライセンスで公開されています。
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+更新履歴:
+ver1.02:
+MZでエラーが出るケースの対応。
+
+ver1.01:
+対象を保存する変数の設定を追加。
+ver1.00:
+公開
+
+@param IndexVariableID
+@text 発動者インデックス変数ID
+@desc 発動者のインデックスを保存する変数IDです。 発動者がエネミーの場合は値に+1000されます。
+@default 11
+@type variable
+
+@param TargetIndexVariableID
+@text 対象インデックス変数ID
+@desc 対象のインデックスを保存する変数IDです。 対象が2体以上の場合は変数の値は-1が設定されます。
+@default 12
+@type variable
+
+@param nullNumberCommonReserve
+@text 0番コモンイベントを予約する
+@desc 0番のコモンイベントを指定した場合でも予約動作を行う。 ※旧バージョンとの互換性確保のための項目
+@default true
+@type boolean
+*/
 
 (function () {
 
