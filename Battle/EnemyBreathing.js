@@ -12,61 +12,111 @@
 
 var Imported = Imported || {};
 Imported['EnemyBreathing'] = 1.01;
-
 /*:
- * @plugindesc ver1.01/エネミーを上に伸ばしたり、横に伸ばしたり、反転させたりします。
- * @author Yana
- * 
- * @param Breath Frequency
- * @desc 息継ぎの頻度です。
- * 設定フレーム毎にリズム配列を1つ進めます。
- * @default 10
- * 
- * @param Breath Rhythem
- * @desc 息継ぎのリズムの配列です。
- * 数値xExpansionX(Y)の値だけ縮み(伸び)ます。
- * @default 0,0,1,2,3,4,5,5,4,3,2,1
- * 
- * @param ExpansionX
- * @desc X方向の縮む値です。
- * @default 0.005
- * 
- * @param ExpansionY
- * @desc Y方向の伸びる値です。
- * @default 0.005
- * 
- * @param Enemy Size
- * @desc エネミーのランダムサイズ補正です。
- * +-この値%分だけ、初期サイズがランダムに変化します。
- * @default 10
- * 
- * @help プラグインコマンドはありません。
- * ------------------------------------------------------
- * 使い方
- * ------------------------------------------------------
- * 基本的に導入するだけで動作します。
- *
- * ※メモによる設定※
- * エネミーのメモ欄に、<反転なし>という記述がある場合、そのエネミーは反転しません。
- * エネミーのメモ欄に、<サイズ変更なし>という記述がある場合、そのエネミーはランダムなサイズ補正が掛かりません。
- * エネミーのメモ欄に、<サイズ補正+○>という記述がある場合、そのエネミーの初期サイズに+○%のサイズ補正がかかります。
- * エネミーのメモ欄に、<動作なし>という記述がある場合、そのエネミーは息継ぎ動作を行いません。
- * ------------------------------------------------------
- * 利用規約
- * ------------------------------------------------------
- * 当プラグインはMITライセンスで公開されています。
- * 使用に制限はありません。商用、アダルト、いずれにも使用できます。
- * 二次配布も制限はしませんが、サポートは行いません。
- * 著作表示は任意です。行わなくても利用できます。
- * 要するに、特に規約はありません。
- * バグ報告や使用方法等のお問合せはネ実ツクールスレ、または、Twitterにお願いします。
- * https://twitter.com/yanatsuki_
- * 素材利用は自己責任でお願いします。
- * ------------------------------------------------------
- * 更新履歴:
- * ver1.00:
- * 公開
- */
+@plugindesc ver1.01/Stretch enemies upwards, horizontally, or flip them.
+@author Yana
+@url https://github.com/munokura/Yana-MV-plugins
+@license MIT License
+
+@help
+English Help Translator: munokura
+This is an unofficial English translation of the plugin help,
+created to support global RPG Maker users.
+Feedback is welcome to improve translation quality
+(see: https://github.com/munokura/Yana-MV-plugins ).
+Original plugin by Yana.
+-----
+------------------------------------------------------
+How to Use
+------------------------------------------------------
+Basically, it works just by installing it.
+
+*Enemies Note field*
+<反転なし>
+- The enemy will not be inverted.
+<サイズ変更なし>
+- The enemy will not have random size adjustments applied.
+<サイズ補正+○>
+- The enemy's initial size will be adjusted by +○%.
+<動作なし>
+- The enemy will not take a breath.
+------------------------------------------------------
+Terms of Use
+------------------------------------------------------
+This plugin is released under the MIT License.
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+Update History:
+ver1.00:
+Released
+
+@param Breath Frequency
+@desc The frequency of breaths. The rhythm sequence advances by one for each set frame.
+@default 10
+
+@param Breath Rhythem
+@desc This is the rhythmic sequence of breaths. It contracts (expands) by the value of xExpansionX(Y).
+@default 0,0,1,2,3,4,5,5,4,3,2,1
+
+@param ExpansionX
+@desc The shrink value in the X direction.
+@default 0.005
+
+@param ExpansionY
+@desc The stretch value in the Y direction.
+@default 0.005
+
+@param Enemy Size
+@desc Enemy random size correction. +- This value % will randomly change the initial size.
+@default 10
+*/
+
+
+/*:ja
+@plugindesc ver1.01/エネミーを上に伸ばしたり、横に伸ばしたり、反転させたりします。
+@author Yana
+
+@help
+------------------------------------------------------
+使い方
+------------------------------------------------------
+基本的に導入するだけで動作します。
+
+※メモによる設定※
+エネミーのメモ欄に、<反転なし>という記述がある場合、そのエネミーは反転しません。
+エネミーのメモ欄に、<サイズ変更なし>という記述がある場合、そのエネミーはランダムなサイズ補正が掛かりません。
+エネミーのメモ欄に、<サイズ補正+○>という記述がある場合、そのエネミーの初期サイズに+○%のサイズ補正がかかります。
+エネミーのメモ欄に、<動作なし>という記述がある場合、そのエネミーは息継ぎ動作を行いません。
+------------------------------------------------------
+利用規約
+------------------------------------------------------
+当プラグインはMITライセンスで公開されています。
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+更新履歴:
+ver1.00:
+公開
+
+@param Breath Frequency
+@desc 息継ぎの頻度です。 設定フレーム毎にリズム配列を1つ進めます。
+@default 10
+
+@param Breath Rhythem
+@desc 息継ぎのリズムの配列です。 数値xExpansionX(Y)の値だけ縮み(伸び)ます。
+@default 0,0,1,2,3,4,5,5,4,3,2,1
+
+@param ExpansionX
+@desc X方向の縮む値です。
+@default 0.005
+
+@param ExpansionY
+@desc Y方向の伸びる値です。
+@default 0.005
+
+@param Enemy Size
+@desc エネミーのランダムサイズ補正です。 +-この値%分だけ、初期サイズがランダムに変化します。
+@default 10
+*/
 
 (function () {
 
