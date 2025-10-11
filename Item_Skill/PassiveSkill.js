@@ -12,183 +12,331 @@
 
 var Imported = Imported || {};
 Imported['yPassiveSkill'] = 1.063;
-
 /*:
- * @target MZ MV
- * @url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Item_Skill/PassiveSkill.js
- * @plugindesc ver1.063/スキルに特徴を設定できるようにします。
- * @author Yana
- * 
- * @param Passive Skill Type ID
- * @desc パッシブスキルとして扱うスキルタイプID。
- * ここで設定されたIDのスキルタイプは、戦闘時に表示されません。
- * @default 3
- * 
- * @param Add Multi Order
- * @desc パラメータの加算と乗算の順番。
- * trueだと加算→乗算、falseだと乗算→加算になります。
- * @default true
- *
- * @help
- * ------------------------------------------------------
- * 設定方法
- * ------------------------------------------------------
- * ・攻撃力や最大HP等のパラメータが1つのパッシブスキルの設定
- * <パッシブスキル:xxx+y>
- * <パッシブスキル:xxx-y>
- * <パッシブスキル:xxx+y%>
- * <パッシブスキル:xxx-y%>
- * <パッシブスキル:xxxy>
- * xxxのステータスをyポイント(%)増加(減少)させます。
- * ※最大HP、最大MP、攻撃力、防御力、魔法力、魔法防御、敏捷性、運の
- * 通常能力値のいずれかの場合、
- * %が付いていない時はその数値通りの値が適用されます。
- * %が付いている時は、その数値に100を加算し、
- * 算出した数値を通常の特徴で設定した時と同じように適用します。
- * 
- * ※命中率、回避率、会心率、会心回避、魔法回避、魔法反射、反撃率、HP再生率、
- * MP再生率、TP再生率の等の追加能力値のいずれかの場合、
- * %が付いている時と%がついてない時の動作は同じになります。
- * 
- * ※狙われ率、防御効果率、回復効果率、薬の知識、MP消費率、TPチャージ率、
- * 物理ダメージ率、魔法ダメージ率、床ダメージ率、経験値獲得率等の
- * 特殊能力地のいずれかの場合、
- * %が付いていない時はその数値通りの値が適用されます。
- * %が付いている時は、その数値に100を加算し、算出した数値を
- * 通常の特徴で設定した時と同じように適用します。
- * 
- * ※ステート無効化、攻撃時属性、攻撃速度補正、攻撃追加回数、
- * スキルタイプ追加、スキルタイプ封印、スキル追加、スキル封印、
- * 武器タイプ装備、防具タイプ装備、装備固定、装備封印、行動回数追加
- * のいずれかの場合も、これで設定します。
- * これらは%が付いていても付いていなくても同じです。
- * 
- * 例：
- * <パッシブスキル:最大HP+50>
- * 最大HPが50ポイント増加します。
- * 
- * <パッシブスキル:攻撃力+20%>
- * 特徴、攻撃力120%と同じ意味です。
- * 
- * <パッシブスキル:命中率+20%>
- * <パッシブスキル:命中率+20>
- * 特徴、命中率+20%と同じ意味です。
- * 
- * <パッシブスキル:狙われ率+30>
- * 狙われ率が30%増加します。
- * 
- * <パッシブスキル:狙われ率+30%>
- * 特徴、狙われ率130%と同じ意味です。
- * 
- * <パッシブスキル:ステート無効化5>
- * 特徴、ステート無効化5番のステートと同じ意味です。
- * 
- * <パッシブスキル:行動回数追加+20%>
- * 特徴、行動回数追加20%と同じ意味です。
- * 
- * ・属性有効度やステート有効度などのパラメータが2つのパッシブスキルの設定
- * <パッシブスキル:xxxy+z>
- * <パッシブスキル:xxxy-z>
- * <パッシブスキル:xxxy+z%>
- * <パッシブスキル:xxxy-z%>
- * xxxのy番のレートをz(%)増加(減少)します。
- * ※属性有効度、弱体有効度、ステート有効度のいずれかの場合、
- * %が付いていない時は、その数値の値を直接加算(減算)します。
- * %が付いている時は、その数値に100を加算し、
- * 算出した数値を通常の特徴で設定した時と同じように適用します。
- * 
- * ※攻撃時ステートの場合、%が付いていても付いていなくても同じです。
- * 
- * 例:
- * <パッシブスキル:属性有効度4-30%>
- * 特徴、属性有効度4番の属性70%と同じ意味です。
- * 
- * <パッシブスキル:属性有効度4-30>
- * 4番の属性の属性有効度を30%減少させます。
- * 
- * ・二刀流や自動戦闘など、パラメータを持たないパッシブスキルの設定
- * <パッシブスキル:xxx>
- * xxxの特徴を付与します。
- * 
- * 例:
- * <パッシブスキル:二刀流>
- * 特徴、スロットタイプ二刀流と同じ意味です。
- * 
- * <パッシブスキル:自動戦闘>
- * 特徴、特殊フラグ自動戦闘と同じ意味です。
- * 
- * ------------------------------------------------------
- * 仕様と解説
- * ------------------------------------------------------
- * ・特徴で追加されたスキルはパッシブスキルとして機能しません。
- * ・AddMultiOrderがtrueだと、加算の計算→乗算の計算となるので、
- * 攻撃力100で攻撃力+50と攻撃力+50%の特徴を持っていた場合、
- * (100+50)x1.5=225となります。
- * falseの場合は、乗算→加算と計算されるので、
- * 100x1.5+50=200となります。
- * ・対応するスキルタイプが封印されたり、パッシブスキル自体が封印された場合、
- * そのスキルは効果がなくなります。
- * ・必要武器タイプが設定されていた場合、それらの条件を満たしていないと
- * そのスキルは効果がなくなります。
- * ・PassiveSkillTypeIDで指定したスキルタイプでないと
- * パッシブスキルとして機能しない、という事はありません。
- * ・PassiveSkillTypeIDはあくまで、
- * 戦闘中に表示しないスキルタイプのIDというのみです。
- * ------------------------------------------------------
- *  プラグインコマンドはありません。
- * ------------------------------------------------------
- * ------------------------------------------------------
- * 利用規約
- * ------------------------------------------------------
- * 当プラグインはMITライセンスで公開されています。
- * 使用に制限はありません。商用、アダルト、いずれにも使用できます。
- * 二次配布も制限はしませんが、サポートは行いません。
- * 著作表示は任意です。行わなくても利用できます。
- * 要するに、特に規約はありません。
- * バグ報告や使用方法等のお問合せはネ実ツクールスレ、
- * または、Twitterにお願いします。
- * https://twitter.com/yanatsuki_
- * 素材利用は自己責任でお願いします。
- * ------------------------------------------------------
- * 更新履歴:
- * ver1.061:
- * ステータスクラス+クラスチェンジシーンと併用時、
- * レベルアップ時に無限ループに入ってしまうバグを修正。
- * ver1.06:
- * イベントコマンドでスキルを習得した際、
- * パッシブスキルが反映されないバグを修正。
- * ver1.051:
- * console.logを削除。
- * ver1.05:
- * いくつかの記述ミスを修正。
- * 機能していなかったプラグインパラメータを削除。
- * ver1.04:
- * 最大MPのキーワードが間違っていたバグを修正。
- * システムで設定した用語でのパッシブスキル化が正常に機能していなかった
- * バグを修正。
- * ver1.03:
- * 特徴を持っていないスキルもパッシブスキルとして判定されていたバグを修正。
- * sparamの数値が100%基準になっていなかったバグを修正。
- * ver1.02:
- * PassiveSkillManagerをfunctionの外に移動
- * ver1.01:
- * パッシブスキルのスキルタイプが一番上に追加されていると、
- * 正常に非表示にできないバグを修正。
- * ver1.00:
- * 公開
- */
+@plugindesc ver1.063/Allows you to set Traits for skills.
+@author Yana
+@url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Item_Skill/PassiveSkill.js
+@license MIT License
+
+@help
+English Help Translator: munokura
+This is an unofficial English translation of the plugin help,
+created to support global RPG Maker users.
+Feedback is welcome to improve translation quality
+(see: https://github.com/munokura/Yana-MV-plugins ).
+Original plugin by Yana.
+-----
+------------------------------------------------------
+How to Set
+------------------------------------------------------
+- Setting a passive skill with a single parameter, such as attack power or max HP
+<passive:xxx+y>
+<passive:xxx-y>
+<passive:xxx+y%>
+<passive:xxx-y%>
+<passive:xxxy>
+Increases (decreases) xxx's stat by y points (%).
+*For any of the standard stats (Max HP, Max MP, Attack Power, Defense, Magic Power, Magic Defense, Agility, and Luck),
+the value is applied as is if no % is attached.
+If a % is attached, add 100 to the value,
+and apply the resulting value as if it were a standard Elements.
+
+*For any of the additional stats (Accuracy, Evasion, Critical Hit Rate, Critical Hit Avoidance, Magic Evasion, Magic Reflectionion, Counterattack Rate, HP Regeneration Rate,
+MP Regeneration Rate, TP Regeneration Rate),
+the behavior is the same whether a % is attached or not.
+
+*For special ability effects such as Target Rate, Defense Effectiveness Rate, Recovery Effectiveness Rate, Medicine Knowledge, MP Consumption Rate, TP Recharge Rate,
+Physical Damage Rate, Magic Damage Rate, Floor Damage Rate, and EXP Gain Rate,
+if no percentage is attached, the actual value is applied.
+If a percentage is attached, add 100 to the value and apply the calculated value
+in the same way as when setting a normal trait.
+
+*This also applies to State Nullification, Attack Elements, Attack Speed Modifier, Additional Attacks,
+Add Skill Type, Skill Type Seal, Add Skill, Skill Seal,
+Weapon Type Equipment, Armor Type Equipment, Fixed Equipment, Equipment Seal, and Additional Actions.
+These are the same whether or not a percentage is attached.
+
+Example:
+<passive:MaxHp +50>
+Max HP increases by 50 points.
+
+<passive:ATK +20%>
+Same as the trait, Attack Power +120%.
+
+<passive:HIT+20%>
+<passive:HIT+20>
+Same as the Traits, Hit Rate +20%.
+
+<passive:TGR+30>
+Increases Target Rate by 30%.
+
+<passive:TGR+30%>
+Same as the Traits, Target Rate +130%.
+
+<passive:StateResist5>
+Same as the Traits, State Nullification 5.
+
+<passive:ActionTime+20%>
+Same as the Traits, Additional Actions 20%.
+
+- Passive skill settings with two parameters, such as Elements effectiveness or state effectiveness.
+<passive:xxxy+z>
+<passive:xxxy-z>
+<passive:xxxy+z%>
+<passive:xxxy-z%>
+Increases (decreases) the rate of xxx's yth parameter by z (%).
+*For Elements effectiveness, debuff effectiveness, and state effectiveness,
+if there is no % attached, the value is added (subtracted) directly.
+If there is a % attached, 100 is added to the value,
+and the calculated value is applied in the same way as when setting a normal trait.
+
+*For attacking states, the % attached or not is the same.
+
+Example:
+<passive:ElementRate4-30%>
+This is the same as setting Elements number 4 to 70% Elements effectiveness.
+
+<passive:ElementRate4-30>
+This reduces the Elements effectiveness of Elements number 4 by 30%.
+
+- Setting passive skills without parameters, such as Dual Wielding and Auto-Battle
+<passive:xxx>
+Adds the xxx trait.
+
+Example:
+<passive:DualWield>
+This is the same as the trait and slot type Dual Wielding.
+
+<passive:AutoBattle>
+This is the same as the trait and special flag Auto-Battle.
+
+------------------------------------------------------
+Specifications and Explanation
+------------------------------------------------------
+- Skills added via traits do not function as passive skills.
+- When AddMultiOrder is true, the calculation is additive, then multiplicative.
+So, if you have 100 attack power and both the Attack Power +50 and Attack Power +50% traits,
+
+the result is (100 + 50) x 1.5 = 225.
+- When false, the calculation is multiplicative, then additive,
+
+the result is 100 x 1.5 + 50 = 200.
+- If the corresponding skill type is sealed or the passive skill itself is sealed,
+
+the skill will lose its effect.
+- If a required weapon type is set,
+
+the skill will lose its effect if that condition is not met.
+- A passive skill does not necessarily function as a passive skill unless it is the skill type specified by PassiveSkillTypeID.
+- PassiveSkillTypeID is merely the ID of the skill type that will not be displayed during battle.
+-----------------------------------------------------
+There are no plugin commands.
+--------------------------------------------------------------------
+------------------------------------------------------
+Terms of Use
+------------------------------------------------------
+This plugin is released under the MIT License.
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+Update History:
+ver1.061:
+Fixed a bug that caused an infinite loop when leveling up when using the Status Class + Class Change Scene.
+ver1.06:
+Fixed a bug that prevented passive skills from being applied when acquiring skills via event commands.
+ver1.051:
+Deleted console.log.
+ver1.05:
+Fixed several typos.
+Deleted a non-functional plugin parameter.
+ver1.04:
+Fixed a bug where the maximum MP keyword was incorrect.
+Fixed a bug where passive skills were not properly defined using system-defined terms.
+ver1.03:
+Fixed a bug where skills without traits were being recognized as passive skills.
+Fixed a bug where sparam values were not 100% correct.
+ver1.02:
+Moved PassiveSkillManager outside of the function.
+ver1.01:
+Fixed a bug that prevented passive skills from being hidden properly if the skill type was added at the top.
+ver1.00:
+Released
+
+@param Passive Skill Type ID
+@desc Skill type ID to treat as a passive skill. Skill types with IDs set here will not be displayed during battle.
+@default 3
+
+@param Add Multi Order
+@desc The order of parameter addition and multiplication. If true, it is addition → multiplication, if false, it is multiplication → addition.
+@default true
+*/
+
+
+/*:ja
+@plugindesc ver1.063/スキルに特徴を設定できるようにします。
+@author Yana
+@url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Item_Skill/PassiveSkill.js
+
+@help
+------------------------------------------------------
+設定方法
+------------------------------------------------------
+・攻撃力や最大HP等のパラメータが1つのパッシブスキルの設定
+<パッシブスキル:xxx+y>
+<パッシブスキル:xxx-y>
+<パッシブスキル:xxx+y%>
+<パッシブスキル:xxx-y%>
+<パッシブスキル:xxxy>
+xxxのステータスをyポイント(%)増加(減少)させます。
+※最大HP、最大MP、攻撃力、防御力、魔法力、魔法防御、敏捷性、運の
+通常能力値のいずれかの場合、
+%が付いていない時はその数値通りの値が適用されます。
+%が付いている時は、その数値に100を加算し、
+算出した数値を通常の特徴で設定した時と同じように適用します。
+
+※命中率、回避率、会心率、会心回避、魔法回避、魔法反射、反撃率、HP再生率、
+MP再生率、TP再生率の等の追加能力値のいずれかの場合、
+%が付いている時と%がついてない時の動作は同じになります。
+
+※狙われ率、防御効果率、回復効果率、薬の知識、MP消費率、TPチャージ率、
+物理ダメージ率、魔法ダメージ率、床ダメージ率、経験値獲得率等の
+特殊能力地のいずれかの場合、
+%が付いていない時はその数値通りの値が適用されます。
+%が付いている時は、その数値に100を加算し、算出した数値を
+通常の特徴で設定した時と同じように適用します。
+
+※ステート無効化、攻撃時属性、攻撃速度補正、攻撃追加回数、
+スキルタイプ追加、スキルタイプ封印、スキル追加、スキル封印、
+武器タイプ装備、防具タイプ装備、装備固定、装備封印、行動回数追加
+のいずれかの場合も、これで設定します。
+これらは%が付いていても付いていなくても同じです。
+
+例：
+<パッシブスキル:最大HP+50>
+最大HPが50ポイント増加します。
+
+<パッシブスキル:攻撃力+20%>
+特徴、攻撃力120%と同じ意味です。
+
+<パッシブスキル:命中率+20%>
+<パッシブスキル:命中率+20>
+特徴、命中率+20%と同じ意味です。
+
+<パッシブスキル:狙われ率+30>
+狙われ率が30%増加します。
+
+<パッシブスキル:狙われ率+30%>
+特徴、狙われ率130%と同じ意味です。
+
+<パッシブスキル:ステート無効化5>
+特徴、ステート無効化5番のステートと同じ意味です。
+
+<パッシブスキル:行動回数追加+20%>
+特徴、行動回数追加20%と同じ意味です。
+
+・属性有効度やステート有効度などのパラメータが2つのパッシブスキルの設定
+<パッシブスキル:xxxy+z>
+<パッシブスキル:xxxy-z>
+<パッシブスキル:xxxy+z%>
+<パッシブスキル:xxxy-z%>
+xxxのy番のレートをz(%)増加(減少)します。
+※属性有効度、弱体有効度、ステート有効度のいずれかの場合、
+%が付いていない時は、その数値の値を直接加算(減算)します。
+%が付いている時は、その数値に100を加算し、
+算出した数値を通常の特徴で設定した時と同じように適用します。
+
+※攻撃時ステートの場合、%が付いていても付いていなくても同じです。
+
+例:
+<パッシブスキル:属性有効度4-30%>
+特徴、属性有効度4番の属性70%と同じ意味です。
+
+<パッシブスキル:属性有効度4-30>
+4番の属性の属性有効度を30%減少させます。
+
+・二刀流や自動戦闘など、パラメータを持たないパッシブスキルの設定
+<パッシブスキル:xxx>
+xxxの特徴を付与します。
+
+例:
+<パッシブスキル:二刀流>
+特徴、スロットタイプ二刀流と同じ意味です。
+
+<パッシブスキル:自動戦闘>
+特徴、特殊フラグ自動戦闘と同じ意味です。
+
+------------------------------------------------------
+仕様と解説
+------------------------------------------------------
+・特徴で追加されたスキルはパッシブスキルとして機能しません。
+・AddMultiOrderがtrueだと、加算の計算→乗算の計算となるので、
+攻撃力100で攻撃力+50と攻撃力+50%の特徴を持っていた場合、
+(100+50)x1.5=225となります。
+falseの場合は、乗算→加算と計算されるので、
+100x1.5+50=200となります。
+・対応するスキルタイプが封印されたり、パッシブスキル自体が封印された場合、
+そのスキルは効果がなくなります。
+・必要武器タイプが設定されていた場合、それらの条件を満たしていないと
+そのスキルは効果がなくなります。
+・PassiveSkillTypeIDで指定したスキルタイプでないと
+パッシブスキルとして機能しない、という事はありません。
+・PassiveSkillTypeIDはあくまで、
+戦闘中に表示しないスキルタイプのIDというのみです。
+------------------------------------------------------
+ プラグインコマンドはありません。
+------------------------------------------------------
+------------------------------------------------------
+利用規約
+------------------------------------------------------
+当プラグインはMITライセンスで公開されています。
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+更新履歴:
+ver1.061:
+ステータスクラス+クラスチェンジシーンと併用時、
+レベルアップ時に無限ループに入ってしまうバグを修正。
+ver1.06:
+イベントコマンドでスキルを習得した際、
+パッシブスキルが反映されないバグを修正。
+ver1.051:
+console.logを削除。
+ver1.05:
+いくつかの記述ミスを修正。
+機能していなかったプラグインパラメータを削除。
+ver1.04:
+最大MPのキーワードが間違っていたバグを修正。
+システムで設定した用語でのパッシブスキル化が正常に機能していなかった
+バグを修正。
+ver1.03:
+特徴を持っていないスキルもパッシブスキルとして判定されていたバグを修正。
+sparamの数値が100%基準になっていなかったバグを修正。
+ver1.02:
+PassiveSkillManagerをfunctionの外に移動
+ver1.01:
+パッシブスキルのスキルタイプが一番上に追加されていると、
+正常に非表示にできないバグを修正。
+ver1.00:
+公開
+
+@param Passive Skill Type ID
+@desc パッシブスキルとして扱うスキルタイプID。 ここで設定されたIDのスキルタイプは、戦闘時に表示されません。
+@default 3
+
+@param Add Multi Order
+@desc パラメータの加算と乗算の順番。 trueだと加算→乗算、falseだと乗算→加算になります。
+@default true
+*/
 
 function PassiveSkillManager() {
     throw new Error('This is a static class');
 };
 
-(function() {
+(function () {
 
     var parameters = PluginManager.parameters('PassiveSkill');
     var passiveSkillTypeId = Number(parameters['Passive Skill Type ID']);
     var addMultiOrder = String(parameters['Add Multi Order']) === 'true';
 
-    PassiveSkillManager.checkPassive = function(text) {
+    PassiveSkillManager.checkPassive = function (text) {
         if (text.match(/<(?:パッシブスキル|パッシブ|passive|PS):(.+)>/)) {
             var reg = RegExp.$1;
             var trait = this.makePassive('<' + reg + '>');
@@ -197,7 +345,7 @@ function PassiveSkillManager() {
         return false;
     };
 
-    PassiveSkillManager.makePassive = function(reg) {
+    PassiveSkillManager.makePassive = function (reg) {
         if (reg.match(/<(.+?)(\d+),?([+-]\d+)(%)?>/)) {
             return this.makeNumTrait([RegExp.$1, RegExp.$2, RegExp.$3, RegExp.$4]);
         } else if (reg.match(/<(.+?),?([+-]?\d+)(%)?>/)) {
@@ -209,7 +357,7 @@ function PassiveSkillManager() {
         return false;
     };
 
-    PassiveSkillManager.makeNumTrait = function(ary) {
+    PassiveSkillManager.makeNumTrait = function (ary) {
         var code = null;
         var id = parseInt(ary[1]);
         var value = parseInt(ary[2]);
@@ -238,13 +386,14 @@ function PassiveSkillManager() {
         return { 'code': code, 'dataId': id, 'value': value };
     };
 
-    PassiveSkillManager.makeParamTrait = function(ary) {
+    PassiveSkillManager.makeParamTrait = function (ary) {
         var code = null;
         var id = null;
         var value = parseInt(ary[1]);
         var parc = ary[2];
         switch (ary[0]) {
             // param
+            case 'MaxHp':
             case '最大HP':
             case '最大ＨＰ':
             case TextManager.basic(2):
@@ -253,6 +402,7 @@ function PassiveSkillManager() {
                 id = 0;
                 code = parc == '' ? 121 : 21;
                 break;
+            case 'MaxMp':
             case '最大MP':
             case '最大ＭＰ':
             case TextManager.basic(4):
@@ -303,7 +453,7 @@ function PassiveSkillManager() {
                 id = 7;
                 code = parc == '' ? 121 : 21;
                 break;
-                // xparams
+            // xparams
             case 'HIT':
             case 'ＨＩＴ':
             case '命中率':
@@ -369,7 +519,7 @@ function PassiveSkillManager() {
                 id = 9;
                 code = 22;
                 break;
-                //sparams
+            //sparams
             case 'TGR':
             case 'ＴＧＲ':
             case '狙われ率':
@@ -432,7 +582,7 @@ function PassiveSkillManager() {
                 id = 9;
                 code = parc == '' ? 123 : 23;
                 break;
-                //その他
+            //その他
             case 'ステート無効化':
             case 'StateResist':
                 id = value;
@@ -494,7 +644,8 @@ function PassiveSkillManager() {
                 code = 54;
                 break;
             case '行動回数追加':
-            case 'ActionTime+':
+            // case 'ActionTime+':
+            case 'ActionTime':
                 id = value;
                 code = 61;
                 break;
@@ -507,7 +658,7 @@ function PassiveSkillManager() {
         return { 'code': code, 'dataId': id, 'value': value };
     };
 
-    PassiveSkillManager.makeExTrait = function(reg) {
+    PassiveSkillManager.makeExTrait = function (reg) {
         var code = null;
         var id = null;
         var value = 1;
@@ -577,7 +728,7 @@ function PassiveSkillManager() {
         return { 'code': code, 'dataId': id, 'value': value };
     };
 
-    PassiveSkillManager.initPassiveSkill = function(skill) {
+    PassiveSkillManager.initPassiveSkill = function (skill) {
         if (skill.traits) { return }
         skill.traits = [];
         var texts = skill.note.split('\n');
@@ -588,11 +739,11 @@ function PassiveSkillManager() {
     };
 
     var _pS_GActor_traitObjects = Game_Actor.prototype.traitObjects;
-    Game_Actor.prototype.traitObjects = function() {
+    Game_Actor.prototype.traitObjects = function () {
         var objects = _pS_GActor_traitObjects.call(this);
         if (this.traitNest) { return objects }
         this.traitNest = true;
-        this.enableSkills().forEach(function(skill) {
+        this.enableSkills().forEach(function (skill) {
             if (!skill.traits) PassiveSkillManager.initPassiveSkill(skill);
             if (skill.traits.length > 0) { objects.push(skill) }
         }, this);
@@ -601,7 +752,7 @@ function PassiveSkillManager() {
     };
 
     var _pS_GBBase_addedSkillTypes = Game_BattlerBase.prototype.addedSkillTypes;
-    Game_BattlerBase.prototype.addedSkillTypes = function() {
+    Game_BattlerBase.prototype.addedSkillTypes = function () {
         var types = _pS_GBBase_addedSkillTypes.call(this);
         if (!$gameParty.inBattle()) { return types }
         var id = types.indexOf(passiveSkillTypeId);
@@ -609,10 +760,10 @@ function PassiveSkillManager() {
         return types;
     };
 
-    Game_Actor.prototype.enableSkills = function() {
+    Game_Actor.prototype.enableSkills = function () {
         if (!this._enableSkills || this._passiveRefresh) {
             this._enableSkills = [];
-            this._skills.forEach(function(skillId) {
+            this._skills.forEach(function (skillId) {
                 var skill = $dataSkills[skillId];
                 if (!skill.traits) PassiveSkillManager.initPassiveSkill(skill);
                 if (this.isUsableSkill(skill) && skill.traits.length > 0) {
@@ -621,69 +772,69 @@ function PassiveSkillManager() {
             }, this);
             this._passiveRefresh = false;
         }
-        return this._enableSkills.reduce(function(r, id) { return r.concat([$dataSkills[id]]) }, []);
+        return this._enableSkills.reduce(function (r, id) { return r.concat([$dataSkills[id]]) }, []);
     };
 
     var _pS_GActor_refresh = Game_Actor.prototype.refresh;
-    Game_Actor.prototype.refresh = function() {
+    Game_Actor.prototype.refresh = function () {
         this._passiveRefresh = true;
         _pS_GActor_refresh.call(this);
     };
 
     var _pS_GActor_learnSkill = Game_Actor.prototype.learnSkill;
-    Game_Actor.prototype.learnSkill = function(skillId) {
+    Game_Actor.prototype.learnSkill = function (skillId) {
         _pS_GActor_learnSkill.call(this, skillId);
         if (!(Imported['VXandAceHybridClass'] || Imported.YEP_ClassChangeCore)) this.refresh();
     };
 
-    Game_Actor.prototype.isUsableSkill = function(skill) {
+    Game_Actor.prototype.isUsableSkill = function (skill) {
         return (this.isSkillWtypeOk(skill) && !this.isSkillSealed(skill.id) &&
             !this.isSkillTypeSealed(skill.stypeId));
     };
 
-    Game_Party.prototype.refreshSkills = function() {
-        this.members().forEach(function(actor) {
+    Game_Party.prototype.refreshSkills = function () {
+        this.members().forEach(function (actor) {
             actor._passiveRefresh = true;
         })
     };
 
     var _pS_BManager_startInput = BattleManager.startInput;
-    BattleManager.startInput = function() {
+    BattleManager.startInput = function () {
         $gameParty.refreshSkills();
         _pS_BManager_startInput.call(this);
     };
 
     if (addMultiOrder) {
         var _pS_GBBase_paramPlus = Game_BattlerBase.prototype.paramPlus;
-        Game_BattlerBase.prototype.paramPlus = function(paramId) {
+        Game_BattlerBase.prototype.paramPlus = function (paramId) {
             var pr = _pS_GBBase_paramPlus.call(this, paramId);
             pr += this.traitsSum(121, paramId);
             return pr;
         };
 
         var _pS_GBBase_sparam = Game_BattlerBase.prototype.sparam;
-        Game_BattlerBase.prototype.sparam = function(paramId) {
+        Game_BattlerBase.prototype.sparam = function (paramId) {
             var pr = this.traitsSum(123, paramId) + 1.0;
             pr *= _pS_GBBase_sparam.call(this, paramId);
             return pr;
         };
 
         var _pS_GBBase_elementRate = Game_BattlerBase.prototype.elementRate;
-        Game_BattlerBase.prototype.elementRate = function(elementId) {
+        Game_BattlerBase.prototype.elementRate = function (elementId) {
             var rate = this.traitsSum(111, elementId) + 1.0;
             rate *= _pS_GBBase_elementRate.call(this, elementId);
             return rate;
         };
 
         var _pS_GBBase_debuffRate = Game_BattlerBase.prototype.debuffRate;
-        Game_BattlerBase.prototype.debuffRate = function(debuffId) {
+        Game_BattlerBase.prototype.debuffRate = function (debuffId) {
             var rate = this.traitsSum(112, debuffId) + 1.0;
             rate *= _pS_GBBase_debuffRate.call(this, debuffId);
             return rate;
         };
 
         var _pS_GBBase_stateRate = Game_BattlerBase.prototype.stateRate;
-        Game_BattlerBase.prototype.stateRate = function(stateId) {
+        Game_BattlerBase.prototype.stateRate = function (stateId) {
             var rate = this.traitsSum(113, stateId) + 1.0;
             rate *= _pS_GBBase_stateRate.call(this, stateId);
             return rate;
@@ -691,7 +842,7 @@ function PassiveSkillManager() {
 
     } else {
         var _pS_GBBase_param = Game_BattlerBase.prototype.param;
-        Game_BattlerBase.prototype.param = function(paramId) {
+        Game_BattlerBase.prototype.param = function (paramId) {
             var pr = _pS_GBBase_param.call(this, paramId);
             pr += this.traitsSum(121, paramId);
             var maxValue = this.paramMax(paramId);
@@ -700,28 +851,28 @@ function PassiveSkillManager() {
         };
 
         var _pS_GBBase_sparam = Game_BattlerBase.prototype.sparam;
-        Game_BattlerBase.prototype.sparam = function(paramId) {
+        Game_BattlerBase.prototype.sparam = function (paramId) {
             var pr = _pS_GBBase_sparam.call(this, paramId);
             pr += this.traitsSum(123, paramId) + 1.0;
             return pr;
         };
 
         var _pS_GBBase_elementRate = Game_BattlerBase.prototype.elementRate;
-        Game_BattlerBase.prototype.elementRate = function(elementId) {
+        Game_BattlerBase.prototype.elementRate = function (elementId) {
             var rate = _pS_GBBase_elementRate.call(this, elementId);
             rate += this.traitsSum(111, elementId) + 1.0;
             return rate;
         };
 
         var _pS_GBBase_debuffRate = Game_BattlerBase.prototype.debuffRate;
-        Game_BattlerBase.prototype.debuffRate = function(debuffId) {
+        Game_BattlerBase.prototype.debuffRate = function (debuffId) {
             var rate = _pS_GBBase_debuffRate.call(this, debuffId);
             rate += this.traitsSum(112, debuffId) + 1.0;
             return rate;
         };
 
         var _pS_GBBase_stateRate = Game_BattlerBase.prototype.stateRate;
-        Game_BattlerBase.prototype.stateRate = function(stateId) {
+        Game_BattlerBase.prototype.stateRate = function (stateId) {
             var rate = _pS_GBBase_stateRate.call(this, stateId);
             rate += this.traitsSum(113, stateId) + 1.0;
             return rate;

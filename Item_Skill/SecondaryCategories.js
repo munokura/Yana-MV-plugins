@@ -12,71 +12,128 @@
 
 var Imported = Imported || {};
 Imported['SecondaryCategories'] = 1.04;
-
 /*:
- * @plugindesc ver1.04/アイテムにセカンダリカテゴリを設定できようにします。
- * @author Yana
- *
- * @param UseSubItemCategory
- * @desc アイテムカテゴリ選択時に上下キーでセカンダリカテゴリの切り替えを許可するかの設定です。
- * @type boolean
- * @default true
- *
- * @param AllIncludesCategory
- * @desc すべてのアイテムに付与されるカテゴリの名称です。
- * カテゴリで指定を行うときに使用します。
- * @default すべて
- *
- * @param UseArrows
- * @desc セカンダリカテゴリが存在するとき、アローカーソルを表示するかの設定です。
- * @type boolean
- * @default true
- *
- * @help------------------------------------------------------
- *  プラグインコマンドはありません。
- * ------------------------------------------------------
- * ------------------------------------------------------
- *  使い方
- * ------------------------------------------------------
- * アイテムのメモ欄に
- * <分類:xxx>
- * <Category:xxx>
- * のいずれかを記述します。
- *
- * 記述がある場合、そのアイテムはそのセカンダリカテゴリのアイテムとなります。
- * アイテムであればアイテム、防具であれば防具など、そのアイテムが元々持つ分類は自動で追加されます。
- * それに加えて、すべてのアイテムにプラグインパラメータですべてに指定したカテゴリが追加されます。
- *
- * UseSubItemCategoryがtrueの場合、カテゴリウィンドウがアクティブなとき、
- * 上下キーで選択したカテゴリをセカンダリカテゴリに切り替えることができます。
- * ------------------------------------------------------
- * 利用規約
- * ------------------------------------------------------
- * 当プラグインはMITライセンスで公開されています。
- * 使用に制限はありません。商用、アダルト、いずれにも使用できます。
- * 二次配布も制限はしませんが、サポートは行いません。
- * 著作表示は任意です。行わなくても利用できます。
- * 要するに、特に規約はありません。
- * バグ報告や使用方法等のお問合せはネ実ツクールスレ、または、Twitterにお願いします。
- * https://twitter.com/yanatsuki_
- * 素材利用は自己責任でお願いします。
- * ------------------------------------------------------
- * 更新履歴:
- * ver1.04:180917
- * カテゴリ数が変わった時、アロー表示がずれるバグを修正。
- * ver1.03:180408
- * 装備タイプのカテゴリ名が他のカテゴリ名と重複表示されるバグを修正。
- * セカンダリカテゴリが存在するとき、アローを表示をする設定を追加。
- * プラグインパラメータの仕様を1.5.0に更新。
- * ver1.02:170110-2
- * 武器と防具のコマンド名がカテゴリに登録されていなかったバグを修正。
- * ver1.01:170110-1
- * セカンダリカテゴリの選択をホイールでもできるように機能を追加
- * ver1.00:
- * 公開
- */
+@plugindesc ver1.04/Add the ability to set secondary categories for items.
+@author Yana
+@url https://github.com/munokura/Yana-MV-plugins
+@license MIT License
 
-(function() {
+@help
+English Help Translator: munokura
+This is an unofficial English translation of the plugin help,
+created to support global RPG Maker users.
+Feedback is welcome to improve translation quality
+(see: https://github.com/munokura/Yana-MV-plugins ).
+Original plugin by Yana.
+-----
+There are no plugin commands.
+------------------------------------------------------
+------------------------------------------------------
+How to Use
+------------------------------------------------------
+Write either
+<Category:xxx>
+in the item's Note field.
+
+If this is present, the item will be classified as a secondary category item.
+The item's original classification will be automatically added, such as "Item" for items, "Armor" for armor, etc.
+In addition, the category specified as "All" in the plugin parameters will be added to all items.
+
+If UseSubItemCategory is true, when the category window is active,
+you can use the up and down keys to switch the selected category to a secondary category.
+------------------------------------------------------
+Terms of Use
+------------------------------------------------------
+This plugin is released under the MIT License.
+http://opensource.org/licenses/mit-license.php
+---------------------------------------------------
+Update History:
+ver1.04:180917
+Fixed a bug that caused the arrow display to shift when the number of categories changed.
+ver1.03:180408
+Fixed a bug where equipment type category names were overlapping with other category names.
+Added a setting to display arrows when secondary categories exist.
+Updated plugin parameter specifications to 1.5.0.
+ver1.02:170110-2
+Fixed a bug where weapon and armor command names were not registered in categories.
+ver1.01:170110-1
+Added a Traits to allow secondary category selection using the wheel.
+ver1.00:
+Released
+
+@param UseSubItemCategory
+@desc This setting determines whether to allow switching secondary categories with the up and down keys when selecting an item category.
+@default true
+@type boolean
+
+@param AllIncludesCategory
+@desc The category name that will be assigned to all items. Used when specifying a category.
+@default All
+
+@param UseArrows
+@desc This setting determines whether to display the arrow cursor when a secondary category exists.
+@default true
+@type boolean
+*/
+
+
+/*:ja
+@plugindesc ver1.04/アイテムにセカンダリカテゴリを設定できようにします。
+@author Yana
+
+@help
+ プラグインコマンドはありません。
+------------------------------------------------------
+------------------------------------------------------
+ 使い方
+------------------------------------------------------
+アイテムのメモ欄に
+<分類:xxx>
+<Category:xxx>
+のいずれかを記述します。
+
+記述がある場合、そのアイテムはそのセカンダリカテゴリのアイテムとなります。
+アイテムであればアイテム、防具であれば防具など、そのアイテムが元々持つ分類は自動で追加されます。
+それに加えて、すべてのアイテムにプラグインパラメータですべてに指定したカテゴリが追加されます。
+
+UseSubItemCategoryがtrueの場合、カテゴリウィンドウがアクティブなとき、
+上下キーで選択したカテゴリをセカンダリカテゴリに切り替えることができます。
+------------------------------------------------------
+利用規約
+------------------------------------------------------
+当プラグインはMITライセンスで公開されています。
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+更新履歴:
+ver1.04:180917
+カテゴリ数が変わった時、アロー表示がずれるバグを修正。
+ver1.03:180408
+装備タイプのカテゴリ名が他のカテゴリ名と重複表示されるバグを修正。
+セカンダリカテゴリが存在するとき、アローを表示をする設定を追加。
+プラグインパラメータの仕様を1.5.0に更新。
+ver1.02:170110-2
+武器と防具のコマンド名がカテゴリに登録されていなかったバグを修正。
+ver1.01:170110-1
+セカンダリカテゴリの選択をホイールでもできるように機能を追加
+ver1.00:
+公開
+
+@param UseSubItemCategory
+@desc アイテムカテゴリ選択時に上下キーでセカンダリカテゴリの切り替えを許可するかの設定です。
+@default true
+@type boolean
+
+@param AllIncludesCategory
+@desc すべてのアイテムに付与されるカテゴリの名称です。 カテゴリで指定を行うときに使用します。
+@default すべて
+
+@param UseArrows
+@desc セカンダリカテゴリが存在するとき、アローカーソルを表示するかの設定です。
+@default true
+@type boolean
+*/
+
+(function () {
 
     'use strict';
 
@@ -89,19 +146,19 @@ Imported['SecondaryCategories'] = 1.04;
 
     ////////////////////////////////////////////////////////////////////////////////////
 
-    DataManager.itemSecondaryCategories = function(item) {
+    DataManager.itemSecondaryCategories = function (item) {
         if (!item) return [];
         if (item._secondaryCategories) return item._secondaryCategories;
         item._secondaryCategories = [allIncludesCategory];
         var texts = item.note.split('\n');
-        for (var i =0,max=texts.length;i<max;i++) {
+        for (var i = 0, max = texts.length; i < max; i++) {
             var text = texts[i];
             if (text.match(/<(?:分類|Category):(.+)>/)) {
                 var cn = RegExp.$1;
                 item._secondaryCategories.push(cn);
             }
         }
-        if (this.isItemEx(item) && item.itypeId === 1){
+        if (this.isItemEx(item) && item.itypeId === 1) {
             item._secondaryCategories.push(TextManager.item);
         } else if (this.isWeaponEx(item)) {
             var wtype = $dataSystem.weaponTypes[item.wtypeId];
@@ -122,33 +179,33 @@ Imported['SecondaryCategories'] = 1.04;
         }
         return item._secondaryCategories;
     };
-    
-    DataManager.isItemEx = function(item) {
+
+    DataManager.isItemEx = function (item) {
         if (!item._type) this.initItemType(item);
         return item._itemType === 0;
     };
-    
-    DataManager.isWeaponEx = function(item) {
+
+    DataManager.isWeaponEx = function (item) {
         if (!item._type) this.initItemType(item);
         return item._itemType === 1;
     };
-    
-    DataManager.isArmorEx = function(item) {
+
+    DataManager.isArmorEx = function (item) {
         if (!item._type) this.initItemType(item);
         return item._itemType === 2;
     };
-    
-    DataManager.isSkillEx = function(item) {
+
+    DataManager.isSkillEx = function (item) {
         if (!item._type) this.initItemType(item);
         return item._itemType === 3;
     };
-    
-    DataManager.initItemType = function(item) {
+
+    DataManager.initItemType = function (item) {
         item._itemType = -1;
-        if (DataManager.isItem(item))   item._itemType = 0;
+        if (DataManager.isItem(item)) item._itemType = 0;
         if (DataManager.isWeapon(item)) item._itemType = 1;
-        if (DataManager.isArmor(item))  item._itemType = 2;
-        if (DataManager.isSkill(item))  item._itemType = 3;
+        if (DataManager.isArmor(item)) item._itemType = 2;
+        if (DataManager.isSkill(item)) item._itemType = 3;
     };
 
     ////////////////////////////////////////////////////////////////////////////////////
@@ -161,14 +218,14 @@ Imported['SecondaryCategories'] = 1.04;
             __WICategory_initialize.call(this);
         };
 
-        Window_ItemCategory.prototype.cursorUp =function(wrap) {
+        Window_ItemCategory.prototype.cursorUp = function (wrap) {
             if (this.isOpenAndActive() && (this._list.length < 5 || this.index() > 0)) {
-                    this.backSubCategory();
-                    this._stayCount = -5;
+                this.backSubCategory();
+                this._stayCount = -5;
             }
         };
 
-        Window_ItemCategory.prototype.cursorDown = function(wrap) {
+        Window_ItemCategory.prototype.cursorDown = function (wrap) {
             if (this.isOpenAndActive() && (this._list.length < 5 || this.index() > 0)) {
                 this.forwardSubCategory();
                 this._stayCount = -5;
@@ -199,10 +256,10 @@ Imported['SecondaryCategories'] = 1.04;
             this.allItems().forEach(function (item) {
                 var sc = DataManager.itemSecondaryCategories(item);
                 var id = -1;
-                if (DataManager.isItemEx(item))     id = n;
-                if (DataManager.isWeaponEx(item))   id = n+1;
-                if (DataManager.isArmorEx(item))    id = n+2;
-                if (id === n && item.itypeId === 2) id = n+3;
+                if (DataManager.isItemEx(item)) id = n;
+                if (DataManager.isWeaponEx(item)) id = n + 1;
+                if (DataManager.isArmorEx(item)) id = n + 2;
+                if (id === n && item.itypeId === 2) id = n + 3;
                 for (var i = 0, max = sc.length; i < max; i++) {
                     if (sc[i] === allIncludesCategory) continue;
                     if (sc[i] === TextManager.item) continue;
@@ -215,17 +272,17 @@ Imported['SecondaryCategories'] = 1.04;
                 }
             }.bind(this));
             this._categories[n].sort();
-            this._categories[n+1].sort();
-            this._categories[n+2].sort();
-            this._categories[n+3].sort();
+            this._categories[n + 1].sort();
+            this._categories[n + 2].sort();
+            this._categories[n + 3].sort();
             this._categories[n].unshift('');
-            this._categories[n+1].unshift('');
-            this._categories[n+2].unshift('');
-            this._categories[n+3].unshift('');
+            this._categories[n + 1].unshift('');
+            this._categories[n + 2].unshift('');
+            this._categories[n + 3].unshift('');
             this._subIndex = [0, 0, 0, 0, 0];
         };
 
-        Window_ItemCategory.prototype.allItems = function() {
+        Window_ItemCategory.prototype.allItems = function () {
             return $gameParty.allItems();
         };
 
@@ -258,15 +315,15 @@ Imported['SecondaryCategories'] = 1.04;
             this.refresh();
         };
 
-        Window_ItemCategory.prototype.scrollDown = function() {
+        Window_ItemCategory.prototype.scrollDown = function () {
             this.forwardSubCategory();
         };
 
-        Window_ItemCategory.prototype.scrollUp = function() {
+        Window_ItemCategory.prototype.scrollUp = function () {
             this.backSubCategory();
         };
 
-        Window_ItemCategory.prototype.select = function(index) {
+        Window_ItemCategory.prototype.select = function (index) {
             Window_HorzCommand.prototype.select.call(this, index);
             if (this._itemWindow) this._itemWindow.setSubCategory(this.currentSubCategory());
         };

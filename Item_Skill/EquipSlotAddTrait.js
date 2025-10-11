@@ -13,47 +13,81 @@
 var Imported = Imported || {};
 Imported['EquipSlotAddTrait'] = 1.02;
 /*:
- * @target MZ MV
- * @url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Item_Skill/EquipSlotAddTrait.js
- * @plugindesc ver1.02/装備スロットを追加する特徴を設定できるようにします。
- * @author Yana
- * 
- * @help
- * ------------------------------------------------------
- * 使用方法
- * ------------------------------------------------------
- * 特徴を持ったオブジェクトのメモ欄に
- * <装備スロット:x+y>
- * または、
- * <AddEquipSlot:x+y>
- * と記述することで、xのスロットをy個増やします。
- * +を-にすることで減らすことも可能です。
- *
- * ※注意※
- * 初期装備に反映される形で、武器を減らさないでください。
- * 
- * ------------------------------------------------------
- * 利用規約
- * ------------------------------------------------------
- * 当プラグインはMITライセンスで公開されています。
- * 使用に制限はありません。商用、アダルト、いずれにも使用できます。
- * 二次配布も制限はしませんが、サポートは行いません。
- * 著作表示は任意です。行わなくても利用できます。
- * 要するに、特に規約はありません。
- * バグ報告や使用方法等のお問合せはネ実ツクールスレ、
- * または、Twitterにお願いします。
- * https://twitter.com/yanatsuki_
- * 素材利用は自己責任でお願いします。
- * ------------------------------------------------------
- * 更新履歴:
- * ver1.02:
- * 装備欄の数が変化したとき、エラーが出る可能性のあるバグを修正。
- * ver1.01:
- * 初期装備に反映される形で設定を行った場合、
- * 装備可能な初期装備まで消えることのあるバグを修正
- * ver1.00:
- * 公開
- */
+@plugindesc ver1.02/Adds the ability to set Traits that add equipment slots.
+@author Yana
+@url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Item_Skill/EquipSlotAddTrait.js
+@license MIT License
+
+@help
+English Help Translator: munokura
+This is an unofficial English translation of the plugin help,
+created to support global RPG Maker users.
+Feedback is welcome to improve translation quality
+(see: https://github.com/munokura/Yana-MV-plugins ).
+Original plugin by Yana.
+-----
+------------------------------------------------------
+How to Use
+------------------------------------------------------
+By entering
+<AddEquipSlot: x+y>
+in the Note field of an object with a Traits, you can increase the number of slots x by y.
+You can also decrease the number by changing the + to -.
+
+Note:
+Do not decrease weapons in a way that Reflections the initial equipment.
+
+-----------------------------------------------------
+Terms of Use
+------------------------------------------------------
+This plugin is released under the MIT License.
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+Update History:
+ver 1.02:
+Fixed a bug that could cause an error when the number of equipment slots was changed.
+ver 1.01:
+Fixed a bug that could cause equippable initial equipment to disappear when settings were made that Reflectioned the initial equipment.
+ver 1.00:
+Released
+*/
+
+
+/*:ja
+@plugindesc ver1.02/装備スロットを追加する特徴を設定できるようにします。
+@author Yana
+@url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Item_Skill/EquipSlotAddTrait.js
+
+@help
+------------------------------------------------------
+使用方法
+------------------------------------------------------
+特徴を持ったオブジェクトのメモ欄に
+<装備スロット:x+y>
+または、
+<AddEquipSlot:x+y>
+と記述することで、xのスロットをy個増やします。
++を-にすることで減らすことも可能です。
+
+※注意※
+初期装備に反映される形で、武器を減らさないでください。
+
+------------------------------------------------------
+利用規約
+------------------------------------------------------
+当プラグインはMITライセンスで公開されています。
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+更新履歴:
+ver1.02:
+装備欄の数が変化したとき、エラーが出る可能性のあるバグを修正。
+ver1.01:
+初期装備に反映される形で設定を行った場合、
+装備可能な初期装備まで消えることのあるバグを修正
+ver1.00:
+公開
+*/
+
 (function () {
     ////////////////////////////////////////////////////////////////////////////////////
 

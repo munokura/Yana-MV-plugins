@@ -13,40 +13,70 @@
 var Imported = Imported || {};
 Imported['ItemSkillType'] = 1.00;
 /*:
- * @target MZ MV
- * @url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Item_Skill/ItemSkillType.js
- * @plugindesc ver1.00/アイテムにスキルタイプを関連付けることで、アイテムコマンドの封印などを可能にします。
- * @author Yana
- * 
- * @param ItemSkillType
- * @text アイテムのスキルタイプID
- * @desc アイテムのスキルタイプとして設定するIDです。
- * @type number
- * @default 4
- * 
- * @help
- * ------------------------------------------------------
- * 使用方法
- * ------------------------------------------------------
- * プラグインパラメータを設定すれば、動作します。
- * 
- * ------------------------------------------------------
- * 利用規約
- * ------------------------------------------------------
- * 当プラグインはMITライセンスで公開されています。
- * 使用に制限はありません。商用、アダルト、いずれにも使用できます。
- * 二次配布も制限はしませんが、サポートは行いません。
- * 著作表示は任意です。行わなくても利用できます。
- * 要するに、特に規約はありません。
- * バグ報告や使用方法等のお問合せはネ実ツクールスレ、
- * または、Twitterにお願いします。
- * https://twitter.com/yanatsuki_
- * 素材利用は自己責任でお願いします。
- * ------------------------------------------------------
- * 更新履歴:
- * ver1.00:
- * 公開
- */
+@plugindesc ver1.00/By associating skill types with items, it is possible to seal item commands, etc.
+@author Yana
+@url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Item_Skill/ItemSkillType.js
+@license MIT License
+
+@help
+English Help Translator: munokura
+This is an unofficial English translation of the plugin help,
+created to support global RPG Maker users.
+Feedback is welcome to improve translation quality
+(see: https://github.com/munokura/Yana-MV-plugins ).
+Original plugin by Yana.
+-----
+------------------------------------------------------
+How to Use
+------------------------------------------------------
+Set the plugin parameters to run it.
+
+-----------------------------------------------------
+Terms of Use
+------------------------------------------------------
+This plugin is released under the MIT License.
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+Update History:
+ver1.00:
+Released
+
+@param ItemSkillType
+@text Item skill type ID
+@desc The ID to set as the skill type of the item.
+@default 4
+@type number
+*/
+
+
+/*:ja
+@plugindesc ver1.00/アイテムにスキルタイプを関連付けることで、アイテムコマンドの封印などを可能にします。
+@author Yana
+@url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Item_Skill/ItemSkillType.js
+
+@help
+------------------------------------------------------
+使用方法
+------------------------------------------------------
+プラグインパラメータを設定すれば、動作します。
+
+------------------------------------------------------
+利用規約
+------------------------------------------------------
+当プラグインはMITライセンスで公開されています。
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+更新履歴:
+ver1.00:
+公開
+
+@param ItemSkillType
+@text アイテムのスキルタイプID
+@desc アイテムのスキルタイプとして設定するIDです。
+@default 4
+@type number
+*/
+
 (function() {
     ////////////////////////////////////////////////////////////////////////////////////
 
