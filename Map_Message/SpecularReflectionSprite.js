@@ -12,90 +12,141 @@
 
 var Imported = Imported || {};
 Imported['SpecularReflectionSprite'] = 1.01;
-
 /*:
- * @plugindesc ver1.01/遠景と下層レイヤーの間に鏡像スプライトを追加します。
- * @author Yana
- *
- * @param TerrainId
- * @desc 鏡像が表示される地形タグです。
- * 地形タグは1,2,3のように複数登録することができます。
- * @default 1
- *
- * @param OffsetYVariableID
- * @desc プレイヤーのY座標の補正値として使用する変数のIDです。
- * 0を指定すると使用しません。
- * @default 0
- *
- * @help ------------------------------------------------------
- * このプラグインについて
- * ------------------------------------------------------
- *  このプラグインは、正確には、
- *  「遠景と下層レイヤーの間にキャラクターの鏡像を表示する地形タグを設定するプラグイン」
- *  となります。
- *  つまり、下層レイヤーの一部が透明や半透明でないと、地形タグを設定しても変化はありません。
- * ------------------------------------------------------
- * 使用方法
- * ------------------------------------------------------
- * プラグインパラメータで地形タグを設定すると、その地形タグに鏡像が表示されるようになります。
- *
- * イベントのメモに
- * <鏡像表示なし>
- * <NoReflection>
- * のいずれかを記述すると、そのイベントの鏡像は表示されません。
- *
- * 同じように、イベントのメモに
- * <鏡像表示補正Y:○>
- * <SpecularOffsetY:○>
- * のいずれかを記述すると、鏡像の表示位置を○分ずらします。
- *
- * ------------------------------------------------------
- * 利用規約
- * ------------------------------------------------------
- * 当プラグインはMITライセンスで公開されています。
- * 使用に制限はありません。商用、アダルト、いずれにも使用できます。
- * 二次配布も制限はしませんが、サポートは行いません。
- * 著作表示は任意です。行わなくても利用できます。
- * 要するに、特に規約はありません。
- * バグ報告や使用方法等のお問合せはネ実ツクールスレ、または、Twitterにお願いします。
- * https://twitter.com/yanatsuki_
- * 素材利用は自己責任でお願いします。
- * ------------------------------------------------------
- * 更新履歴:
- * ver1.01:
- * 戦闘開始演出時に鏡像スプライトが残ってしまうバグを修正。
- * ver1.00:
- * 公開
- */
+@plugindesc ver1.01/Adds a mirror image sprite between the background and the lower layer.
+@author Yana
+@url https://github.com/munokura/Yana-MV-plugins
+@license MIT License
 
-(function(){
+@help
+English Help Translator: munokura
+This is an unofficial English translation of the plugin help,
+created to support global RPG Maker users.
+Feedback is welcome to improve translation quality
+(see: https://github.com/munokura/Yana-MV-plugins ).
+Original plugin by Yana.
+-----
+About this plugin
+--------------------------------------------------------------------
+To be precise, this plugin is a plugin that sets a terrain tag to display a mirror image of the character between the background and the lower layer.
+
+In other words, if the lower layer is not partially transparent or translucent, setting the terrain tag will have no effect.
+------------------------------------------------------
+How to use
+------------------------------------------------------
+Setting a terrain tag in the plugin parameters will cause a mirror image to be displayed for that terrain tag.
+
+Writing either
+<NoReflectionion>
+in the event notes will suppress the mirror image for that event.
+
+Similarly, writing either
+<SpecularOffsetY:○>
+in the event notes will shift the position of the mirror image by ○ minutes.
+
+------------------------------------------------------
+Terms of Use
+------------------------------------------------------
+This plugin is released under the MIT License.
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+Update History:
+ver. 1.01:
+Fixed a bug that caused mirrored sprites to remain during the battle start animation.
+ver. 1.00:
+Released
+
+@param TerrainId
+@desc This is a terrain tag that displays a mirror image. Multiple terrain tags can be registered, such as 1, 2, and 3.
+@type number
+@default 1
+
+@param OffsetYVariableID
+@desc The ID of the variable used as the player's Y coordinate offset. Set to 0 to not use.
+@type variable
+@default 0
+*/
+
+
+/*:ja
+@plugindesc ver1.01/遠景と下層レイヤーの間に鏡像スプライトを追加します。
+@author Yana
+@url https://github.com/munokura/Yana-MV-plugins
+@license MIT License
+
+@help
+このプラグインについて
+------------------------------------------------------
+ このプラグインは、正確には、
+ 「遠景と下層レイヤーの間にキャラクターの鏡像を表示する地形タグを設定するプラグイン」
+ となります。
+ つまり、下層レイヤーの一部が透明や半透明でないと、地形タグを設定しても変化はありません。
+------------------------------------------------------
+使用方法
+------------------------------------------------------
+プラグインパラメータで地形タグを設定すると、その地形タグに鏡像が表示されるようになります。
+
+イベントのメモに
+<鏡像表示なし>
+<NoReflection>
+のいずれかを記述すると、そのイベントの鏡像は表示されません。
+
+同じように、イベントのメモに
+<鏡像表示補正Y:○>
+<SpecularOffsetY:○>
+のいずれかを記述すると、鏡像の表示位置を○分ずらします。
+
+------------------------------------------------------
+利用規約
+------------------------------------------------------
+当プラグインはMITライセンスで公開されています。
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+更新履歴:
+ver1.01:
+戦闘開始演出時に鏡像スプライトが残ってしまうバグを修正。
+ver1.00:
+公開
+
+@param TerrainId
+@desc 鏡像が表示される地形タグです。 地形タグは1,2,3のように複数登録することができます。
+@type number
+@default 1
+
+@param OffsetYVariableID
+@desc プレイヤーのY座標の補正値として使用する変数のIDです。 0を指定すると使用しません。
+@type variable
+@default 0
+*/
+
+(function () {
     ////////////////////////////////////////////////////////////////////////////////////
 
     var parameters = PluginManager.parameters('SpecularReflectionSprite');
-    var terrainIds = parameters['TerrainId'].split(',').map(function(n){ return Number(n) });
+    var terrainIds = parameters['TerrainId'].split(',').map(function (n) { return Number(n) });
     var offsetYVariableId = Number(parameters['OffsetYVariableID']) || 0;
 
     ////////////////////////////////////////////////////////////////////////////////////
 
-    Game_CharacterBase.prototype.isReflect = function() {
+    Game_CharacterBase.prototype.isReflect = function () {
         return true;
     };
 
-    Game_CharacterBase.prototype.isEvent = function() {
+    Game_CharacterBase.prototype.isEvent = function () {
         return false;
     };
 
     ////////////////////////////////////////////////////////////////////////////////////
 
-    Game_Event.prototype.isReflect = function() {
+    Game_Event.prototype.isReflect = function () {
         return this.event() && !(this.event().meta['鏡像表示なし'] || this.event().meta['NoReflection']);
     };
 
-    Game_Event.prototype.isEvent = function() {
+    Game_Event.prototype.isEvent = function () {
         return true;
     };
 
-    Game_Event.prototype.specularOffsetY = function() {
+    Game_Event.prototype.specularOffsetY = function () {
         if (!this.event()) return 0;
         if (this.event().meta['鏡像表示補正Y']) {
             return Number(this.event().meta['鏡像表示補正Y']) || 0;
@@ -115,63 +166,63 @@ Imported['SpecularReflectionSprite'] = 1.01;
     Sprite_Specular.prototype = Object.create(Sprite_Base.prototype);
     Sprite_Specular.prototype.constructor = Sprite_Specular;
 
-    Sprite_Specular.prototype.initialize = function(character) {
+    Sprite_Specular.prototype.initialize = function (character) {
         Sprite_Base.prototype.initialize.call(this);
         this.initMembers();
         this.setCharacter(character);
     };
 
-    Sprite_Specular.prototype.initMembers = function() {
+    Sprite_Specular.prototype.initMembers = function () {
         this.anchor.x = 0.5;
         this.anchor.y = 1;
         this._character = null;
         this._tilesetId = 0;
         this._upperBody = null;
         this._lowerBody = null;
-        this.scale = new Point(1.0,-1.0);
+        this.scale = new Point(1.0, -1.0);
         this.visible = true;
         this.z = 2;
     };
-    
-    
-    Sprite_Specular.prototype.setCharacter = function(character) {
+
+
+    Sprite_Specular.prototype.setCharacter = function (character) {
         this._character = character;
     };
-    
-    Sprite_Specular.prototype.updateVisibility = function() {
+
+    Sprite_Specular.prototype.updateVisibility = function () {
         Sprite_Base.prototype.updateVisibility.call(this);
-        if (this._startBattle || this._character.isTransparent() || !this._character.isReflect()){
+        if (this._startBattle || this._character.isTransparent() || !this._character.isReflect()) {
             this.visible = false;
             return;
         }
         var x = this._character.x;
-        var y = this._character.y + Math.ceil(this.offsetY() / $gameMap.tileWidth())+1;
+        var y = this._character.y + Math.ceil(this.offsetY() / $gameMap.tileWidth()) + 1;
         var dir = this._character._direction;
         var terrainTag = $gameMap.terrainTag(x, y);
         var reflectTerrain = terrainIds.contains(terrainTag);
 
-        switch(dir) {
+        switch (dir) {
             case 2: y = reflectTerrain ? y : y - 1; break;
-            case 4: x = reflectTerrain ? x : x + 1;  break;
+            case 4: x = reflectTerrain ? x : x + 1; break;
             case 6: x = reflectTerrain ? x : x - 1; break;
-            case 8: y = reflectTerrain ? y : y + 1;  break;
+            case 8: y = reflectTerrain ? y : y + 1; break;
         }
 
         terrainTag = $gameMap.terrainTag(x, y);
         this.visible = terrainIds.contains(terrainTag);
     };
 
-    Sprite_Specular.prototype.isTile = function() {
+    Sprite_Specular.prototype.isTile = function () {
         return this._character.tileId > 0;
     };
 
-    Sprite_Specular.prototype.tilesetBitmap = function(tileId) {
+    Sprite_Specular.prototype.tilesetBitmap = function (tileId) {
         var tileset = $gameMap.tileset();
         var setNumber = 5 + Math.floor(tileId / 256);
         return ImageManager.loadTileset(tileset.tilesetNames[setNumber]);
     };
 
-    Sprite_Specular.prototype.updateBitmap = function() {
+    Sprite_Specular.prototype.updateBitmap = function () {
         if (this.isImageChanged()) {
             this._tilesetId = $gameMap.tilesetId();
             this._tileId = this._character.tileId();
@@ -185,23 +236,23 @@ Imported['SpecularReflectionSprite'] = 1.01;
         }
     };
 
-    Sprite_Specular.prototype.isImageChanged = function() {
+    Sprite_Specular.prototype.isImageChanged = function () {
         return (this._tilesetId !== $gameMap.tilesetId() ||
-                this._tileId !== this._character.tileId() ||
-                this._characterName !== this._character.characterName() ||
-                this._characterIndex !== this._character.characterIndex());
+            this._tileId !== this._character.tileId() ||
+            this._characterName !== this._character.characterName() ||
+            this._characterIndex !== this._character.characterIndex());
     };
 
-    Sprite_Specular.prototype.setTileBitmap = function() {
+    Sprite_Specular.prototype.setTileBitmap = function () {
         this.bitmap = this.tilesetBitmap(this._tileId);
     };
 
-    Sprite_Specular.prototype.setCharacterBitmap = function() {
+    Sprite_Specular.prototype.setCharacterBitmap = function () {
         this.bitmap = ImageManager.loadCharacter(this._characterName);
         this._isBigCharacter = ImageManager.isBigCharacter(this._characterName);
     };
 
-    Sprite_Specular.prototype.updateFrame = function() {
+    Sprite_Specular.prototype.updateFrame = function () {
         if (this._tileId > 0) {
             this.updateTileFrame();
         } else {
@@ -209,7 +260,7 @@ Imported['SpecularReflectionSprite'] = 1.01;
         }
     };
 
-    Sprite_Specular.prototype.updateTileFrame = function() {
+    Sprite_Specular.prototype.updateTileFrame = function () {
         var pw = this.patternWidth();
         var ph = this.patternHeight();
         var sx = (Math.floor(this._tileId / 128) % 2 * 8 + this._tileId % 8) * pw;
@@ -217,7 +268,7 @@ Imported['SpecularReflectionSprite'] = 1.01;
         this.setFrame(sx, sy, pw, ph);
     };
 
-    Sprite_Specular.prototype.updateCharacterFrame = function() {
+    Sprite_Specular.prototype.updateCharacterFrame = function () {
         var pw = this.patternWidth();
         var ph = this.patternHeight();
         var sx = (this.characterBlockX() + this.characterPatternX()) * pw;
@@ -233,7 +284,7 @@ Imported['SpecularReflectionSprite'] = 1.01;
         }
     };
 
-    Sprite_Specular.prototype.characterBlockX = function() {
+    Sprite_Specular.prototype.characterBlockX = function () {
         if (this._isBigCharacter) {
             return 0;
         } else {
@@ -242,7 +293,7 @@ Imported['SpecularReflectionSprite'] = 1.01;
         }
     };
 
-    Sprite_Specular.prototype.characterBlockY = function() {
+    Sprite_Specular.prototype.characterBlockY = function () {
         if (this._isBigCharacter) {
             return 0;
         } else {
@@ -251,15 +302,15 @@ Imported['SpecularReflectionSprite'] = 1.01;
         }
     };
 
-    Sprite_Specular.prototype.characterPatternX = function() {
+    Sprite_Specular.prototype.characterPatternX = function () {
         return this._character.pattern();
     };
 
-    Sprite_Specular.prototype.characterPatternY = function() {
+    Sprite_Specular.prototype.characterPatternY = function () {
         return (this._character.direction() - 2) / 2;
     };
 
-    Sprite_Specular.prototype.patternWidth = function() {
+    Sprite_Specular.prototype.patternWidth = function () {
         if (this._tileId > 0) {
             return $gameMap.tileWidth();
         } else if (this._isBigCharacter) {
@@ -269,7 +320,7 @@ Imported['SpecularReflectionSprite'] = 1.01;
         }
     };
 
-    Sprite_Specular.prototype.patternHeight = function() {
+    Sprite_Specular.prototype.patternHeight = function () {
         if (this._tileId > 0) {
             return $gameMap.tileHeight();
         } else if (this._isBigCharacter) {
@@ -279,7 +330,7 @@ Imported['SpecularReflectionSprite'] = 1.01;
         }
     };
 
-    Sprite_Specular.prototype.updateHalfBodySprites = function() {
+    Sprite_Specular.prototype.updateHalfBodySprites = function () {
         if (this._bushDepth > 0) {
             this.createHalfBodySprites();
             this._upperBody.bitmap = this.bitmap;
@@ -297,7 +348,7 @@ Imported['SpecularReflectionSprite'] = 1.01;
         }
     };
 
-    Sprite_Specular.prototype.createHalfBodySprites = function() {
+    Sprite_Specular.prototype.createHalfBodySprites = function () {
         if (!this._upperBody) {
             this._upperBody = new Sprite();
             this._upperBody.anchor.x = 0.5;
@@ -313,14 +364,14 @@ Imported['SpecularReflectionSprite'] = 1.01;
         }
     };
 
-    Sprite_Specular.prototype.updateOther = function() {
+    Sprite_Specular.prototype.updateOther = function () {
         this.opacity = this._character.opacity();
         this.blendMode = this._character.blendMode();
         this._bushDepth = this._character.bushDepth();
     };
 
 
-    Sprite_Specular.prototype.update = function() {
+    Sprite_Specular.prototype.update = function () {
         Sprite_Base.prototype.update.call(this);
         this.updatePosition();
         this.updateBitmap();
@@ -328,14 +379,14 @@ Imported['SpecularReflectionSprite'] = 1.01;
         this.updatePosition();
         this.updateOther();
     };
-    
-    Sprite_Specular.prototype.updatePosition = function() {
+
+    Sprite_Specular.prototype.updatePosition = function () {
         this.x = this._character.screenX();
         this.y = this._character.screenY() + this.offsetY();
         this.z = this._character.screenZ();
     };
 
-    Sprite_Specular.prototype.offsetY = function() {
+    Sprite_Specular.prototype.offsetY = function () {
         var offsetY = offsetYVariableId ? $gameVariables.value(offsetYVariableId) : 0;
         offsetY = this._character.isEvent() ? this._character.specularOffsetY() : offsetY;
         return offsetY;
@@ -344,20 +395,20 @@ Imported['SpecularReflectionSprite'] = 1.01;
     ////////////////////////////////////////////////////////////////////////////////////
 
     var _sref_SMap_createParallax = Spriteset_Map.prototype.createParallax;
-    Spriteset_Map.prototype.createParallax = function() {
+    Spriteset_Map.prototype.createParallax = function () {
         _sref_SMap_createParallax.call(this);
         this.createSpecular();
     };
-    
-    Spriteset_Map.prototype.createSpecular = function() {
+
+    Spriteset_Map.prototype.createSpecular = function () {
         this._specularSprites = [];
-        $gameMap.events().forEach(function(event) {
+        $gameMap.events().forEach(function (event) {
             this._specularSprites.push(new Sprite_Specular(event));
         }, this);
-        $gameMap.vehicles().forEach(function(vehicle) {
+        $gameMap.vehicles().forEach(function (vehicle) {
             this._specularSprites.push(new Sprite_Specular(vehicle));
         }, this);
-        $gamePlayer.followers().reverseEach(function(follower) {
+        $gamePlayer.followers().reverseEach(function (follower) {
             this._specularSprites.push(new Sprite_Specular(follower));
         }, this);
         this._specularSprites.push(new Sprite_Specular($gamePlayer));
@@ -369,8 +420,8 @@ Imported['SpecularReflectionSprite'] = 1.01;
     ////////////////////////////////////////////////////////////////////////////////////
 
     var __SMap_snapForBattleBackground = Scene_Map.prototype.snapForBattleBackground;
-    Scene_Map.prototype.snapForBattleBackground = function() {
-        this._spriteset._specularSprites.forEach(function(s){
+    Scene_Map.prototype.snapForBattleBackground = function () {
+        this._spriteset._specularSprites.forEach(function (s) {
             s._startBattle = true;
             s.visible = false;
         });

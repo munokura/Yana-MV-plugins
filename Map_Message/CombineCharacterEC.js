@@ -13,72 +13,137 @@
 var Imported = Imported || {};
 Imported['CombineCharacterEC'] = 1.00;
 /*:
- * @plugindesc ver1.00/指定した文字に濁点や半濁点を付ける制御文字を追加します。
- * @author Yana
- *
- * @param PlusRate
- * @desc 濁点や半濁点の表示位置です。文字サイズに対する倍率で指定してください。
- * @default 0.75
- *
- * @help------------------------------------------------------
- * 使用方法
- * ------------------------------------------------------
- * drawTextExを通る場面(文章の表示やバトルログ)などに以下の制御文字を追加します。
- *
- * \VS[テキスト]
- * と記述することで、そのテキストに濁点を付けることができます。
- *
- * \PS[テキスト]
- * と記述することで、そのテキストに半濁点を付けることができます。
- *
- * \EC[テキスト]
- * と記述することで、そのテキストに傍点を付けることができます。
- *
- * \AT[テキスト]
- * と記述することで、そのテキストに打ち消し線を付けることができます。
- *
- * \WAT[テキスト]
- * と記述することで、そのテキストに二重打ち消し線を付けることができます。
- *
- * \UL[テキスト]
- * と記述することで、そのテキストに下線を付けることができます。
- *
- *
- * ※ちょっと難しい制御文字※
- *
- * \CC[裏に入れる文字,テキスト,表から重ねる文字]
- * と記述することで、そのテキストの裏と表に文字を重ねることができます。
- *
- * それぞれの文字は、通常の文字の代わりに、
- * i<アイコンインデックス> :インデックスのアイコンを文字として重ねる。
- * L○<x/y/w/h> :x,y,w,hで指定した大きさで○のテキストカラーをした矩形を重ねる。
- * の2つを使うこともできます。
- * この際、x,y,w,hは文字サイズに対する倍率で指定してください。
- * また、<x/y/w/h>は複数指定することもできます。
- * ○に何も指定しない場合、現在のテキストカラーが使用されます。
- *
- * 例1:テキストの裏を2番のテキストカラーで塗りつぶす。
- * \CC[L2<0/0/1/1>,塗りつぶすテキスト]
- * 例2:テキストの表に3番のテキストカラーで線を2本引く。
- * \CC[,塗りつぶすテキスト,L3<0/0/1/0.1><0/0.9/1/0.1>]
- *
- * ------------------------------------------------------
- * 利用規約
- * ------------------------------------------------------
- * 当プラグインはMITライセンスで公開されています。
- * 使用に制限はありません。商用、アダルト、いずれにも使用できます。
- * 二次配布も制限はしませんが、サポートは行いません。
- * 著作表示は任意です。行わなくても利用できます。
- * 要するに、特に規約はありません。
- * バグ報告や使用方法等のお問合せはネ実ツクールスレ、または、Twitterにお願いします。
- * https://twitter.com/yanatsuki_
- * 素材利用は自己責任でお願いします。
- * ------------------------------------------------------
- * 更新履歴:
- * ver1.00:
- * 公開
- */
+@plugindesc ver1.00/Adds control characters that add voiced or semi-voiced marks to specified characters.
+@author Yana
+@url https://github.com/munokura/Yana-MV-plugins
+@license MIT License
 
+@help
+English Help Translator: munokura
+This is an unofficial English translation of the plugin help,
+created to support global RPG Maker users.
+Feedback is welcome to improve translation quality
+(see: https://github.com/munokura/Yana-MV-plugins ).
+Original plugin by Yana.
+-----
+How to Use
+--------------------------------------------------------------------
+Adds the following control characters to scenes that use drawTextEx (such as text display and battle logs).
+
+\VS[text]
+Adds a voiced consonant mark to the text.
+
+\PS[text]
+Adds a handakuten consonant mark to the text.
+
+\EC[text]
+Adds a footnote to the text.
+
+\AT[text]
+Adds a strikethrough to the text.
+
+\WAT[text]
+Adds a double strikethrough to the text.
+
+\UL[text]
+Adds an underline to the text.
+
+*Somewhat complicated control characters*
+
+\CC[text to add behind, text, overlay from the front]
+Adds text behind and in front of the text.
+
+Each character is displayed as an icon instead of a regular character.
+i<icon index>: Overlays an index icon as the character.
+L○<x/y/w/h>: Overlays a rectangle with the text color specified by x, y, w, and h.
+You can also use these two options.
+In this case, specify x, y, w, and h as the scale factor for the font size.
+You can also specify multiple <x/y/w/h> options.
+If no value is specified for ○, the current text color will be used.
+
+Example 1: Fill the back of the text with text color number 2.
+\CC[L2<0/0/1/1>,FillText]
+Example 2: Draw two lines on the front of the text in text color number 3.
+\CC[,FillText,L3<0/0/1/0.1><0/0.9/1/0.1>]
+
+------------------------------------------------------
+Terms of Use
+------------------------------------------------------
+This plugin is released under the MIT License.
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+Update History:
+Ver. 1.00:
+Released
+
+@param PlusRate
+@desc This is the display position of voiced consonants and semi-voiced consonants. Please specify it as a magnification factor relative to the character size.
+@default 0.75
+*/
+
+
+/*:ja
+@plugindesc ver1.00/指定した文字に濁点や半濁点を付ける制御文字を追加します。
+@author Yana
+@url https://github.com/munokura/Yana-MV-plugins
+@license MIT License
+
+@help
+使用方法
+------------------------------------------------------
+drawTextExを通る場面(文章の表示やバトルログ)などに以下の制御文字を追加します。
+
+\VS[テキスト]
+と記述することで、そのテキストに濁点を付けることができます。
+
+\PS[テキスト]
+と記述することで、そのテキストに半濁点を付けることができます。
+
+\EC[テキスト]
+と記述することで、そのテキストに傍点を付けることができます。
+
+\AT[テキスト]
+と記述することで、そのテキストに打ち消し線を付けることができます。
+
+\WAT[テキスト]
+と記述することで、そのテキストに二重打ち消し線を付けることができます。
+
+\UL[テキスト]
+と記述することで、そのテキストに下線を付けることができます。
+
+
+※ちょっと難しい制御文字※
+
+\CC[裏に入れる文字,テキスト,表から重ねる文字]
+と記述することで、そのテキストの裏と表に文字を重ねることができます。
+
+それぞれの文字は、通常の文字の代わりに、
+i<アイコンインデックス> :インデックスのアイコンを文字として重ねる。
+L○<x/y/w/h> :x,y,w,hで指定した大きさで○のテキストカラーをした矩形を重ねる。
+の2つを使うこともできます。
+この際、x,y,w,hは文字サイズに対する倍率で指定してください。
+また、<x/y/w/h>は複数指定することもできます。
+○に何も指定しない場合、現在のテキストカラーが使用されます。
+
+例1:テキストの裏を2番のテキストカラーで塗りつぶす。
+\CC[L2<0/0/1/1>,塗りつぶすテキスト]
+例2:テキストの表に3番のテキストカラーで線を2本引く。
+\CC[,塗りつぶすテキスト,L3<0/0/1/0.1><0/0.9/1/0.1>]
+
+------------------------------------------------------
+利用規約
+------------------------------------------------------
+当プラグインはMITライセンスで公開されています。
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+更新履歴:
+ver1.00:
+公開
+
+@param PlusRate
+@desc 濁点や半濁点の表示位置です。文字サイズに対する倍率で指定してください。
+@default 0.75
+*/
 
 (function(){
     ////////////////////////////////////////////////////////////////////////////////////

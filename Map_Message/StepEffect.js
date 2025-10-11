@@ -12,222 +12,220 @@
 
 var Imported = Imported || {};
 Imported['StepEffect'] = 1.00;
-
 /*:
- * @target MZ MV
- * @url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Map_Message/StepEffect.js
- * @plugindesc ver1.00/足跡などのエフェクトを追加します。
- * @author Yana
- * 
- * @param EffectWidth
- * @text エフェクト画像の横幅
- * @type number
- * @desc エフェクト画像1セルの横幅です。
- * @default 48
- * 
- * @param AnimationSpeed
- * @text エフェクト画像速度
- * @type number
- * @desc 何フレームに一度エフェクト画像を進めるかの設定です。
- * 数値を大きくするほど、遅くなります。
- * @default 8
- * 
- * @param StepSize
- * @text エフェクトサイズ
- * @type number
- * @desc エフェクトを何ドットずらすかの設定です。
- * 設定した値の半分ずつ、エフェクトが中心からずれます。
- * @default 8
- *
- * @param AudibleDistance
- * @text ステップサウンド距離
- * @type number
- * @desc プレイヤー以外のステップサウンドが聞こえる距離です。
- * XYの距離の合計値がこの値を超えると、聞こえなくなります。
- * @default 10
- *
- * @noteParam ステップエフェクト0
- * @noteRequire 1
- * @noteDir img/system/
- * @noteType file
- * @noteData tilesets
- *
- * @noteParam ステップエフェクト1
- * @noteRequire 1
- * @noteDir img/system/
- * @noteType file
- * @noteData tilesets
- *
- * @noteParam ステップエフェクト2
- * @noteRequire 1
- * @noteDir img/system/
- * @noteType file
- * @noteData tilesets
- *
- * @noteParam ステップエフェクト3
- * @noteRequire 1
- * @noteDir img/system/
- * @noteType file
- * @noteData tilesets
- *
- * @noteParam ステップエフェクト4
- * @noteRequire 1
- * @noteDir img/system/
- * @noteType file
- * @noteData tilesets
- *
- * @noteParam ステップエフェクト5
- * @noteRequire 1
- * @noteDir img/system/
- * @noteType file
- * @noteData tilesets
- *
- * @noteParam ステップエフェクト6
- * @noteRequire 1
- * @noteDir img/system/
- * @noteType file
- * @noteData tilesets
- *
- * @noteParam ステップエフェクト7
- * @noteRequire 1
- * @noteDir img/system/
- * @noteType file
- * @noteData tilesets
- *
- * @noteParam ステップサウンド0
- * @noteRequire 1
- * @noteDir audio/se/
- * @noteType file
- * @noteData tilesets
- *
- * @noteParam ステップサウンド1
- * @noteRequire 1
- * @noteDir audio/se/
- * @noteType file
- * @noteData tilesets
- *
- * @noteParam ステップサウンド2
- * @noteRequire 1
- * @noteDir audio/se/
- * @noteType file
- * @noteData tilesets
- *
- * @noteParam ステップサウンド3
- * @noteRequire 1
- * @noteDir audio/se/
- * @noteType file
- * @noteData tilesets
- *
- * @noteParam ステップサウンド4
- * @noteRequire 1
- * @noteDir audio/se/
- * @noteType file
- * @noteData tilesets
- *
- * @noteParam ステップサウンド5
- * @noteRequire 1
- * @noteDir audio/se/
- * @noteType file
- * @noteData tilesets
- *
- * @noteParam ステップサウンド6
- * @noteRequire 1
- * @noteDir audio/se/
- * @noteType file
- * @noteData tilesets
- *
- * @noteParam ステップサウンド7
- * @noteRequire 1
- * @noteDir audio/se/
- * @noteType file
- * @noteData tilesets
- *
- * @help
- * ------------------------------------------------------
- * 使用方法
- * ------------------------------------------------------
- * エフェクトに使用する画像は、img/system/内に用意してください。
- *
- * タイルセットのメモ欄に、
- * <ステップエフェクト○:画像名>
- * <StepEffect○:fileName>
- * のいずれかを記述すると、○番の地形タグのタイルに踏み込んだ時に、
- * 画像の表示を行います。
- *
- * 追加で、下記のいずれかの記述を行うと、
- * <ステップエフェクト設定○:X補正値,Y補正値[,スケール%[,fitAngle[,fitStep[,dry[,wet□[,animeSpeed◇]]]]]]>
- * <StepEffectSetting○:offsetX,offsetY[,scale%[,fitAngle[,fitStep[,dry[,wet□[,animeSpeed◇]]]]]]>
- *
- * ステップエフェクトの表示位置やスケールなどの追加パラメータを指定できます。
- * fitAngle
- *   その画像はキャラクターの向きに合わせて回転するようになります。
- *
- * fitStep
- *   その画像の表示位置が一歩ごとに上下左右にぶれるようになります。
- *
- * wet□
- *   その地形を通った時に通ったキャラクターにwet状態として、
- *   □番の地形タグが関連付けられます。
- *
- * dry
- *   wet状態のキャラは現在の地形タグを□番に変更します。
- *   これにより、濡れた地形を通った後乾いた地形を通ると足跡が残る、
- *   のような仕組みが作れます。
- *
- * animeSpeed◇
- *   そのエフェクトのanimationSpeedが◇に設定されます。
- *
- *
- * また、同じ設定はイベントのメモ欄と1ページ目の注釈でも行うことができます。
- * イベントに設定がある場合、タイルセットの設定より優先されます。
- *
- * タイルセットのメモ欄に、
- * <ステップサウンド○:SE名>
- * <StepSound○:fileName>
- * のいずれかを記述すると、○番の地形タグのタイルに踏み込んだ時に、
- * 指定したSEを再生します。
- *
- * 追加で、
- * <ステップサウンド設定○:ボリューム,ピッチ>
- * <StepSoundSetting○:volume,pitch>
- * のいずれかの記述を行うと、
- * ステップサウンドのボリュームとピッチを変更できます。
- * 設定が無い場合、それぞれには100が設定されます。
- * また、ボリューム、ピッチどちらも、値を範囲指定することができます。
- * 50-70のように指定すると、50-70のランダムな値が設定されます。
- *
- * また、これらの画像名やSE名の指定にnullを指定することで
- * エフェクトやサウンドを無効化することができます。
- *
- * ------------------------------------------------------
- * ※注意※
- * このプラグインで指定した画像やSEのうちイベントに設定したものは、
- * デプロイメントを行うとき、「未使用素材を含まない」のオプションを
- * オンにすると削除されてしまいます。
- * デプロイメント後、画像をフォルダに入れなおしたり、
- * 素材削除回避プラグインを導入して、
- * そちらで削除回避の対象に指定するなどの処置が必要です。
- * 素材削除回避プラグイン>http://rpg.mitukasa.jp/src/ogrpg1408.zip
- *
- * ------------------------------------------------------
- * 利用規約
- * ------------------------------------------------------
- * 当プラグインはMITライセンスで公開されています。
- * 使用に制限はありません。商用、アダルト、いずれにも使用できます。
- * 二次配布も制限はしませんが、サポートは行いません。
- * 著作表示は任意です。行わなくても利用できます。
- * 要するに、特に規約はありません。
- * バグ報告や使用方法等のお問合せはネ実ツクールスレ、
- * または、Twitterにお願いします。
- * https://twitter.com/yanatsuki_
- * 素材利用は自己責任でお願いします。
- * ------------------------------------------------------
- * 更新履歴:
- * ver1.00:
- * 公開
- */
+@target MZ MV
+@plugindesc ver1.00/Adds effects such as footprints.
+@author Yana
+@url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Map_Message/StepEffect.js
+@license MIT License
 
-(function() {
+@help
+English Help Translator: munokura
+This is an unofficial English translation of the plugin help,
+created to support global RPG Maker users.
+Feedback is welcome to improve translation quality
+(see: https://github.com/munokura/Yana-MV-plugins ).
+Original plugin by Yana.
+-----
+------------------------------------------------------
+How to Use
+------------------------------------------------------
+Please prepare the image to use for the effect in the img/system/ directory.
+
+By adding either of the following to the tile set's Note field:
+<StepEffect△:FileName>
+, the image will be displayed when you step on a tile with the terrain tag △.
+
+Additionally, by adding either of the following:
+<StepEffectSetting△:OffsetX,OffsetY[,Scale%[,FitAngle[,FitStep[,Dry[,Wet□[,AnimeSpeed◇]]]]]]>
+
+You can specify additional parameters for the step effect, such as its position and scale.
+fitAngle
+- The image will rotate based on the character's orientation.
+
+fitStep
+- The displayed position of the image will shift up, down, left, and right with each step.
+
+wet□
+- When a character passes through that terrain, the terrain tag #□ will be associated with the wet state.
+
+dry
+- A character in the wet state will have their current terrain tag changed to #□.
+This allows you to create a system where footprints are left behind when passing through wet terrain and then dry terrain.
+
+animeSpeed◇
+- The animationSpeed for that effect will be set to #◇.
+
+This same setting can also be made in the event Note field and the annotations on page 1.
+If a setting is made for an event, it will take precedence over the tile set setting.
+
+Entering either
+<StepSound△:fileName>
+in the tile set Note field will play the specified SE when the character steps on a tile with the terrain tag #△.
+
+Additionally, you can change the volume and pitch of the step sound by writing either
+<StepSoundSetting△:volume,pitch>
+.
+If no setting is specified, each will be set to 100.
+You can also specify a range for both volume and pitch.
+For example, specifying 50-70 will set a random value between 50 and 70.
+
+You can also disable effects or sounds by specifying null for the image name or sound effect name.
+
+-----------------------------------------------------
+Note:
+Images and sound effects specified with this plugin that are set to events will be deleted if the "Exclude unused files" option is turned on during deployment.
+After deployment, you will need to take measures such as relocating the images to a folder or installing a material deletion prevention plugin and specifying them as targets for deletion prevention.
+Material Deletion Prevention Plugin > 
+https://raw.githubusercontent.com/triacontane/RPGMakerMV/master/ExcludeMaterialGuard.js
+
+------------------------------------------------------
+Terms of Use
+------------------------------------------------------
+This plugin is released under the MIT License.
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+Update History:
+ver. 1.00:
+Released
+
+@param EffectWidth
+@text Effect image width
+@desc The width of one cell of the effect image.
+@default 48
+@type number
+
+@param AnimationSpeed
+@text Effect Image Speed
+@desc This sets how many frames the effect image advances between. The larger the value, the slower the image will advance.
+@default 8
+@type number
+
+@param StepSize
+@text Effect Size
+@desc This sets how many dots the effect is shifted from the center. The effect will shift from the center by half the set value.
+@default 8
+@type number
+
+@param AudibleDistance
+@text Step Sound Distance
+@desc The distance at which non-player step sounds can be heard. If the total value of the X and Y distances exceeds this value, the sound will no longer be heard.
+@default 10
+@type number
+*/
+
+
+/*:ja
+@target MZ MV
+@plugindesc ver1.00/足跡などのエフェクトを追加します。
+@author Yana
+@url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Map_Message/StepEffect.js
+@license MIT License
+
+@help
+------------------------------------------------------
+使用方法
+------------------------------------------------------
+エフェクトに使用する画像は、img/system/内に用意してください。
+
+タイルセットのメモ欄に、
+<ステップエフェクト○:画像名>
+<StepEffect○:fileName>
+のいずれかを記述すると、○番の地形タグのタイルに踏み込んだ時に、
+画像の表示を行います。
+
+追加で、下記のいずれかの記述を行うと、
+<ステップエフェクト設定○:X補正値,Y補正値[,スケール%[,fitAngle[,fitStep[,dry[,wet□[,animeSpeed◇]]]]]]>
+<StepEffectSetting○:offsetX,offsetY[,scale%[,fitAngle[,fitStep[,dry[,wet□[,animeSpeed◇]]]]]]>
+
+ステップエフェクトの表示位置やスケールなどの追加パラメータを指定できます。
+fitAngle
+  その画像はキャラクターの向きに合わせて回転するようになります。
+
+fitStep
+  その画像の表示位置が一歩ごとに上下左右にぶれるようになります。
+
+wet□
+  その地形を通った時に通ったキャラクターにwet状態として、
+  □番の地形タグが関連付けられます。
+
+dry
+  wet状態のキャラは現在の地形タグを□番に変更します。
+  これにより、濡れた地形を通った後乾いた地形を通ると足跡が残る、
+  のような仕組みが作れます。
+
+animeSpeed◇
+  そのエフェクトのanimationSpeedが◇に設定されます。
+
+
+また、同じ設定はイベントのメモ欄と1ページ目の注釈でも行うことができます。
+イベントに設定がある場合、タイルセットの設定より優先されます。
+
+タイルセットのメモ欄に、
+<ステップサウンド○:SE名>
+<StepSound○:fileName>
+のいずれかを記述すると、○番の地形タグのタイルに踏み込んだ時に、
+指定したSEを再生します。
+
+追加で、
+<ステップサウンド設定○:ボリューム,ピッチ>
+<StepSoundSetting○:volume,pitch>
+のいずれかの記述を行うと、
+ステップサウンドのボリュームとピッチを変更できます。
+設定が無い場合、それぞれには100が設定されます。
+また、ボリューム、ピッチどちらも、値を範囲指定することができます。
+50-70のように指定すると、50-70のランダムな値が設定されます。
+
+また、これらの画像名やSE名の指定にnullを指定することで
+エフェクトやサウンドを無効化することができます。
+
+------------------------------------------------------
+※注意※
+このプラグインで指定した画像やSEのうちイベントに設定したものは、
+デプロイメントを行うとき、「未使用素材を含まない」のオプションを
+オンにすると削除されてしまいます。
+デプロイメント後、画像をフォルダに入れなおしたり、
+素材削除回避プラグインを導入して、
+そちらで削除回避の対象に指定するなどの処置が必要です。
+素材削除回避プラグイン>
+https://raw.githubusercontent.com/triacontane/RPGMakerMV/master/ExcludeMaterialGuard.js
+
+------------------------------------------------------
+利用規約
+------------------------------------------------------
+当プラグインはMITライセンスで公開されています。
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+更新履歴:
+ver1.00:
+公開
+
+@param EffectWidth
+@text エフェクト画像の横幅
+@desc エフェクト画像1セルの横幅です。
+@default 48
+@type number
+
+@param AnimationSpeed
+@text エフェクト画像速度
+@desc 何フレームに一度エフェクト画像を進めるかの設定です。 数値を大きくするほど、遅くなります。
+@default 8
+@type number
+
+@param StepSize
+@text エフェクトサイズ
+@desc エフェクトを何ドットずらすかの設定です。 設定した値の半分ずつ、エフェクトが中心からずれます。
+@default 8
+@type number
+
+@param AudibleDistance
+@text ステップサウンド距離
+@desc プレイヤー以外のステップサウンドが聞こえる距離です。 XYの距離の合計値がこの値を超えると、聞こえなくなります。
+@default 10
+@type number
+*/
+
+(function () {
     ////////////////////////////////////////////////////////////////////////////////////
 
     var parameters = PluginManager.parameters('StepEffect');
@@ -238,7 +236,7 @@ Imported['StepEffect'] = 1.00;
 
     ////////////////////////////////////////////////////////////////////////////////////
 
-    DataManager.initStepEffects = function(note) {
+    DataManager.initStepEffects = function (note) {
         var stepEffects = [];
         var texts = note.split('\n');
         for (var i = 0, max = texts.length; i < max; i++) {
@@ -286,11 +284,11 @@ Imported['StepEffect'] = 1.00;
     Sprite_StepEffect.prototype = Object.create(Sprite.prototype);
     Sprite_StepEffect.prototype.constructor = Sprite_StepEffect;
 
-    Sprite_StepEffect.prototype.isUsed = function() {
+    Sprite_StepEffect.prototype.isUsed = function () {
         return this._used;
     };
 
-    Sprite_StepEffect.prototype.initialize = function(fileName, setting, x, y, d, character) {
+    Sprite_StepEffect.prototype.initialize = function (fileName, setting, x, y, d, character) {
         Sprite.prototype.initialize.call(this);
         this._used = true;
         var fn = setting.split(',');
@@ -298,8 +296,8 @@ Imported['StepEffect'] = 1.00;
         var ox = Number(fn[0]) ? Number(fn[0]) : 0;
         var oy = Number(fn[1]) ? Number(fn[1]) : 0;
         var scale = sc ? sc : 100;
-        var wet = fn.filter(function(s) { return s.contains('wet') })[0];
-        var as = fn.filter(function(s) { return s.contains('animeSpeed') })[0];
+        var wet = fn.filter(function (s) { return s.contains('wet') })[0];
+        var as = fn.filter(function (s) { return s.contains('animeSpeed') })[0];
         this._fileName = fileName;
         this._nx = x * $gameMap.tileWidth() + characterSize / 2 + ox;
         this._ny = y * $gameMap.tileHeight() + characterSize / 2 + oy;
@@ -335,7 +333,7 @@ Imported['StepEffect'] = 1.00;
         if (as && as.match(/animeSpeed(\d+)/)) this._animeSpeed = Number(RegExp.$1);
     };
 
-    Sprite_StepEffect.prototype.update = function() {
+    Sprite_StepEffect.prototype.update = function () {
         Sprite.prototype.update.call(this);
         if (!this.isUsed()) return;
         if (!this.bitmap) {
@@ -381,12 +379,12 @@ Imported['StepEffect'] = 1.00;
     ////////////////////////////////////////////////////////////////////////////////////
 
     var __SSMap_createTilemap = Spriteset_Map.prototype.createTilemap;
-    Spriteset_Map.prototype.createTilemap = function() {
+    Spriteset_Map.prototype.createTilemap = function () {
         __SSMap_createTilemap.call(this);
         this.createStepContainer();
     };
 
-    Spriteset_Map.prototype.createStepContainer = function() {
+    Spriteset_Map.prototype.createStepContainer = function () {
         this._stepContainer = new Sprite();
         this._stepContainer.setFrame(0, 0, this.width, this.height);
         this._stepContainer.z = 2;
@@ -395,7 +393,7 @@ Imported['StepEffect'] = 1.00;
 
     ////////////////////////////////////////////////////////////////////////////////////
 
-    Game_Map.prototype.combineStepEffect = function(se, ce) {
+    Game_Map.prototype.combineStepEffect = function (se, ce) {
         var effect = { anime: '', animeSetting: '', se: '', seSetting: '' };
         if (se) {
             if (se.anime) effect.anime = se.anime;
@@ -412,7 +410,7 @@ Imported['StepEffect'] = 1.00;
         return effect;
     };
 
-    Game_Map.prototype.showStepEffect = function(tag, x, y, d, show, character, stepSpeed) {
+    Game_Map.prototype.showStepEffect = function (tag, x, y, d, show, character, stepSpeed) {
         if (!show) return;
         var tileset = this.tileset();
         if (tileset) {
@@ -453,27 +451,27 @@ Imported['StepEffect'] = 1.00;
         }
     };
 
-    Game_Map.prototype.stepEffects = function(tileset) {
+    Game_Map.prototype.stepEffects = function (tileset) {
         if (!tileset._stepEffects) tileset._stepEffects = DataManager.initStepEffects(tileset.note);
         return tileset._stepEffects;
     };
 
     ////////////////////////////////////////////////////////////////////////////////////
 
-    Game_CharacterBase.prototype.isVisible = function() {
+    Game_CharacterBase.prototype.isVisible = function () {
         return true;
     };
 
-    Game_CharacterBase.prototype.isVehicle = function() {
+    Game_CharacterBase.prototype.isVehicle = function () {
         return false;
     };
 
-    Game_CharacterBase.prototype.stepEffects = function() {
+    Game_CharacterBase.prototype.stepEffects = function () {
         return [];
     };
 
     var __GCBase_updateMove = Game_CharacterBase.prototype.updateMove;
-    Game_CharacterBase.prototype.updateMove = function() {
+    Game_CharacterBase.prototype.updateMove = function () {
         __GCBase_updateMove.call(this);
         if (this === $gamePlayer && this.isInVehicle()) return;
         if (this.isVehicle()) return;
@@ -496,10 +494,10 @@ Imported['StepEffect'] = 1.00;
 
     ////////////////////////////////////////////////////////////////////////////////////
 
-    Game_Event.prototype.stepEffects = function() {
+    Game_Event.prototype.stepEffects = function () {
         if (this._stepEffects) return this._stepEffects;
         var note = this.event().note + '\n';
-        this.event().pages[0].list.forEach(function(l) {
+        this.event().pages[0].list.forEach(function (l) {
             if (l.code === 108) note += l.parameters + '\n';
             if (l.code === 408) note += l.parameters + '\n';
         }.bind(this));
@@ -509,19 +507,19 @@ Imported['StepEffect'] = 1.00;
 
     ////////////////////////////////////////////////////////////////////////////////////
 
-    Game_Vehicle.prototype.isVehicle = function() {
+    Game_Vehicle.prototype.isVehicle = function () {
         return true;
     };
 
     ////////////////////////////////////////////////////////////////////////////////////
 
     var __SMap_update = Scene_Map.prototype.update;
-    Scene_Map.prototype.update = function() {
+    Scene_Map.prototype.update = function () {
         __SMap_update.call(this);
         this.updateStepSprites();
     };
 
-    Scene_Map.prototype.updateStepSprites = function() {
+    Scene_Map.prototype.updateStepSprites = function () {
         if (!this._stepSprites) this._stepSprites = [];
         for (var i = 0, max = this._stepSprites.length; i < max; i++) {
             if (this._stepSprites[i] && !this._stepSprites[i].isUsed()) {
@@ -529,10 +527,10 @@ Imported['StepEffect'] = 1.00;
                 this._stepSprites[i] = null;
             }
         }
-        this._stepSprites = this._stepSprites.filter(function(s) { return !!s });
+        this._stepSprites = this._stepSprites.filter(function (s) { return !!s });
     };
 
-    Scene_Map.prototype.setStepEffectAnime = function(name, setting, x, y, d, character) {
+    Scene_Map.prototype.setStepEffectAnime = function (name, setting, x, y, d, character) {
         if (!this._stepSprites) this._stepSprites = [];
         if (character._stepCount === undefined) character._stepCount = 0;
         var sprite = new Sprite_StepEffect(name, setting, x, y, d, character);

@@ -13,70 +13,127 @@
 var Imported = Imported || {};
 Imported['MessageAlignmentEC'] = 1.04;
 /*:
- * @plugindesc ver1.04/メッセージのアライメントを変更する制御文字を追加します。
- * @author Yana
- *
- * @param ExtendEC
- * @desc メッセージ内で制御文字として扱う文字です。
- * 詳細はヘルプを参照してください。
- * @default
- *
- * @help ------------------------------------------------------
- * 使用方法
- * ------------------------------------------------------
- * イベントコマンド「文章の表示」及び、「文章のスクロール表示」内に
- * アライメントを変更する制御文字を追加します。
- * 追加される制御文字は、
- *
- * \LL 文字を左寄せにします。
- * \CL 文字を中央寄せにします。
- * \RL 文字を右寄せにします。
- *
- * の3つです。
- * 呼び出された時点で、同ページのそれより下の行は自動的に
- * 設定したアライメントに変更されます。
- *
- * ※プラグインパラメータについて
- *
- * プラグインパラメータで指定した制御文字は、幅0として計算される
- * ようになります。
- *
- * この際、制御文字が\aの場合は、aを指定します。
- * 制御文字が\a[x]の場合は、aのみを指定します。
- *
- * 指定する制御文字はカンマ区切りで複数個指定可能です。
- * a,b,d
- * と指定すると、\a及び\a[x]、\b及び\b[x]、\d及び\d[x]が、
- * 文字幅0として計算されます。
- *
- * ------------------------------------------------------
- * 利用規約
- * ------------------------------------------------------
- * 当プラグインはMITライセンスで公開されています。
- * 使用に制限はありません。商用、アダルト、いずれにも使用できます。
- * 二次配布も制限はしませんが、サポートは行いません。
- * 著作表示は任意です。行わなくても利用できます。
- * 要するに、特に規約はありません。
- * バグ報告や使用方法等のお問合せはネ実ツクールスレ、または、Twitterにお願いします。
- * https://twitter.com/yanatsuki_
- * 素材利用は自己責任でお願いします。
- * ------------------------------------------------------
- * 更新履歴:
- * ver1.04:
- * 一つの行に複数の色変更やアイコンがあった時、正常にテキストの幅が取得できないバグを修正。
- * ver1.03:
- * 拡張制御文字に合わせて処理を修正。
- * ver1.02:
- * プラグインパラメータに何も指定していない時、アライメント指定が正常に機能しないバグを修正。
- * ver1.01:
- * 文章のスクロール表示に対応。
- * }{を使用すると、正常に文字の横幅を取得できていなかったバグを修正。
- * 指定した制御文字を幅0で計算するためのパラメータを追加。
- * ver1.00:
- * 公開
- */
+@plugindesc ver1.04/Adds a control character to change the alignment of the message.
+@author Yana
+@url https://github.com/munokura/Yana-MV-plugins
+@license MIT License
 
-(function() {
+@help
+English Help Translator: munokura
+This is an unofficial English translation of the plugin help,
+created to support global RPG Maker users.
+Feedback is welcome to improve translation quality
+(see: https://github.com/munokura/Yana-MV-plugins ).
+Original plugin by Yana.
+-----
+How to Use
+--------------------------------------------------------------------
+Adds a control character to change the alignment within the "Show Text" and "Show Scrolling Text" Event's Contents.
+
+The control characters added are:
+
+\LL Left-aligns text.
+\CL Centers text.
+\RL Right-aligns text.
+
+When invoked, the lines below it on the same page will automatically
+adjust to the alignment you set.
+
+*About Plugin Parameters
+
+Control characters specified in plugin parameters will be calculated as having a width of 0.
+
+In this case, if the control character is \a, specify a.
+If the control character is \a[x], specify only a.
+
+You can specify multiple control characters separated by commas.
+
+If you specify a,b,d, \a and \a[x], \b and \b[x], and \d and \d[x] will be calculated as having a width of 0.
+
+------------------------------------------------------
+Terms of Use
+------------------------------------------------------
+This plugin is released under the MIT License.
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+Update History:
+ver1.04:
+Fixed a bug where the text width could not be obtained correctly when there were multiple color changes or icons on a single line.
+ver1.03:
+Fixed processing to accommodate extended control characters.
+ver1.02:
+Fixed a bug where the alignment setting did not work properly when no plugin parameters were specified.
+ver1.01:
+Added support for scrolling text.
+Fixed a bug where the character width could not be obtained correctly when using }{.
+Added a parameter to calculate specified control characters with a width of 0.
+ver1.00:
+Released
+
+@param ExtendEC
+@desc Characters that are treated as control characters in messages. See the help for details.
+*/
+
+
+/*:ja
+@plugindesc ver1.04/メッセージのアライメントを変更する制御文字を追加します。
+@author Yana
+@url https://github.com/munokura/Yana-MV-plugins
+@license MIT License
+
+@help
+使用方法
+------------------------------------------------------
+イベントコマンド「文章の表示」及び、「文章のスクロール表示」内に
+アライメントを変更する制御文字を追加します。
+追加される制御文字は、
+
+\LL 文字を左寄せにします。
+\CL 文字を中央寄せにします。
+\RL 文字を右寄せにします。
+
+の3つです。
+呼び出された時点で、同ページのそれより下の行は自動的に
+設定したアライメントに変更されます。
+
+※プラグインパラメータについて
+
+プラグインパラメータで指定した制御文字は、幅0として計算される
+ようになります。
+
+この際、制御文字が\aの場合は、aを指定します。
+制御文字が\a[x]の場合は、aのみを指定します。
+
+指定する制御文字はカンマ区切りで複数個指定可能です。
+a,b,d
+と指定すると、\a及び\a[x]、\b及び\b[x]、\d及び\d[x]が、
+文字幅0として計算されます。
+
+------------------------------------------------------
+利用規約
+------------------------------------------------------
+当プラグインはMITライセンスで公開されています。
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+更新履歴:
+ver1.04:
+一つの行に複数の色変更やアイコンがあった時、正常にテキストの幅が取得できないバグを修正。
+ver1.03:
+拡張制御文字に合わせて処理を修正。
+ver1.02:
+プラグインパラメータに何も指定していない時、アライメント指定が正常に機能しないバグを修正。
+ver1.01:
+文章のスクロール表示に対応。
+}{を使用すると、正常に文字の横幅を取得できていなかったバグを修正。
+指定した制御文字を幅0で計算するためのパラメータを追加。
+ver1.00:
+公開
+
+@param ExtendEC
+@desc メッセージ内で制御文字として扱う文字です。 詳細はヘルプを参照してください。
+*/
+
+(function () {
 
     ////////////////////////////////////////////////////////////////////////////////////
 
@@ -92,7 +149,7 @@ Imported['MessageAlignmentEC'] = 1.04;
             result += Window_Base._iconWidth;
             return '';
         }.bind(this));
-        for (var i = 0, max = text.length;i < max; i++) {
+        for (var i = 0, max = text.length; i < max; i++) {
             var c = text[i];
             if (c === '\x1b') {
                 i++;
@@ -101,12 +158,12 @@ Imported['MessageAlignmentEC'] = 1.04;
                     this.makeFontBigger();
                 } else if (c === '}') {
                     this.makeFontSmaller();
-                } else if (c === 'F' && text[i+1] === 'S') {
+                } else if (c === 'F' && text[i + 1] === 'S') {
                     var cc = '\x1b';
-                    for (var j=i;j<max;j++){
+                    for (var j = i; j < max; j++) {
                         cc += text[j];
-                        if (text[j] === ']'){
-                            if (cc.match(/\x1bFS\[(\d+)\]/i)) this.contents.fontSize =  Number(RegExp.$1);
+                        if (text[j] === ']') {
+                            if (cc.match(/\x1bFS\[(\d+)\]/i)) this.contents.fontSize = Number(RegExp.$1);
                             i = j;
                             break;
                         }
@@ -147,7 +204,7 @@ Imported['MessageAlignmentEC'] = 1.04;
     ////////////////////////////////////////////////////////////////////////////////////
 
     // 再定義
-    Window_ScrollText.prototype.refresh = function() {
+    Window_ScrollText.prototype.refresh = function () {
         var textState = { index: 0 };
         textState.text = this.convertEscapeCharacters(this._text);
         this.resetFontSettings();
@@ -158,20 +215,21 @@ Imported['MessageAlignmentEC'] = 1.04;
         var yy = 0;
         var fontSize = this.contents.fontSize;
         this._aligns = [];
-        for (var i=0,max=texts.length;i<max;i++){
+        for (var i = 0, max = texts.length; i < max; i++) {
             var text = texts[i];
             var text2 = this.convertEscapeCharacters(text);
-            if (fontSize > this.standardFontSize()){
+            if (fontSize > this.standardFontSize()) {
                 var n = Math.ceil((fontSize - this.standardFontSize()) / 12);
-                for (var j=0;j<n;j++){ text = '\\{' + text } }
-            if (fontSize < this.standardFontSize()){ text = '\\}' + text }
-            var height = this.calcTextHeight({index:0,text:text2}, false);
-            text2 = this.setAlignment(text2,i,max);
+                for (var j = 0; j < n; j++) { text = '\\{' + text }
+            }
+            if (fontSize < this.standardFontSize()) { text = '\\}' + text }
+            var height = this.calcTextHeight({ index: 0, text: text2 }, false);
+            text2 = this.setAlignment(text2, i, max);
             var textWidth = this.textWidthEx(text2);
             var sx = 0;
-            if (this._aligns[i] === 'center'){
+            if (this._aligns[i] === 'center') {
                 sx = (this.contentsWidth() - this.textPadding() - textWidth) / 2;
-            } else if (this._aligns[i] === 'right'){
+            } else if (this._aligns[i] === 'right') {
                 sx = this.contentsWidth() - this.textPadding() - textWidth;
             }
             this.drawTextEx(text, this.textPadding() + sx, 1 + yy);
@@ -198,8 +256,8 @@ Imported['MessageAlignmentEC'] = 1.04;
         var ary = this.zeroWidthEscapes();
         for (var i = 0, max = texts.length; i < max; i++) {
             var text = texts[i];
-            for (var j=0,jmax=ary.length;j<jmax;j++){
-                var regExp = new RegExp('\\x1b'+ary[j]+'(?:\\[.+?\\])*','gi');
+            for (var j = 0, jmax = ary.length; j < jmax; j++) {
+                var regExp = new RegExp('\\x1b' + ary[j] + '(?:\\[.+?\\])*', 'gi');
                 text = text.replace(regExp, '');
             }
             text = this.setAlignment(text, i, max);
@@ -207,21 +265,21 @@ Imported['MessageAlignmentEC'] = 1.04;
         }
         this.contents.fontSize = fontSize;
     };
-    
-    Window_Message.prototype.zeroWidthEscapes = function() {
-        var ary = ['\\.','\\|','\\$','>','<','!','\\^'];
-        if (extendEC.length > 0 && extendEC[0] !== ''){ ary = ary.concat(extendEC) }
-        if (Imported['yExtendEscapeCharacters']){
-            var ary2 = ['BGM','BGS','SE','ME','FRT','FFV','FFH','FO','FCI','FSN','FCT','FBC',
-                        'WC','WCW','DWC','DWCW','MMW','RMW','OMW','BLN','ANI','SPIC','MPIC',
-                        'ZPIC','OPIC','ORPIC','RPIC','APIC','TPIC','NCPIC','CFPIC','CTPIC',
-                        'CXPIC','BNPIC','FIPIC','FOPIC'];
+
+    Window_Message.prototype.zeroWidthEscapes = function () {
+        var ary = ['\\.', '\\|', '\\$', '>', '<', '!', '\\^'];
+        if (extendEC.length > 0 && extendEC[0] !== '') { ary = ary.concat(extendEC) }
+        if (Imported['yExtendEscapeCharacters']) {
+            var ary2 = ['BGM', 'BGS', 'SE', 'ME', 'FRT', 'FFV', 'FFH', 'FO', 'FCI', 'FSN', 'FCT', 'FBC',
+                'WC', 'WCW', 'DWC', 'DWCW', 'MMW', 'RMW', 'OMW', 'BLN', 'ANI', 'SPIC', 'MPIC',
+                'ZPIC', 'OPIC', 'ORPIC', 'RPIC', 'APIC', 'TPIC', 'NCPIC', 'CFPIC', 'CTPIC',
+                'CXPIC', 'BNPIC', 'FIPIC', 'FOPIC'];
             ary = ary.concat(ary2);
         }
-        if (Imported['StandPictureEC']){
-            var ary2 = ['WT','SP','HP','CP','RP','MP','ZP','RMP','RRP','RZP','TP','CFP',
-                        'COP','BCP','LS','LE','BP','OP','SFR','SBK','MC','RMC','ZC','RZC',
-                        'RC','RRC','RPC','ZPC','SAC'];
+        if (Imported['StandPictureEC']) {
+            var ary2 = ['WT', 'SP', 'HP', 'CP', 'RP', 'MP', 'ZP', 'RMP', 'RRP', 'RZP', 'TP', 'CFP',
+                'COP', 'BCP', 'LS', 'LE', 'BP', 'OP', 'SFR', 'SBK', 'MC', 'RMC', 'ZC', 'RZC',
+                'RC', 'RRC', 'RPC', 'ZPC', 'SAC'];
             ary = ary.concat(ary2);
         }
         return ary;
@@ -234,7 +292,7 @@ Imported['MessageAlignmentEC'] = 1.04;
         }
         var newX = __WMessage_newLineX.call(this);
         var width = this.contents.width;
-        if (this._rightFace){ width -= 168 }
+        if (this._rightFace) { width -= 168 }
         if (this._aligns[this._currentPage] === 'center') {
             newX = ((width - newX) - this._corX[this._currentPage]) / 2 + newX;
         } else if (this._aligns[this._currentPage] === 'right') {
@@ -250,5 +308,5 @@ Imported['MessageAlignmentEC'] = 1.04;
         this._textState.x = this.newLineX();
     };
 
-////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////
 }());

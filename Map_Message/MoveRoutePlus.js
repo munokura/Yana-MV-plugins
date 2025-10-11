@@ -12,79 +12,143 @@
 
 var Imported = Imported || {};
 Imported['MoveRoutePlus'] = 1.00;
-
 /*:
- * @target MZ MV
- * @url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Map_Message/MoveRoutePlus.js
- * @plugindesc ver1.00/移動ルートの設定を拡張します。
- * @author Yana
- *
- * @help
- * ------------------------------------------------------
- * 使用方法
- * ------------------------------------------------------
- * イベントの自立移動→カスタムの移動ルートまたは、
- * イベントコマンドの移動ルートの設定でスクリプトの項目を使って、
- * 以下のような指定をできるようにします。
- *
- * moveUp(○)
- * 上に○歩移動
- * moveLeft(○)
- * 左に○歩移動
- * moveRight(○)
- * 右に○歩移動
- * moveDown(○)
- * 下に○歩移動
- * moveLeftDown(○)
- * 左下に○歩移動
- * moveLeftUp(○)
- * 左上に○歩移動
- * moveRightDown(○)
- * 右下に○歩移動
- * moveRightUp(○)
- * 右上に○歩移動
- * 「◇◇に移動」を○個並べるのと同じ効果です。
- *
- * moveForward(○)
- * ○歩前進
- * moveBack(○)
- * ○歩後退
- * 「一歩前進」「一歩後退」を○個並べるのと同じ効果です。
- *
- * moveToward(○)
- * ○歩近づく
- * moveAway(○)
- * ○歩遠ざかる
- * 「プレイヤーに近づく」「プレイヤーから遠ざかる」を
- * ○個並べるのと同じ効果です。
- *
- * moveRandom(○)
- * ○歩ランダムに移動
- * 「ランダムに移動」を○個並べるのと同じ効果です。
- *
- * loopRoute(○,□[,×,◇…])
- * □番のコードの移動ルートを○回並べるのと同じ効果です。
- * 必要に応じて、×、◇など、追加のパラメータを設定します。
- *
- * ------------------------------------------------------
- * 利用規約
- * ------------------------------------------------------
- * 当プラグインはMITライセンスで公開されています。
- * 使用に制限はありません。商用、アダルト、いずれにも使用できます。
- * 二次配布も制限はしませんが、サポートは行いません。
- * 著作表示は任意です。行わなくても利用できます。
- * 要するに、特に規約はありません。
- * バグ報告や使用方法等のお問合せはネ実ツクールスレ、
- * または、Twitterにお願いします。
- * https://twitter.com/yanatsuki_
- * 素材利用は自己責任でお願いします。
- * ------------------------------------------------------
- * 更新履歴:
- * ver1.00:
- * 公開
- */
+@target MZ MV
+@plugindesc ver1.00/Expanded travel route settings.
+@author Yana
+@url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Map_Message/MoveRoutePlus.js
+@license MIT License
 
-(function() {
+@help
+English Help Translator: munokura
+This is an unofficial English translation of the plugin help,
+created to support global RPG Maker users.
+Feedback is welcome to improve translation quality
+(see: https://github.com/munokura/Yana-MV-plugins ).
+Original plugin by Yana.
+-----
+------------------------------------------------------
+How to Use
+------------------------------------------------------
+You can specify the following by using the script option in the event's Autonomous Movement → Custom or
+in the Event's Contents → Set Movement Route.
+
+moveUp(○)
+Move ○ steps up
+moveLeft(○)
+Move ○ steps left
+moveRight(○)
+Move ○ steps right
+moveDown(○)
+Move ○ steps down
+moveLeftDown(○)
+Move ○ steps down and left
+moveLeftUp(○)
+Move ○ steps up and left
+moveRightDown(○)
+Move ○ steps down and right
+moveRightUp(○)
+Move ○ steps up and right
+This has the same effect as lining up "Move to ◇◇" ○ times.
+
+moveForward(○)
+Move ○ steps forward
+moveBack(○)
+Move ○ steps back
+This has the same effect as lining up "One Step Forward" and "One Step Back" ○ times.
+
+moveToward(○)
+Move ○ steps closer
+moveAway(○)
+Move ○ steps away
+This has the same effect as lining up ○ "Move closer to the player" and "Move away from the player" commands.
+
+moveRandom(○)
+Move ○ steps randomly
+This has the same effect as lining up ○ "Move randomly" commands.
+
+loopRoute(○,□[,×,◇…])
+This has the same effect as lining up the movement route of code #□ ○ times.
+Add additional parameters, such as × or ◇, as needed.
+
+------------------------------------------------------
+Terms of Use
+-------------------------------------------------------
+This plugin is released under the MIT License.
+http://opensource.org/licenses/mit-license.php
+--------------------------------------------------------
+Update History:
+ver1.00:
+Released
+*/
+
+
+/*:ja
+@target MZ MV
+@plugindesc ver1.00/移動ルートの設定を拡張します。
+@author Yana
+@url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Map_Message/MoveRoutePlus.js
+@license MIT License
+
+@help
+------------------------------------------------------
+使用方法
+------------------------------------------------------
+イベントの自立移動→カスタムの移動ルートまたは、
+イベントコマンドの移動ルートの設定でスクリプトの項目を使って、
+以下のような指定をできるようにします。
+
+moveUp(○)
+上に○歩移動
+moveLeft(○)
+左に○歩移動
+moveRight(○)
+右に○歩移動
+moveDown(○)
+下に○歩移動
+moveLeftDown(○)
+左下に○歩移動
+moveLeftUp(○)
+左上に○歩移動
+moveRightDown(○)
+右下に○歩移動
+moveRightUp(○)
+右上に○歩移動
+「◇◇に移動」を○個並べるのと同じ効果です。
+
+moveForward(○)
+○歩前進
+moveBack(○)
+○歩後退
+「一歩前進」「一歩後退」を○個並べるのと同じ効果です。
+
+moveToward(○)
+○歩近づく
+moveAway(○)
+○歩遠ざかる
+「プレイヤーに近づく」「プレイヤーから遠ざかる」を
+○個並べるのと同じ効果です。
+
+moveRandom(○)
+○歩ランダムに移動
+「ランダムに移動」を○個並べるのと同じ効果です。
+
+loopRoute(○,□[,×,◇…])
+□番のコードの移動ルートを○回並べるのと同じ効果です。
+必要に応じて、×、◇など、追加のパラメータを設定します。
+
+------------------------------------------------------
+利用規約
+------------------------------------------------------
+当プラグインはMITライセンスで公開されています。
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+更新履歴:
+ver1.00:
+公開
+*/
+
+(function () {
 
     ////////////////////////////////////////////////////////////////////////////////////
 
@@ -93,22 +157,22 @@ Imported['MoveRoutePlus'] = 1.00;
     ////////////////////////////////////////////////////////////////////////////////////
 
     var __GCharacter_setMoveRoute = Game_Character.prototype.setMoveRoute;
-    Game_Character.prototype.setMoveRoute = function(moveRoute) {
+    Game_Character.prototype.setMoveRoute = function (moveRoute) {
         var mr = moveRoute;
         mr.list = this.deploymentMoveRoute(moveRoute);
         __GCharacter_setMoveRoute.call(this, mr);
     };
 
     var __GCharacter_forceMoveRoute = Game_Character.prototype.forceMoveRoute;
-    Game_Character.prototype.forceMoveRoute = function(moveRoute) {
+    Game_Character.prototype.forceMoveRoute = function (moveRoute) {
         var mr = moveRoute;
         mr.list = this.deploymentMoveRoute(moveRoute);
         __GCharacter_forceMoveRoute.call(this, mr);
     };
 
-    Game_Character.prototype.deploymentMoveRoute = function(moveRoute) {
+    Game_Character.prototype.deploymentMoveRoute = function (moveRoute) {
         var list = [];
-        moveRoute.list.forEach(function(r) {
+        moveRoute.list.forEach(function (r) {
             if (r.code === 45) {
                 if (r.parameters[0].match(/^(?:moveDown|下に)\(?(\d+)\)?(?:歩移動)?/)) {
                     for (var i = 0; i < Number(RegExp.$1); i++) list.push({ code: 1 });
