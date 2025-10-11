@@ -72,7 +72,7 @@ Released
 
 @param HitCountMessage
 @desc This is a message about the number of hits of the attack. Change _cnt to the number of hits and _name to the name.
-@default _cnt回ヒット！
+@default _cnt hits!
 */
 
 

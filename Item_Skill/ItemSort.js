@@ -108,35 +108,35 @@ Released
 
 @param SortNewText
 @desc This text is given priority for new purchases.
-@default 新規入手優先
+@default New purchases given priority
 
 @param SortIdAText
 @desc Text in ascending order by ID.
-@default ID昇順
+@default ID ascending
 
 @param SortIdBText
 @desc Text by ID descending.
-@default ID降順
+@default ID descending
 
 @param SortKanaAText
 @desc Name ascending text.
-@default 名前昇順
+@default Name ascending
 
 @param SortKanaBText
 @desc Text by name descending.
-@default 名前降順
+@default Name descending
 
 @param SortPriceAText
 @desc Price ascending text.
-@default 価格昇順
+@default Price ascending
 
 @param SortPriceBText
 @desc Price descending text.
-@default 価格降順
+@default Price descending
 
 @param SortUsableText
 @desc Available text is preferred.
-@default 使用可能優先
+@default Availability priority
 */
 
 
