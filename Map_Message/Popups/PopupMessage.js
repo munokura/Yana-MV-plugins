@@ -16,51 +16,95 @@ Imported['PopupMessage'] = 1.02;
 if (!Imported.CommonPopupCore) {
 	console.error('CommonPopupCoreを導入してください。')
 }
-
 /*:
- * @plugindesc ver1.02/メッセージの表示をポップアップに変更する制御文字_pum[delay,x,y,action]を追加します。
- * @author Yana
- * 
- * @param Pop Message FontSize
- * @desc ポップアップメッセージのデフォルトフォントサイズです。
- * @default 28
- * 
- * @param Pop Message Count
- * @desc ポップアップメッセージの表示時間です。
- * @default 120
- * 
- * @help プラグインコマンドはありません。
- * 
- * メッセージの表示のメッセージの中に_pum[delay,x,y,action,pattern]と記述することで、
- * メッセージをポップアップに変更します。
- * delayはディレイ値で、この値フレーム分待ってから、ポップアップを行います。
- * xは表示位置のX座標です。未指定の場合は、0が設定されます。
- * yは表示位置のY座標です。未指定の場合は、画面高さ-ポップアップの高さが設定されます。
- * actionはアクション形式です。1を指定すると、上から下にアクションします。
- * patternは動作パターンです。Normalで今まで通り、GrowUpでにょき、Stretchでうにょーんとなります。
- * ------------------------------------------------------
- * 利用規約
- * ------------------------------------------------------
- * 当プラグインはMITライセンスで公開されています。
- * 使用に制限はありません。商用、アダルト、いずれにも使用できます。
- * 二次配布も制限はしませんが、サポートは行いません。
- * 著作表示は任意です。行わなくても利用できます。
- * 要するに、特に規約はありません。
- * バグ報告や使用方法等のお問合せはネ実ツクールスレ、または、Twitterにお願いします。
- * https://twitter.com/yanatsuki_
- * 素材利用は自己責任でお願いします。
- * ------------------------------------------------------
- * このプラグインには「汎用ポップアップベース」のプラグインが必要です。
- * 汎用ポップアップベースより下に配置してください。 
- * ------------------------------------------------------
- * 更新履歴:
- * ver1.02:
- * 動作パターンの設定を追加。
- * ver1.01:
- * 表示位置を調整する機能を追加。
- * ver1.00:
- * 公開
- */
+@plugindesc ver1.02/Added the control character _pum[delay,x,y,action] to change the message display to a popup.
+@author Yana
+@url https://github.com/munokura/Yana-MV-plugins
+@license MIT License
+
+@help
+English Help Translator: munokura
+This is an unofficial English translation of the plugin help,
+created to support global RPG Maker users.
+Feedback is welcome to improve translation quality
+(see: https://github.com/munokura/Yana-MV-plugins ).
+Original plugin by Yana.
+-----
+
+By adding _pum[delay,x,y,action,pattern] to the message in the message display,
+you can change the message to a popup.
+delay is the delay value; it waits this many frames before popping up.
+x is the X coordinate of the display position. If unspecified, it is set to 0.
+y is the Y coordinate of the display position. If unspecified, it is set to the screen height - popup height.
+action is the action type. If set to 1, the action will be from top to bottom.
+pattern is the behavior pattern. Normal is the same as before, GrowUp is for "grow", and Stretch is for "squish".
+------------------------------------------------------
+Terms of Use
+------------------------------------------------------
+This plugin is released under the MIT License.
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+This plugin requires the "Generic Popup Base" plugin.
+Place it below the Generic Popup Base.
+------------------------------------------------------
+Update History:
+ver. 1.02:
+Added movement pattern settings.
+ver. 1.01:
+Added the ability to adjust the display position.
+ver. 1.00:
+Released
+
+@param Pop Message FontSize
+@desc The default font size for popup messages.
+@default 28
+
+@param Pop Message Count
+@desc The duration for which the pop-up message is displayed.
+@default 120
+*/
+
+
+/*:ja
+@plugindesc ver1.02/メッセージの表示をポップアップに変更する制御文字_pum[delay,x,y,action]を追加します。
+@author Yana
+@url https://github.com/munokura/Yana-MV-plugins
+@license MIT License
+
+@help
+
+メッセージの表示のメッセージの中に_pum[delay,x,y,action,pattern]と記述することで、
+メッセージをポップアップに変更します。
+delayはディレイ値で、この値フレーム分待ってから、ポップアップを行います。
+xは表示位置のX座標です。未指定の場合は、0が設定されます。
+yは表示位置のY座標です。未指定の場合は、画面高さ-ポップアップの高さが設定されます。
+actionはアクション形式です。1を指定すると、上から下にアクションします。
+patternは動作パターンです。Normalで今まで通り、GrowUpでにょき、Stretchでうにょーんとなります。
+------------------------------------------------------
+利用規約
+------------------------------------------------------
+当プラグインはMITライセンスで公開されています。
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+このプラグインには「汎用ポップアップベース」のプラグインが必要です。
+汎用ポップアップベースより下に配置してください。
+------------------------------------------------------
+更新履歴:
+ver1.02:
+動作パターンの設定を追加。
+ver1.01:
+表示位置を調整する機能を追加。
+ver1.00:
+公開
+
+@param Pop Message FontSize
+@desc ポップアップメッセージのデフォルトフォントサイズです。
+@default 28
+
+@param Pop Message Count
+@desc ポップアップメッセージの表示時間です。
+@default 120
+*/
 
 (function() {
 	var parameters = PluginManager.parameters('PopupMessage');

@@ -12,177 +12,319 @@
 
 var Imported = Imported || {};
 Imported['AnimationMapName'] = 1.04;
-
 /*:
- * @plugindesc ver1.04/マップ名表示をアニメーションさせます。
- * @author Yana
- *
- * @param Pattern Variable ID
- * @desc パターンの変更に使う変数のIDです。
- * 0または、空欄で変数を使用しません。
- * @default 
- * 
- * @param Anime Font Size
- * @desc 表示マップ名のフォントサイズです。
- * @default 28
- *
- * @param Anime Pattern
- * @desc マップ名の動作パターンです。
- * Normal:普通 GrowUp:にょきにょき Stretch:うにょーん
- * @default Normal
- *
- * @param Anime Count
- * @desc マップ名の表示時間です。
- * @default 300
- * 
- * @param Anime OriginalX
- * @desc 移動前の座標Xです。
- * @default 0
- * 
- * @param Anime OriginalY
- * @desc 移動前の座標Yです。
- * @default -60
- * 
- * @param Anime MoveX
- * @desc X座標の移動距離です。
- * @default 0
- * 
- * @param Anime MoveY
- * @desc Y座標の移動距離です。
- * @default 60
- *
- * @param Fill Rect Color
- * @desc 背景の色です。
- * @default rgba(0,0,0,0.5)
- *
- * @param Back Picture
- * @desc 背景に使用するピクチャ画像です。
- * こちらを指定すると、背景を塗りつぶすRectは無効になります。
- * @default
- *
- * @help------------------------------------------------------
- * プラグインコマンド
- * ------------------------------------------------------
- * アニメーションマップネーム 設定 ～
- * AnimationMapName Setting ～
- *
- * アニメーションマップネームの設定を変更します。
- * 変更できる項目は、それぞれプラグインパラメータに対応しており、
- * size:Anime Font Size
- * pattern:Anime Pattern
- * count:Anime Count
- * ox:Anime OriginalX
- * oy:Anime OriginalY
- * mx:Anime MoveX
- * my:Anime MoveY
- * color:Fill Rect Color
- * picture:Back Picture
- * となっています。
- * 記述は以下のように「変更したい項目:変更後の設定」と記述します。
- * 例:patternをGrowUp,countを200に変更する。
- * アニメーションマップネーム 設定 pattern:GrowUp count:200
- *
- * アニメーションマップネーム 表示 ～
- * AnimationMapName Add ～
- *
- * 指定したパラメータを使って、アニメーションマップネームを呼び出します。
- * 指定できるパラメータは上記の設定に加えて、
- * text:表示するテキスト
- * が使用可能です。
- * ------------------------------------------------------
- * 使い方
- * ------------------------------------------------------
- * マップ名表示を改造し、アニメーションするように変更します。
- * また、
- * \C[x]　\I[x]　\V[x] \N[x] \P[x] \G
- * の制御文字を使用できるようになります。
- *
- * ---変数によるパターンの設定---
- * 変数IDを設定してあると、変数の値を変更するだけで、アニメーションの
- * 表示パターンが変更可能です。
- * それぞれ、対応する数値と設定は、
- * 0でNormal、-1でStretch、-2でGrowUp
- * となります。
- * この数値は、プラグインコマンドで設定が変更された際には、自動で設定された
- * 値に合わせた数値が代入されます。
- *
- * ---マップのメモによるパラメータの設定---
- * マップのメモ欄を使うことでも、アニメーションマップネームの設定を、
- * 個別に変更することが可能です。
- * マップのメモ欄に以下のように記述してください。
- *
- * <アニメーションマップネーム設定>
- * 
- * 設定項目
- *
- * </アニメーションマップネーム設定>
- * 
- * 設定項目は、プラグインコマンドの設定の変更の項目で記述されているものが
- * 使用可能です。
- *
- * ---各設定項目の優先度---
- * プラグインコマンドによる設定は、基本設定を書き換えると同時に、パターンが
- * 設定されている場合は、指定した変数の数値も書き換えます。
- * 
- * マップのメモによる設定は、基本的に優先されます。
- * プラグインコマンドで呼び出した場合も、マップに設定がある場合は、その設定を
- * ベースとして使用します。
- * また、マップのメモによるパターンの設定は、変数の値より優先されます。
- * その際、変数の値の変更は行いません。
- *
- * なので、優先度は
- * コマンドで呼び出した際の個別設定＞マップの設定＞変数のパターン設定＞基本設定
- * となります。
- *
- * ---リージョンネームの設定---
- * マップのメモ欄を使ってリージョンネームを設定することで、そのリージョンに
- * 足を踏み入れた際にリージョンネームをポップアップさせることができます。
- *
- * マップのメモ欄に
- * <RegionName○:xxx …>
- * <リージョンネーム○:xxx …>
- * のいずれかの書式で記述がある場合、○番のリージョンに侵入した際、xxxで指定した
- * テキストが、マップ名表示としてポップアップします。
- * …の部分は、プラグインコマンドと同じ設定項目が使用できます。
- * 設定せずに、<リージョンネーム○:xxx>だけでも動作します。
- * また、このポップアップは、リージョンネームの設定されたリージョンから、
- * 別のリージョンネームの設定されたリージョンに侵入したときのみ、反応します。
- *
- * 例:3番のリージョンに侵入した際、テストエリアA-1のテキストを、
- *    パターンGrowUpで60フレームの表示時間だけ表示
- * <リージョンネーム3:テストエリアA-1 pattern:GrowUp count:60>
- *
- * ------------------------------------------------------
- * 利用規約
- * ------------------------------------------------------
- * 当プラグインはMITライセンスで公開されています。
- * 使用に制限はありません。商用、アダルト、いずれにも使用できます。
- * 二次配布も制限はしませんが、サポートは行いません。
- * 著作表示は任意です。行わなくても利用できます。
- * 要するに、特に規約はありません。
- * バグ報告や使用方法等のお問合せはネ実ツクールスレ、または、Twitterにお願いします。
- * https://twitter.com/yanatsuki_
- * 素材利用は自己責任でお願いします。
- * ------------------------------------------------------
- * 更新履歴:
- * ver1.04:
- * イベントテストが正常に機能していなかったバグを修正。
- * ver1.03:
- * イベントコマンドでマップ名表示が無効化できなかったバグを修正。
- * 表示パターン「GrowUp」「Stretch」を追加。
- * プラグインコマンドを追加。
- * 設定項目を追加。
- * ver1.02:
- * CommonPopupCoreの変更に合わせて処理を修正。
- * ver1.01:
- * イベントテストが正常に機能していなかったバグを修正。
- * ver1.00:
- * 公開
- */
+@plugindesc ver1.04/Animated map name display.
+@author Yana
+@url https://github.com/munokura/Yana-MV-plugins
+@license MIT License
+
+@help
+English Help Translator: munokura
+This is an unofficial English translation of the plugin help,
+created to support global RPG Maker users.
+Feedback is welcome to improve translation quality
+(see: https://github.com/munokura/Yana-MV-plugins ).
+Original plugin by Yana.
+-----
+Plugin Commands
+------------------------------------------------------
+AnimationMapName Setting ~
+
+Changes the animation map name settings.
+The configurable items correspond to the plugin parameters:
+size:Anime Font Size
+pattern:Anime Pattern
+count:Anime Count
+ox:Anime OriginalX
+oy:Anime OriginalY
+mx:Anime MoveX
+my:Anime MoveY
+color:Fill Rect Color
+picture:Back Picture
+
+The command is written as follows: "Item to change: New setting."
+Example: Change pattern to GrowUp and count to 200.
+AnimationMapName Setting pattern:GrowUp count:200
+
+AnimationMapName Add ~
+
+Calls the animation map name using the specified parameters.
+In addition to the above settings, the following parameter can be specified:
+text:Text to display.
+--------------------------------------------------
+Usage
+------------------------------------------------------
+Modifies the map name display and changes it to animate.
+You can also use control characters such as \C[x], \I[x], \V[x], \N[x], \P[x], and \G.
+
+--Setting Patterns Using Variables---
+Once you've set a variable ID, you can change the animation display pattern simply by changing the variable's value.
+The corresponding values are:
+0 for Normal, -1 for Stretch, and -2 for GrowUp.
+
+When settings are changed using a plugin command, these values are automatically substituted with the corresponding values.
+
+--Setting Parameters Using Map Notes---
+You can also change animation map names individually using the map's notes.
+Enter the following in the map's notes:
+
+<AnimationMapNameSetting>
+
+Setting Item
+
+</AnimationMapNameSetting>
+
+The available settings are those described in the Changing Plugin Command Settings section.
+
+---Priority of each setting ---
+Settings made via plugin commands overwrite the basic settings, and if a pattern is set, they also overwrite the values of the specified variables.
+
+Settings made via map notes generally take precedence.
+Even when called via plugin commands, if a setting exists in the map, that setting will
+be used as the base.
+Furthermore, pattern settings made via map notes take precedence over variable values.
+In such cases, variable values will not be changed.
+
+Therefore, the priority is
+Individual settings when called via command > Map settings > Variable pattern settings > Basic settings.
+
+--Region name settings---
+By setting a region name using the map notes field, you can have the region name pop up when you enter that region.
+
+If the map notes field contains entries in either of the following formats:
+<RegionName△:xxx …>
+, the text specified in xxx will pop up as the map name when you enter region △.
+The "..." part can use the same settings as the plugin commands.
+It will work without specifying a region name. (Region Name:xxx)
+
+Also, this popup only responds when you enter a region with a different region name from one with a region name.
+
+Example: When entering region 3, display the text in Test Area A-1 with a GrowUp pattern for 60 frames.
+
+<RegionName3:TestAreaA-1 pattern:GrowUp count:60>
+
+------------------------------------------------------
+Terms of Use
+------------------------------------------------------
+This plugin is released under the MIT License.
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+Update History:
+ver 1.04:
+Fixed a bug that prevented event testing from functioning properly.
+ver 1.03:
+Fixed a bug that prevented the map name display from being disabled with an Event's Contents.
+Added the display patterns "GrowUp" and "Stretch."
+Added plugin commands.
+Added configuration options.
+ver 1.02:
+Fixed processing to Reflection changes to CommonPopupCore.
+ver1.01:
+Fixed a bug that prevented event testing from functioning properly.
+ver1.00:
+Released
+
+@param Pattern Variable ID
+@desc The ID of the variable used to change the pattern. Leave this field blank or 0 to not use a variable.
+
+@param Anime Font Size
+@desc Font size for displayed map names.
+@default 28
+
+@param Anime Pattern
+@desc The map name is the movement pattern. Normal: Normal GrowUp: Growing Stretch: Slow
+@default Normal
+
+@param Anime Count
+@desc Display time of map name.
+@default 300
+
+@param Anime OriginalX
+@desc The X coordinate before movement.
+@default 0
+
+@param Anime OriginalY
+@desc The Y coordinate before the movement.
+@default -60
+
+@param Anime MoveX
+@desc The distance moved in X coordinate.
+@default 0
+
+@param Anime MoveY
+@desc The Y coordinate movement distance.
+@default 60
+
+@param Fill Rect Color
+@desc The background color.
+@default rgba(0,0,0,0.5)
+
+@param Back Picture
+@desc A picture image to use as the background. If you specify this, the Rect that fills the background will be disabled.
+*/
+
+
+/*:ja
+@plugindesc ver1.04/マップ名表示をアニメーションさせます。
+@author Yana
+@url https://github.com/munokura/Yana-MV-plugins
+@license MIT License
+
+@help
+プラグインコマンド
+------------------------------------------------------
+アニメーションマップネーム 設定 ～
+AnimationMapName Setting ～
+
+アニメーションマップネームの設定を変更します。
+変更できる項目は、それぞれプラグインパラメータに対応しており、
+size:Anime Font Size
+pattern:Anime Pattern
+count:Anime Count
+ox:Anime OriginalX
+oy:Anime OriginalY
+mx:Anime MoveX
+my:Anime MoveY
+color:Fill Rect Color
+picture:Back Picture
+となっています。
+記述は以下のように「変更したい項目:変更後の設定」と記述します。
+例:patternをGrowUp,countを200に変更する。
+アニメーションマップネーム 設定 pattern:GrowUp count:200
+
+アニメーションマップネーム 表示 ～
+AnimationMapName Add ～
+
+指定したパラメータを使って、アニメーションマップネームを呼び出します。
+指定できるパラメータは上記の設定に加えて、
+text:表示するテキスト
+が使用可能です。
+------------------------------------------------------
+使い方
+------------------------------------------------------
+マップ名表示を改造し、アニメーションするように変更します。
+また、
+\C[x]　\I[x]　\V[x] \N[x] \P[x] \G
+の制御文字を使用できるようになります。
+
+---変数によるパターンの設定---
+変数IDを設定してあると、変数の値を変更するだけで、アニメーションの
+表示パターンが変更可能です。
+それぞれ、対応する数値と設定は、
+0でNormal、-1でStretch、-2でGrowUp
+となります。
+この数値は、プラグインコマンドで設定が変更された際には、自動で設定された
+値に合わせた数値が代入されます。
+
+---マップのメモによるパラメータの設定---
+マップのメモ欄を使うことでも、アニメーションマップネームの設定を、
+個別に変更することが可能です。
+マップのメモ欄に以下のように記述してください。
+
+<アニメーションマップネーム設定>
+
+設定項目
+
+</アニメーションマップネーム設定>
+
+設定項目は、プラグインコマンドの設定の変更の項目で記述されているものが
+使用可能です。
+
+---各設定項目の優先度---
+プラグインコマンドによる設定は、基本設定を書き換えると同時に、パターンが
+設定されている場合は、指定した変数の数値も書き換えます。
+
+マップのメモによる設定は、基本的に優先されます。
+プラグインコマンドで呼び出した場合も、マップに設定がある場合は、その設定を
+ベースとして使用します。
+また、マップのメモによるパターンの設定は、変数の値より優先されます。
+その際、変数の値の変更は行いません。
+
+なので、優先度は
+コマンドで呼び出した際の個別設定＞マップの設定＞変数のパターン設定＞基本設定
+となります。
+
+---リージョンネームの設定---
+マップのメモ欄を使ってリージョンネームを設定することで、そのリージョンに
+足を踏み入れた際にリージョンネームをポップアップさせることができます。
+
+マップのメモ欄に
+<RegionName○:xxx …>
+<リージョンネーム○:xxx …>
+のいずれかの書式で記述がある場合、○番のリージョンに侵入した際、xxxで指定した
+テキストが、マップ名表示としてポップアップします。
+…の部分は、プラグインコマンドと同じ設定項目が使用できます。
+設定せずに、<リージョンネーム○:xxx>だけでも動作します。
+また、このポップアップは、リージョンネームの設定されたリージョンから、
+別のリージョンネームの設定されたリージョンに侵入したときのみ、反応します。
+
+例:3番のリージョンに侵入した際、テストエリアA-1のテキストを、
+   パターンGrowUpで60フレームの表示時間だけ表示
+<リージョンネーム3:テストエリアA-1 pattern:GrowUp count:60>
+
+------------------------------------------------------
+利用規約
+------------------------------------------------------
+当プラグインはMITライセンスで公開されています。
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+更新履歴:
+ver1.04:
+イベントテストが正常に機能していなかったバグを修正。
+ver1.03:
+イベントコマンドでマップ名表示が無効化できなかったバグを修正。
+表示パターン「GrowUp」「Stretch」を追加。
+プラグインコマンドを追加。
+設定項目を追加。
+ver1.02:
+CommonPopupCoreの変更に合わせて処理を修正。
+ver1.01:
+イベントテストが正常に機能していなかったバグを修正。
+ver1.00:
+公開
+
+@param Pattern Variable ID
+@desc パターンの変更に使う変数のIDです。 0または、空欄で変数を使用しません。
+
+@param Anime Font Size
+@desc 表示マップ名のフォントサイズです。
+@default 28
+
+@param Anime Pattern
+@desc マップ名の動作パターンです。 Normal:普通 GrowUp:にょきにょき Stretch:うにょーん
+@default Normal
+
+@param Anime Count
+@desc マップ名の表示時間です。
+@default 300
+
+@param Anime OriginalX
+@desc 移動前の座標Xです。
+@default 0
+
+@param Anime OriginalY
+@desc 移動前の座標Yです。
+@default -60
+
+@param Anime MoveX
+@desc X座標の移動距離です。
+@default 0
+
+@param Anime MoveY
+@desc Y座標の移動距離です。
+@default 60
+
+@param Fill Rect Color
+@desc 背景の色です。
+@default rgba(0,0,0,0.5)
+
+@param Back Picture
+@desc 背景に使用するピクチャ画像です。 こちらを指定すると、背景を塗りつぶすRectは無効になります。
+*/
 
 ////////////////////////////////////////////////////////////////////////////////////
 
-(function() {
+(function () {
     var parameters = PluginManager.parameters('AnimationMapName');
     var patternVariableId = Number(parameters['Pattern Variable ID']) || 0;
     var animeFontSize = Number(parameters['Anime Font Size'] || 28);
@@ -198,7 +340,7 @@ Imported['AnimationMapName'] = 1.04;
     ////////////////////////////////////////////////////////////////////////////////////
 
     var __GInterpreter_pluginCommand = Game_Interpreter.prototype.pluginCommand;
-    Game_Interpreter.prototype.pluginCommand = function(command, args) {
+    Game_Interpreter.prototype.pluginCommand = function (command, args) {
         __GInterpreter_pluginCommand.call(this, command, args);
         if (command === 'AnimationMapName' || command === 'アニメーションマップネーム') {
             var code = args.shift();
@@ -207,15 +349,15 @@ Imported['AnimationMapName'] = 1.04;
         }
     };
 
-    Game_Interpreter.prototype.setAmsSetting = function(args) {
+    Game_Interpreter.prototype.setAmsSetting = function (args) {
         var params = $gameSystem.amnParameters();
-        var amnParams = DataManager.makeAmnParams(params,args);
-        if (patternVariableId){
-            if (amnParams.pattern === 'Normal' || amnParams.pattern == 0){
+        var amnParams = DataManager.makeAmnParams(params, args);
+        if (patternVariableId) {
+            if (amnParams.pattern === 'Normal' || amnParams.pattern == 0) {
                 $gameVariables._data[patternVariableId] = 0;
-            } else if (amnParams.pattern === 'Stretch' || amnParams.pattern == -1){
+            } else if (amnParams.pattern === 'Stretch' || amnParams.pattern == -1) {
                 $gameVariables._data[patternVariableId] = -1;
-            } else if (amnParams.pattern === 'GrowUp' || amnParams.pattern == -2){
+            } else if (amnParams.pattern === 'GrowUp' || amnParams.pattern == -2) {
                 $gameVariables._data[patternVariableId] = -2;
             } else {
                 $gameVariables._data[patternVariableId] = Number(amnParams.pattern);
@@ -226,33 +368,33 @@ Imported['AnimationMapName'] = 1.04;
 
     ////////////////////////////////////////////////////////////////////////////////////
 
-    DataManager.amnMapParams = function(map) {
+    DataManager.amnMapParams = function (map) {
         if (!map) return false;
         if (map.note === undefined) return false;
-        if (map._amsParams){ return map._amsParams }
+        if (map._amsParams) { return map._amsParams }
         var texts = map.note.split('\n');
         var params = {};
-        for (var i=0,max=texts.length;i<max;i++) {
-            if (/^<(?:AnimationMapNameSetting|アニメーションマップネーム設定)>/.exec(texts[i])){
-                for (var j=i;j<max;j++){
+        for (var i = 0, max = texts.length; i < max; i++) {
+            if (/^<(?:AnimationMapNameSetting|アニメーションマップネーム設定)>/.exec(texts[i])) {
+                for (var j = i; j < max; j++) {
                     if (/^<\/(?:AnimationMapNameSetting|アニメーションマップネーム設定)>/.exec(texts[j])) {
-                        i=j;
+                        i = j;
                         break;
                     } else {
-                        if (/(.+?):(.+)?/.exec(texts[j])){
+                        if (/(.+?):(.+)?/.exec(texts[j])) {
                             var code = RegExp.$1;
                             var value = RegExp.$2;
-                            switch(code) {
-                                case 'size':    params.size = Number(value) ; break;
-                                case 'count':   params.count = Number(value);break;
-                                case 'ox':      params.ox = Number(value)   ;break;
-                                case 'oy':      params.oy = Number(value)   ;break;
-                                case 'mx':      params.mx = Number(value)   ;break;
-                                case 'my':      params.my = Number(value)   ;break;
-                                case 'pattern': params.pattern = value      ;break;
-                                case 'color':   params.color = value        ;break;
-                                case 'picture': params.picture = value      ;break;
-                                case 'text':    params.text = value         ;break;
+                            switch (code) {
+                                case 'size': params.size = Number(value); break;
+                                case 'count': params.count = Number(value); break;
+                                case 'ox': params.ox = Number(value); break;
+                                case 'oy': params.oy = Number(value); break;
+                                case 'mx': params.mx = Number(value); break;
+                                case 'my': params.my = Number(value); break;
+                                case 'pattern': params.pattern = value; break;
+                                case 'color': params.color = value; break;
+                                case 'picture': params.picture = value; break;
+                                case 'text': params.text = value; break;
                             }
                         }
                     }
@@ -263,26 +405,28 @@ Imported['AnimationMapName'] = 1.04;
         return map._amsParams;
     };
 
-    DataManager.makeAmnParams = function(params,args) {
-        var amnParams = { size:params.size, count:params.count,
-            ox:params.ox, oy:params.oy, mx:params.mx, my:params.my,
-            pattern:params.pattern, color:params.color, picture:params.picture,
-            text:params.text };
-        args.forEach(function(a){
-            if (/(.+?):(.+)?/.exec(a)){
+    DataManager.makeAmnParams = function (params, args) {
+        var amnParams = {
+            size: params.size, count: params.count,
+            ox: params.ox, oy: params.oy, mx: params.mx, my: params.my,
+            pattern: params.pattern, color: params.color, picture: params.picture,
+            text: params.text
+        };
+        args.forEach(function (a) {
+            if (/(.+?):(.+)?/.exec(a)) {
                 var code = RegExp.$1;
                 var value = RegExp.$2;
-                switch(code){
-                    case 'size':   amnParams.size = Number(value);  break;
-                    case 'count':  amnParams.count = Number(value); break;
-                    case 'ox':     amnParams.ox = Number(value);    break;
-                    case 'oy':     amnParams.oy = Number(value);    break;
-                    case 'mx':     amnParams.mx = Number(value);    break;
-                    case 'my':     amnParams.my = Number(value);    break;
-                    case 'pattern':amnParams.pattern = value;       break;
-                    case 'color':  amnParams.color = value;         break;
-                    case 'picture':amnParams.picture = value;       break;
-                    case 'text':   amnParams.text = value;          break;
+                switch (code) {
+                    case 'size': amnParams.size = Number(value); break;
+                    case 'count': amnParams.count = Number(value); break;
+                    case 'ox': amnParams.ox = Number(value); break;
+                    case 'oy': amnParams.oy = Number(value); break;
+                    case 'mx': amnParams.mx = Number(value); break;
+                    case 'my': amnParams.my = Number(value); break;
+                    case 'pattern': amnParams.pattern = value; break;
+                    case 'color': amnParams.color = value; break;
+                    case 'picture': amnParams.picture = value; break;
+                    case 'text': amnParams.text = value; break;
                 }
             }
         }.bind(this));
@@ -291,44 +435,48 @@ Imported['AnimationMapName'] = 1.04;
 
     ////////////////////////////////////////////////////////////////////////////////////
 
-    Game_System.prototype.amnParameters = function() {
+    Game_System.prototype.amnParameters = function () {
         if (!this._amnParameters) this.initAmnParameters();
-        if (patternVariableId){
+        if (patternVariableId) {
             this._amnParameters.pattern = $gameVariables.value(patternVariableId);
         }
         var params = DataManager.amnMapParams($dataMap);
-        var amnParams = { size:this._amnParameters.size, count:this._amnParameters.count,
-                          ox:this._amnParameters.ox, oy:this._amnParameters.oy,
-                          mx:this._amnParameters.mx, my:this._amnParameters.my,
-                          pattern:this._amnParameters.pattern, color:this._amnParameters.color,
-                          picture:this._amnParameters.picture };
+        var amnParams = {
+            size: this._amnParameters.size, count: this._amnParameters.count,
+            ox: this._amnParameters.ox, oy: this._amnParameters.oy,
+            mx: this._amnParameters.mx, my: this._amnParameters.my,
+            pattern: this._amnParameters.pattern, color: this._amnParameters.color,
+            picture: this._amnParameters.picture
+        };
         for (var key in params) { amnParams[key] = params[key] }
         return amnParams;
     };
 
-    Game_System.prototype.initAmnParameters = function() {
-        this._amnParameters = { size:animeFontSize, count:animeCount, ox:animeOriginalX,
-                                oy:animeOriginalY, mx:animeMoveX, my:animeMoveY,
-                                pattern:animePattern, color:fillRectColor, picture:backPicture,
-                                text:''};
-        if (patternVariableId){
+    Game_System.prototype.initAmnParameters = function () {
+        this._amnParameters = {
+            size: animeFontSize, count: animeCount, ox: animeOriginalX,
+            oy: animeOriginalY, mx: animeMoveX, my: animeMoveY,
+            pattern: animePattern, color: fillRectColor, picture: backPicture,
+            text: ''
+        };
+        if (patternVariableId) {
             var pattern = this._amnParameters.pattern;
-            if (pattern === 'Normal'  || pattern === 0)  $gameVariables._data[patternVariableId] = 0;
+            if (pattern === 'Normal' || pattern === 0) $gameVariables._data[patternVariableId] = 0;
             if (pattern === 'Stretch' || pattern === -1) $gameVariables._data[patternVariableId] = -1;
-            if (pattern === 'GrowUp'  || pattern === -2) $gameVariables._data[patternVariableId] = -2;
+            if (pattern === 'GrowUp' || pattern === -2) $gameVariables._data[patternVariableId] = -2;
         }
     };
-    
-    Game_System.prototype.setAmnParameters = function(params) {
+
+    Game_System.prototype.setAmnParameters = function (params) {
         this._amnParameters = params;
     };
 
     ////////////////////////////////////////////////////////////////////////////////////
-    
+
     var __GInterpreter_update = Game_Interpreter.prototype.update;
-    Game_Interpreter.prototype.update = function() {
+    Game_Interpreter.prototype.update = function () {
         __GInterpreter_update.call(this);
-        if (this._refreshAmn){
+        if (this._refreshAmn) {
             if (ImageManager.isReady()) {
                 this.refreshMapName(this._amnParams);
                 this._refreshAmn = false;
@@ -336,9 +484,9 @@ Imported['AnimationMapName'] = 1.04;
             }
         }
     };
-    
-    Game_Interpreter.prototype.animationMapName = function(params) {
-        if(params.picture){
+
+    Game_Interpreter.prototype.animationMapName = function (params) {
+        if (params.picture) {
             ImageManager.loadPicture(params.picture);
             this._refreshAmn = true;
             this._amnParams = params;
@@ -347,7 +495,7 @@ Imported['AnimationMapName'] = 1.04;
         }
     };
 
-    Game_Interpreter.prototype.refreshMapName = function(params) {
+    Game_Interpreter.prototype.refreshMapName = function (params) {
         console.log(params)
         var text = (params.text ? params.text : $gameMap.displayName()) || '';
         var array = CommonPopupManager.window().convertEscapeCharacters(text).split("");
@@ -364,11 +512,11 @@ Imported['AnimationMapName'] = 1.04;
         var afs = params.size + 8;
         var supY = 0;
         if (params.pattern === 'GrowUp' || params.pattern == -2) supY = afs;
-        for(var i=0,max=array.length;i<max;i++){
+        for (var i = 0, max = array.length; i < max; i++) {
             if (array[i] === '\x1b') {
                 var cnt = a2.length;
                 a2[cnt] = array[i];
-                for (var j=i;j<max;j++){
+                for (var j = i; j < max; j++) {
                     if (array[j] === ']') {
                         a2[cnt] += ']';
                         //a2[i] = a2[i].replace(/\x1b/,'\\');
@@ -376,7 +524,7 @@ Imported['AnimationMapName'] = 1.04;
                         i = j;
                         break;
                     } else {
-                      a2[cnt] += array[j];
+                        a2[cnt] += array[j];
                     }
                 }
             } else {
@@ -384,11 +532,11 @@ Imported['AnimationMapName'] = 1.04;
                 s1 += array[i];
             }
         }
-        
+
         CommonPopupManager.window().resetFontSettings();
         var fs = params.size;
         var fontStr = '\\FS[' + fs + ']';
-        CommonPopupManager.window().drawTextEx(fontStr,0,0);
+        CommonPopupManager.window().drawTextEx(fontStr, 0, 0);
         var textSize = CommonPopupManager.window().textWidth(s1) + params.size;
         textSize += (params.size * 1.14) * count;
         var bitmap = null;
@@ -405,7 +553,7 @@ Imported['AnimationMapName'] = 1.04;
             arg.moveY = params.my;
             arg.bitmap = bitmap;
             arg.count = params.count;
-            arg.extend = [0,arg.count]//[arg.count * 0.2, arg.count * 0.8];
+            arg.extend = [0, arg.count]//[arg.count * 0.2, arg.count * 0.8];
             arg.fixed = false;
             arg.anchorX = aX;
             arg.anchorY = aY;
@@ -429,79 +577,79 @@ Imported['AnimationMapName'] = 1.04;
             arg.moveY = params.my;
             arg.bitmap = bitmap;
             arg.count = params.count;
-            arg.extend = [0,arg.count]//[arg.count * 0.2, arg.count * 0.8];
+            arg.extend = [0, arg.count]//[arg.count * 0.2, arg.count * 0.8];
             arg.fixed = false;
             arg.anchorX = aX;
             arg.anchorY = aY;
             arg.pattern = pattern;
             arg.tag = 'AnimationMapName';
         }
-        if(arg) CommonPopupManager._tempCommonSprites.setNullPos(arg);
+        if (arg) CommonPopupManager._tempCommonSprites.setNullPos(arg);
 
-        var s = Math.floor((params.count*0.4)/s1.length);
+        var s = Math.floor((params.count * 0.4) / s1.length);
         var n = 0;
         var setColor = '';
         var ssupY = (pattern == -2 || pattern === 'GrowUp') ? 4 : 0;
         var bfs = fs;
         var cnt = 0;
         CommonPopupManager.window().contents.fontSize = fs;
-        for(var i=0;i<a2.length;i++){
+        for (var i = 0; i < a2.length; i++) {
             if (a2[i].match(/\x1bI\[(\d+)\]/i)) a2[i] = '\\I[' + RegExp.$1 + ']';
             if (a2[i].match(/\x1bC\[(\d+)\]/i)) {
                 setColor = '\\C[' + RegExp.$1 + ']';
-            }else if (a2[i].match(/\x1bFS\[(\d+)\]/i)){
+            } else if (a2[i].match(/\x1bFS\[(\d+)\]/i)) {
                 fs = Number(RegExp.$1);
                 fontStr = '\\FS[' + fs + ']';
-            }else{
+            } else {
                 var fsy = (bfs - fs) / 2;
-                if (fsy > 0 && ssupY > 0) fsy -= 8 ;
+                if (fsy > 0 && ssupY > 0) fsy -= 8;
                 var arg = CommonPopupManager.setPopup('');
-                var bitmap = new Bitmap(fs+12,fs+12);
+                var bitmap = new Bitmap(fs + 12, fs + 12);
                 var tx = fontStr + setColor + a2[i];
                 CommonPopupManager.window().contents.fontSize = fs;
                 var tw = CommonPopupManager.window().textWidth(a2[i]);
                 CommonPopupManager.window().contents = bitmap;
-                CommonPopupManager.window().drawTextEx(tx,4,0);
+                CommonPopupManager.window().drawTextEx(tx, 4, 0);
                 arg.bitmap = bitmap;
-                arg.x = params.ox + n + (bw - textSize)/ 2 + 10;
+                arg.x = params.ox + n + (bw - textSize) / 2 + 10;
                 arg.y = params.oy + supY + ssupY + fsy;
                 arg.moveX = params.mx;
                 arg.moveY = params.my;
                 arg.anchorX = aX;
                 arg.anchorY = aY;
                 arg.delay = s * (cnt + 1);
-                arg.count = Math.floor((params.count-20) - (cnt * s));
-                arg.extend = [0,arg.count]//[arg.count*0.2,arg.count*0.8];
+                arg.count = Math.floor((params.count - 20) - (cnt * s));
+                arg.extend = [0, arg.count]//[arg.count*0.2,arg.count*0.8];
                 arg.fixed = false;
                 arg.pattern = pattern;
                 arg.tag = 'AnimationMapName';
-                if (a2[i].match(/\\I\[\d+\]/i)){
+                if (a2[i].match(/\\I\[\d+\]/i)) {
                     n += 34;
-                }else{
+                } else {
                     n += tw;
                 }
                 CommonPopupManager._tempCommonSprites.setNullPos(arg);
                 cnt++;
-            }   
+            }
         }
     };
 
-    Game_Interpreter.prototype.showAmn = function(args) {
+    Game_Interpreter.prototype.showAmn = function (args) {
         CommonPopupManager.clearPopup('AnimationMapName');
-        var amnParams = DataManager.makeAmnParams($gameSystem.amnParameters(),args);
+        var amnParams = DataManager.makeAmnParams($gameSystem.amnParameters(), args);
         this.animationMapName(amnParams);
     };
 
     ////////////////////////////////////////////////////////////////////////////////////
 
-    Game_Map.prototype.showMapName = function() {
-        if (this.displayName() !== ''){
+    Game_Map.prototype.showMapName = function () {
+        if (this.displayName() !== '') {
             this._interpreter.animationMapName($gameSystem.amnParameters());
         }
     };
-    
-    Game_Map.prototype.displayRegionAmn = function(params) {
-        if(!this.isNameDisplayEnabled()) return;
+
+    Game_Map.prototype.displayRegionAmn = function (params) {
+        if (!this.isNameDisplayEnabled()) return;
         var args = params.split(' ');
         args[0] = 'text:' + args[0];
         this._interpreter.showAmn(args);
@@ -510,31 +658,31 @@ Imported['AnimationMapName'] = 1.04;
     ////////////////////////////////////////////////////////////////////////////////////
 
     var _animeMN_GPlayer_performTransfer = Game_Player.prototype.performTransfer;
-    Game_Player.prototype.performTransfer = function() {
+    Game_Player.prototype.performTransfer = function () {
         _animeMN_GPlayer_performTransfer.call(this);
-        if($gameMap.isNameDisplayEnabled()) $gameMap.showMapName();
+        if ($gameMap.isNameDisplayEnabled()) $gameMap.showMapName();
         $gameTemp._regionAmnArray = null;
         $gameTemp._lastRegionId = null;
     };
-    
+
     var __GPlayer_update = Game_Player.prototype.update;
-    Game_Player.prototype.update = function(sceneActive) {
+    Game_Player.prototype.update = function (sceneActive) {
         __GPlayer_update.call(this, sceneActive);
         var ri = this.regionId();
         if (this.regionAmnArray(ri) && ri !== $gameTemp._lastRegionId) {
             $gameTemp._lastRegionId = ri;
-            if ($dataMap.meta['RegionName'+ri]) {
-                $gameMap.displayRegionAmn($dataMap.meta['RegionName'+ri]);
-            } else if ($dataMap.meta['リージョンネーム'+ri]){
-                $gameMap.displayRegionAmn($dataMap.meta['リージョンネーム'+ri]);
+            if ($dataMap.meta['RegionName' + ri]) {
+                $gameMap.displayRegionAmn($dataMap.meta['RegionName' + ri]);
+            } else if ($dataMap.meta['リージョンネーム' + ri]) {
+                $gameMap.displayRegionAmn($dataMap.meta['リージョンネーム' + ri]);
             }
         }
     };
 
-    Game_Player.prototype.regionAmnArray = function(ri) {
+    Game_Player.prototype.regionAmnArray = function (ri) {
         if ($gameTemp._regionAmnArray) return $gameTemp._regionAmnArray[ri];
         $gameTemp._regionAmnArray = [];
-        for (var i=1,max=255;i<max;i++){
+        for (var i = 1, max = 255; i < max; i++) {
             if (!$dataMap.meta) break;
             if ($dataMap.meta['RegionName' + i]) $gameTemp._regionAmnArray[i] = true;
             if ($dataMap.meta['リージョンネーム' + i]) $gameTemp._regionAmnArray[i] = true;
@@ -545,7 +693,7 @@ Imported['AnimationMapName'] = 1.04;
     ////////////////////////////////////////////////////////////////////////////////////
 
     // 再定義　何もしなくする
-    Window_MapName.prototype.open = function() {
+    Window_MapName.prototype.open = function () {
         //this.refresh();
         this._showCount = 0;
     };
