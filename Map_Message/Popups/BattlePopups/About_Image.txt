@@ -1,0 +1,16 @@
+- MiniWindow and CopperWindow Image Data
+Used in the PopupBackPicture setting.
+The specified image data can be used as the background for regular popups.
+
+- v,i,c,t,o,r,y Image Data
+The attached V, I, C, T, O, R, and Y images can be displayed in a popup upon victory by entering the following in the VictoryPopup plugin parameters:
+\SG[v]\SG[i]\SG[c]\SG[t]\SG[o]\SG[r]\SG[y]
+
+
+- rd, re, rf, ra, and rt Image Data
+The rd, re, rf, ra, and rt images can be displayed in a popup upon defeat by entering the following in the DefeatedPopup parameters:
+\SG[rd]\SG[re]\SG[rf]\SG[re]\SG[ra]\SG[rt]\SG[re]\SG[rd]
+
+- About the PSD data
+This is the PSD data for the background image of the regular popup.
+Feel free to modify, change the color, etc.
