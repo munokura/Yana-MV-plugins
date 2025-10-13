@@ -12,85 +12,157 @@
 
 var Imported = Imported || {};
 Imported['WindowControlGuide'] = 1.00;
-
 /*:
- * @plugindesc ver1.00/操作説明など、任意のテキストを表示するウィンドウをアイテム画面などに追加します。
- * @author Yana
- *
- * @param ItemCategoryGuide
- * @desc アイテムシーンでカテゴリがアクティブなときのヘルプです。
- * @default ↑↓セカンドカテゴリの変更 / Shift:ソートの切替
- *
- * @param ItemListGuide
- * @desc アイテムシーンでアイテムがアクティブなときのヘルプです。
- * @default Shift:ソートの切替 / Ctrl:廃棄モードのＯＮ / Tab:ミニウィンドウ表示の切替
- *
- * @param EquipCommandGuide
- * @desc 装備シーンで装備コマンドがアクティブなときのヘルプです。
- * @default
- *
- * @param EquipSlotGuide
- * @desc 装備シーンで装備スロットがアクティブなときのヘルプです。
- * @default Shift:装備を外す
- *
- * @param EquipItemGuide
- * @desc 装備シーンで装備アイテムがアクティブなときのヘルプです。
- * @default Shift:ソートの切替 / Tab:ミニウィンドウ表示の切替
- *
- * @param SkillTypeGuide
- * @desc スキルシーンでスキルタイプがアクティブなときのヘルプです。
- * @default
- *
- * @param SkillListGuide
- * @desc スキルシーンでスキルリストがアクティブなときのヘルプです。
- * @default Tab:ミニウィンドウ表示の切替
- *
- * @param SellCategoryGuide
- * @desc 売却シーンでカテゴリがアクティブなときのヘルプです。
- * @default ↑↓セカンドカテゴリの変更 / Shift:ソートの切替
- *
- * @param SellItemGuide
- * @desc 売却シーンでアイテムがアクティブなときのヘルプです。
- * @default Shift:ソートの切替 / Tab:ミニウィンドウ表示の切替
- *
- * @param ItemDropGuide
- * @desc アイテムシーンで戦利品がアクティブなときのヘルプです。
- * @default Shift:戦利品を全て捨てる / Ctrl:廃棄モードのＯＮ / Tab:ミニウィンドウ表示の切替
- *
- * @param ItemAbolitionGuide
- * @desc アイテムシーンで廃棄モードがアクティブなときのヘルプです。
- * @default Shift:ソートの切替 / Ctrl:廃棄モードのＯＦＦ / Tab:ミニウィンドウ表示の切替
- *
- * @param ItemAbolitionDropGuide
- * @desc アイテムシーンで戦利品がアクティブで廃棄モードなときのヘルプです。
- * @default Shift:戦利品を全て捨てる / Ctrl:廃棄モードのＯＦＦ / Tab:ミニウィンドウ表示の切替
- *
- * @help------------------------------------------------------
- *  プラグインコマンドはありません。
- * ------------------------------------------------------
- * ------------------------------------------------------
- *  使い方
- * ------------------------------------------------------
- * プラグインを導入し、プラグインパラメータを設定することで動作します。
- * 各ガイドでは、制御文字が使用可能です。
- * ------------------------------------------------------
- * 利用規約
- * ------------------------------------------------------
- * 当プラグインはMITライセンスで公開されています。
- * 使用に制限はありません。商用、アダルト、いずれにも使用できます。
- * 二次配布も制限はしませんが、サポートは行いません。
- * 著作表示は任意です。行わなくても利用できます。
- * 要するに、特に規約はありません。
- * バグ報告や使用方法等のお問合せはネ実ツクールスレ、または、Twitterにお願いします。
- * https://twitter.com/yanatsuki_
- * 素材利用は自己責任でお願いします。
- * ------------------------------------------------------
- * 更新履歴:
- * ver1.00:
- * 公開
- */
+@plugindesc ver1.00/Adds a window to the item screen, etc., that displays arbitrary text, such as operation instructions.
+@author Yana
+@url https://github.com/munokura/Yana-MV-plugins
+@license MIT License
 
-(function(){
+@help
+English Help Translator: munokura
+This is an unofficial English translation of the plugin help,
+created to support global RPG Maker users.
+Feedback is welcome to improve translation quality
+(see: https://github.com/munokura/Yana-MV-plugins ).
+Original plugin by Yana.
+-----
+There are no plugin commands.
+------------------------------------------------------
+------------------------------------------------------
+How to Use
+------------------------------------------------------
+Install the plugin and set the plugin parameters to operate.
+Control characters are allowed in each guide.
+------------------------------------------------------
+Terms of Use
+------------------------------------------------------
+This plugin is released under the MIT License.
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+Update History:
+ver1.00:
+Released
+
+@param ItemCategoryGuide
+@desc Help when a category is active in an item scene.
+@default ↑↓ Change Secondary Category / Shift: Toggle Sorting
+
+@param ItemListGuide
+@desc Help when an item is active in an item scene.
+@default Shift: Toggle Sorting / Ctrl: Turn Discard Mode On / Tab: Toggle Mini-Window Display
+
+@param EquipCommandGuide
+@desc Help when an equip command is active in the equip scene.
+
+@param EquipSlotGuide
+@desc Help when equipment slot is active in equipment scene.
+@default Shift: Unequip
+
+@param EquipItemGuide
+@desc Help when an equipped item is active in the equipment scene.
+@default Shift: Toggle Sorting / Tab: Toggle Mini-Window Display
+
+@param SkillTypeGuide
+@desc This is help when a skill type is active in a skill scene.
+
+@param SkillListGuide
+@desc This is help when the skill list is active in a skill scene.
+@default Tab: Toggle Mini-Window Display
+
+@param SellCategoryGuide
+@desc This is help when the category is active in the selling scene.
+@default ↑↓ Change Secondary Category / Shift: Toggle Sorting
+
+@param SellItemGuide
+@desc Help when an item is active in the sell scene.
+@default Shift: Toggle Sorting / Tab: Toggle Mini-Window Display
+
+@param ItemDropGuide
+@desc Help when loot is active in item scenes.
+@default Shift: Discard All Loot / Ctrl: Turn Discard Mode On / Tab: Toggle Mini-Window Display
+
+@param ItemAbolitionGuide
+@desc Help when Discard Mode is active during the item scene.
+@default Shift: Toggle Sorting / Ctrl: Turn Discard Mode Off / Tab: Toggle Mini-Window Display
+
+@param ItemAbolitionDropGuide
+@desc Help when loot is active and in discard mode during item scenes.
+@default Shift: Discard All Loot / Ctrl: Turn Discard Mode Off / Tab: Toggle Mini-Window Display
+*/
+
+
+/*:ja
+@plugindesc ver1.00/操作説明など、任意のテキストを表示するウィンドウをアイテム画面などに追加します。
+@author Yana
+@url https://github.com/munokura/Yana-MV-plugins
+@license MIT License
+
+@help
+ プラグインコマンドはありません。
+------------------------------------------------------
+------------------------------------------------------
+ 使い方
+------------------------------------------------------
+プラグインを導入し、プラグインパラメータを設定することで動作します。
+各ガイドでは、制御文字が使用可能です。
+------------------------------------------------------
+利用規約
+------------------------------------------------------
+当プラグインはMITライセンスで公開されています。
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+更新履歴:
+ver1.00:
+公開
+
+@param ItemCategoryGuide
+@desc アイテムシーンでカテゴリがアクティブなときのヘルプです。
+@default ↑↓セカンドカテゴリの変更 / Shift:ソートの切替
+
+@param ItemListGuide
+@desc アイテムシーンでアイテムがアクティブなときのヘルプです。
+@default Shift:ソートの切替 / Ctrl:廃棄モードのＯＮ / Tab:ミニウィンドウ表示の切替
+
+@param EquipCommandGuide
+@desc 装備シーンで装備コマンドがアクティブなときのヘルプです。
+
+@param EquipSlotGuide
+@desc 装備シーンで装備スロットがアクティブなときのヘルプです。
+@default Shift:装備を外す
+
+@param EquipItemGuide
+@desc 装備シーンで装備アイテムがアクティブなときのヘルプです。
+@default Shift:ソートの切替 / Tab:ミニウィンドウ表示の切替
+
+@param SkillTypeGuide
+@desc スキルシーンでスキルタイプがアクティブなときのヘルプです。
+
+@param SkillListGuide
+@desc スキルシーンでスキルリストがアクティブなときのヘルプです。
+@default Tab:ミニウィンドウ表示の切替
+
+@param SellCategoryGuide
+@desc 売却シーンでカテゴリがアクティブなときのヘルプです。
+@default ↑↓セカンドカテゴリの変更 / Shift:ソートの切替
+
+@param SellItemGuide
+@desc 売却シーンでアイテムがアクティブなときのヘルプです。
+@default Shift:ソートの切替 / Tab:ミニウィンドウ表示の切替
+
+@param ItemDropGuide
+@desc アイテムシーンで戦利品がアクティブなときのヘルプです。
+@default Shift:戦利品を全て捨てる / Ctrl:廃棄モードのＯＮ / Tab:ミニウィンドウ表示の切替
+
+@param ItemAbolitionGuide
+@desc アイテムシーンで廃棄モードがアクティブなときのヘルプです。
+@default Shift:ソートの切替 / Ctrl:廃棄モードのＯＦＦ / Tab:ミニウィンドウ表示の切替
+
+@param ItemAbolitionDropGuide
+@desc アイテムシーンで戦利品がアクティブで廃棄モードなときのヘルプです。
+@default Shift:戦利品を全て捨てる / Ctrl:廃棄モードのＯＦＦ / Tab:ミニウィンドウ表示の切替
+*/
+
+(function () {
 
     'use strict';
 
@@ -111,21 +183,21 @@ Imported['WindowControlGuide'] = 1.00;
 
     ////////////////////////////////////////////////////////////////////////////////////
 
-    Window_Selectable.prototype.setGuideWindow = function(window) {
+    Window_Selectable.prototype.setGuideWindow = function (window) {
         this._guideWindow = window;
     };
 
-    Window_Selectable.prototype.setGuideText = function(text) {
+    Window_Selectable.prototype.setGuideText = function (text) {
         if (this._guideWindow) this._guideWindow.setText(text);
     };
 
     var __WSelectable_activate = Window_Selectable.prototype.activate;
-    Window_Selectable.prototype.activate = function() {
+    Window_Selectable.prototype.activate = function () {
         __WSelectable_activate.call(this);
         this.setGuideText(this.guideText());
     };
 
-    Window_Selectable.prototype.guideText = function() {
+    Window_Selectable.prototype.guideText = function () {
         return '';
     };
 
@@ -138,38 +210,38 @@ Imported['WindowControlGuide'] = 1.00;
     Window_ItemGuide.prototype = Object.create(Window_Base.prototype);
     Window_ItemGuide.prototype.constructor = Window_ItemGuide;
 
-    Window_ItemGuide.prototype.initialize = function(x, y, width) {
+    Window_ItemGuide.prototype.initialize = function (x, y, width) {
         Window_Base.prototype.initialize.call(this, x, y, width, this.windowHeight());
         this.createSprite();
         this.setText('');
     };
 
-    Window_ItemGuide.prototype.createSprite = function() {
+    Window_ItemGuide.prototype.createSprite = function () {
         this._sprite = new Sprite();
         this._sprite.x = 4;
         this._sprite.y = 4;
         this.addChild(this._sprite);
     };
 
-    Window_ItemGuide.prototype.windowHeight = function() {
+    Window_ItemGuide.prototype.windowHeight = function () {
         return 36;
     };
 
-    Window_ItemGuide.prototype.standardFontSize = function() {
+    Window_ItemGuide.prototype.standardFontSize = function () {
         return 20;
     };
 
-    Window_ItemGuide.prototype.setText = function(text) {
+    Window_ItemGuide.prototype.setText = function (text) {
         this._text = text;
         this.refresh();
     };
 
-    Window_ItemGuide.prototype.refresh = function() {
+    Window_ItemGuide.prototype.refresh = function () {
         if (this._sprite.bitmap) this._sprite.bitmap.clear();
         if (this._text) {
             var w = this.width - 8;
             var h = 24;
-            var bitmap = new Bitmap(w,h);
+            var bitmap = new Bitmap(w, h);
             bitmap.fontSize = 20;
             this.contents = bitmap;
             var width = this.textWidthEx(this.convertEscapeCharacters(this._text));
@@ -219,19 +291,19 @@ Imported['WindowControlGuide'] = 1.00;
 
     ////////////////////////////////////////////////////////////////////////////////////
 
-    Window_ItemCategory.prototype.guideText = function() {
+    Window_ItemCategory.prototype.guideText = function () {
         return itemCategoryGuide;
     };
 
     ////////////////////////////////////////////////////////////////////////////////////
 
-    Window_ItemList.prototype.setGuideWindow = function(window) {
+    Window_ItemList.prototype.setGuideWindow = function (window) {
         Window_Selectable.prototype.setGuideWindow.call(this, window);
         this.height = this.height - 36;
         this.refresh();
     };
 
-    Window_ItemList.prototype.guideText = function() {
+    Window_ItemList.prototype.guideText = function () {
         if (Imported['LimitPossession']) {
             if (this._abolitionMode) {
                 return this._category === 'drop' ? itemAbolitionDropGuide : itemAbolitionGuide;
@@ -244,63 +316,63 @@ Imported['WindowControlGuide'] = 1.00;
     };
 
     var __WIList_refresh = Window_ItemList.prototype.refresh;
-    Window_ItemList.prototype.refresh = function() {
+    Window_ItemList.prototype.refresh = function () {
         __WIList_refresh.call(this);
         if (this.active) this.setGuideText(this.guideText());
     };
 
     ////////////////////////////////////////////////////////////////////////////////////
 
-    Window_EquipCommand.prototype.guideText = function() {
+    Window_EquipCommand.prototype.guideText = function () {
         return equipCommandGuide;
     };
 
     ////////////////////////////////////////////////////////////////////////////////////
 
-    Window_EquipSlot.prototype.guideText = function() {
+    Window_EquipSlot.prototype.guideText = function () {
         return equipSlotGuide;
     };
 
     ////////////////////////////////////////////////////////////////////////////////////
 
-    Window_EquipItem.prototype.guideText = function() {
+    Window_EquipItem.prototype.guideText = function () {
         return equipListGuide;
     };
 
     ////////////////////////////////////////////////////////////////////////////////////
 
-    Window_SkillType.prototype.guideText = function() {
+    Window_SkillType.prototype.guideText = function () {
         return skillTypeGuide;
     };
 
     ////////////////////////////////////////////////////////////////////////////////////
 
-    Window_SkillList.prototype.setGuideWindow = function(window) {
+    Window_SkillList.prototype.setGuideWindow = function (window) {
         Window_Selectable.prototype.setGuideWindow.call(this, window);
         this.height = this.height - 36;
         this.refresh();
     };
 
-    Window_SkillList.prototype.guideText = function() {
+    Window_SkillList.prototype.guideText = function () {
         return skillListGuide;
     };
 
     ////////////////////////////////////////////////////////////////////////////////////
 
-    Window_ShopSell.prototype.setGuideWindow = function(window) {
+    Window_ShopSell.prototype.setGuideWindow = function (window) {
         Window_Selectable.prototype.setGuideWindow.call(this, window);
         this.height = this.height - 36;
         this.refresh();
     };
 
-    Window_ShopSell.prototype.guideText = function() {
+    Window_ShopSell.prototype.guideText = function () {
         return sellItemGuide;
     };
 
     ////////////////////////////////////////////////////////////////////////////////////
 
     var __SItem_create = Scene_Item.prototype.create;
-    Scene_Item.prototype.create = function() {
+    Scene_Item.prototype.create = function () {
         __SItem_create.call(this);
         if (itemCategoryGuide || itemDropGuide || itemListGuide || itemAbolitionGuide || itemAbolitionDropGuide) {
             this.createGuideWindow();
@@ -312,7 +384,7 @@ Imported['WindowControlGuide'] = 1.00;
         }
     };
 
-    Scene_Item.prototype.createGuideWindow = function() {
+    Scene_Item.prototype.createGuideWindow = function () {
         var x = this._itemWindow.x;
         var y = 0;
         this._guideWindow = new Window_ItemGuide(x, y, this._itemWindow.width);
@@ -322,7 +394,7 @@ Imported['WindowControlGuide'] = 1.00;
     ////////////////////////////////////////////////////////////////////////////////////
 
     var __SEquip_create = Scene_Equip.prototype.create;
-    Scene_Equip.prototype.create = function() {
+    Scene_Equip.prototype.create = function () {
         __SEquip_create.call(this);
         if (equipCommandGuide || equipSlotGuide || equipListGuide) {
             this.createGuideWindow();
@@ -336,7 +408,7 @@ Imported['WindowControlGuide'] = 1.00;
         }
     };
 
-    Scene_Equip.prototype.createGuideWindow = function() {
+    Scene_Equip.prototype.createGuideWindow = function () {
         var x = this._itemWindow.x;
         var y = 0;
         this._guideWindow = new Window_ItemGuide(x, y, this._itemWindow.width);
@@ -346,7 +418,7 @@ Imported['WindowControlGuide'] = 1.00;
     ////////////////////////////////////////////////////////////////////////////////////
 
     var __SSkill_create = Scene_Skill.prototype.create;
-    Scene_Skill.prototype.create = function() {
+    Scene_Skill.prototype.create = function () {
         __SSkill_create.call(this);
         if (skillListGuide || skillTypeGuide) {
             this.createGuideWindow();
@@ -358,7 +430,7 @@ Imported['WindowControlGuide'] = 1.00;
         }
     };
 
-    Scene_Skill.prototype.createGuideWindow = function() {
+    Scene_Skill.prototype.createGuideWindow = function () {
         var x = this._itemWindow.x;
         var y = 0;
         this._guideWindow = new Window_ItemGuide(x, y, this._itemWindow.width);
@@ -368,7 +440,7 @@ Imported['WindowControlGuide'] = 1.00;
     ////////////////////////////////////////////////////////////////////////////////////
 
     var __SShop_create = Scene_Shop.prototype.create;
-    Scene_Shop.prototype.create = function() {
+    Scene_Shop.prototype.create = function () {
         __SShop_create.call(this);
         if (sellItemGuide) {
             this.createGuideWindow();
@@ -380,7 +452,7 @@ Imported['WindowControlGuide'] = 1.00;
         }
     };
 
-    Scene_Shop.prototype.createGuideWindow = function() {
+    Scene_Shop.prototype.createGuideWindow = function () {
         var x = this._sellWindow.x;
         var y = 0;
         this._guideWindow = new Window_ItemGuide(x, y, this._sellWindow.width);

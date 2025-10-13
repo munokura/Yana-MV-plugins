@@ -8,176 +8,339 @@
 //
 // author Yana
 //
-
 /*:
- * @plugindesc ver1.098/並び替えシーンを追加します。
- * @author Yana
- *
- * @param Stand Members Size
- * @text 待機メンバー最大数
- * @desc 待機メンバーの最大数です。
- * 11を超えると、ウィンドウが2行になります。
- * @default 8
- * @type number
- *
- * @param Max Battle Members Size
- * @text 最大戦闘メンバー人数
- * @desc 最大戦闘メンバー人数です。
- * 3人以下や、5人以上にも設定できます。
- * @default 4
- * @type number
- *
- * @param Use Menu Formation Scene
- * @text 並び替えシーン置換
- * @desc メニューの並び替えの項目を、並び替えシーンに
- * 置き換えるかどうかの設定です。true/falseで設定してください。
- * @default true
- * @type boolean
- * @on 置換する
- * @off 置換しない
- *
- * @param Formation Scene Battle Name
- * @text 戦闘メンバーのラベル
- * @desc 戦闘メンバーの上に表示されるテキストです。
- * @default 戦闘メンバー
- *
- * @param Formation Scene Stand Name
- * @text 待機メンバーのラベル
- * @desc 待機メンバーの上に表示されるテキストです。
- * @default 待機メンバー
- *
- * @param Use Battle Formation Switch ID
- * @text 戦闘中並び替えスイッチID
- * @desc 戦闘時にパーティコマンドに並び替え項目追加を許可するスイッチのIDです。なしの場合、追加しません。
- * @default 20
- * @type switch
- *
- * @param Battle Command Formation
- * @text パーティコマンド表示コマンド
- * @desc 戦闘時にパーティコマンドに追加される
- * 並び替えの項目のテキストです。
- * @default 戦闘メンバー編成
- *
- * @param Status Window Font Size
- * @text フォントサイズ
- * @desc ステータスウィンドウの文字サイズです。
- * @default 24
- * @type number
- *
- * @param Status Block Width
- * @text パラメータ表示幅
- * @desc ステータスウィンドウのパラメータ表示部の横幅です。
- * @default 372
- * @type number
- *
- * @param Dead Actor Color
- * @text 戦闘不能アクター背景色
- * @desc 戦闘不能アクターの背景色を黄色にします。
- * @default true
- * @type boolean
- * @on 黄色にする
- * @off 無色にする
- *
- * @param Member Space Add
- * @text メンバーの空欄
- * @desc メンバー枠に空欄（－）を追加する。
- * @default true
- * @type boolean
- * @on 追加する
- * @off 追加しない
- *
- * @help ------------------------------------------------------
- * プラグインコマンド
- * ------------------------------------------------------
- * ※スペースは必ず半角で入力してください。
- * 
- * ・並び替えシーンを呼び出します。
- * 並び替えシーン 呼び出し
- * SceneFormation call
- * 
- * ・ID番のアクターの並びを固定します。
- * 並び替えシーン 固定 ID
- * SceneFormation fixed ID
- * 
- * ・ID番のアクターの並びの固定を解除します。
- * 並び替えシーン 固定解除 ID
- * SceneFormation unpin ID
- * 
- * ・全アクターの並びを固定します。
- * 並び替えシーン 全固定
- * SceneFormation all_fixed
- * 
- * ・ID番のアクターの並びを固定します。
- * 並び替えシーン 全固定解除
- * SceneFormation all_unpin
- *
- * ・最大戦闘参加人数を変更します。
- * 最大戦闘参加人数変更 人数
- * MaxBattleMembersSize number
- * ※戦闘中は変更できません！
- *
- * ------------------------------------------------------
- * 並び替えの注意点
- * ------------------------------------------------------
- * 戦闘メンバー内に生存アクターがいない状態では、
- * 並び替えシーンから抜けることが出来ません。
- * 
- * ------------------------------------------------------
- * 利用規約
- * ------------------------------------------------------
- * 当プラグインはMITライセンスで公開されています。
- * http://opensource.org/licenses/mit-license.php
- * ------------------------------------------------------
- * 更新履歴:
- * ver1.098:250517
- * 戦闘メンバーの枠から「－」を無くすプラグインパラメーターを追加
- * ver1.097:240827
- * 戦闘不能アクターの背景色を黄色にするプラグインパラメーターを追加
- * ver1.096:240825
- * アクターの入れ替え条件を修正
- * ver1.095:240429
- * 最大レベルのアクターを扱えない不具合を修正 by Dark Plasma
- * ver1.094:210725
- * 大規模リファクタ by Dark Plasma
- * ver1.093:200516
- * 表示部にパッチを受けられるようWindow_FormationStatusをグローバル化。
- * by Dark Plasma
- * ついでにプラグインパラメータの表示部分を日本語化 by munokura
- * ver1.092:200326
- * RPGアツマールのタッチでキャンセルに対応修正。by ponpokoneruson
- * ver1.091:180410
- * プラグインパラメータの仕様を1.5.0に更新。
- * ver1.09:170228
- * 最大戦闘参加人数を変更するプラグインコマンドを追加。
- * ver1.08:170105
- * パーティが最大人数-1の時にアクター加入時の動作が正常でなかったバグを修正。
- * ver1.07:
- * Use Menu Formation Sceneをfalseにするとエラーが発生するバグを修正。
- * ver1.06:
- * パラメータ表示部の幅を設定する項目を追加。
- * 全体の文字サイズを設定する項目を追加。
- * ウィンドウ外の領域をクリックすることで、
- * キャンセルとして働くように機能を追加。
- * このプラグインより下に入れたプラグインで
- * 右クリックが正常に動作しないことのあるバグを修正。
- * サイドビューで戦闘中に人数の増減を行った場合、正常に表示されないバグを修正。
- * ver1.05:
- * Window_FormationのcheckBltがloadFaceしていたバグを修正。
- * 待機メンバーで空白を選択した後、
- * 戦闘メンバーの最後のアクターを選択できないバグを修正。
- * ver1.04:
- * Window_FormationNameがWindow_Selectableのinitializeを呼んでいたバグを修正。
- * ver1.03:
- * 戦闘中、並び替えがアクティブでない時もクリックが可能だったバグを修正。
- * ver1.02:
- * Stand Members SizeとMax Battle Members Sizeが
- * 正常に動作していなかったバグを修正。
- * 空欄を選択して空欄で決定するとエラーが発生するバグを修正。
- * ver1.01:
- * addActorが正常に動作していなかったバグを修正。
- * ver1.00:
- * 公開
- */
+@plugindesc ver1.098/Added a sorting scene.
+@author Yana
+@url https://github.com/munokura/Yana-MV-plugins
+@license MIT License
+
+@help
+English Help Translator: munokura
+This is an unofficial English translation of the plugin help,
+created to support global RPG Maker users.
+Feedback is welcome to improve translation quality
+(see: https://github.com/munokura/Yana-MV-plugins ).
+Original plugin by Yana.
+-----
+Plugin Commands
+--------------------------------------------------------------------
+*Please enter spaces using half-width characters.
+
+- Calls the reordering scene.
+SceneFormation call
+
+- Fixes the order of the actor with ID number.
+SceneFormation fixed ID
+
+- Unpins the order of the actor with ID number.
+SceneFormation unpin ID
+
+- Fixes the order of all actors.
+SceneFormation all_fixed
+
+- Fixes the order of the actor with ID number.
+SceneFormation all_unpin
+
+- Changes the maximum number of battle participants.
+MaxBattleMembersSize Number
+*Cannot be changed during battle!
+
+------------------------------------------------------
+Notes on reordering
+------------------------------------------------------
+If there are no surviving actors in the battle team,
+you will not be able to exit the reordering scene.
+
+-----------------------------------------------------
+Terms of Use
+------------------------------------------------------
+This plugin is released under the MIT License.
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+Update History:
+ver1.098:250517
+Added a plugin parameter to remove "-" from battle member frames.
+ver1.097:240827
+Added a plugin parameter to change the background color of Collapse actors to yellow.
+ver1.096:240825
+Fixed actor replacement conditions.
+ver1.095:240429
+Fixed a bug that prevented maximum level actors from being handled. by Dark Plasma
+ver1.094:210725
+Major refactoring by Dark Plasma
+ver1.093:200516
+Globalized Window_FormationStatus to allow patches to be received on the display.
+by Dark Plasma
+Also translated the plugin parameter display into Japanese. by munokura
+ver1.092:200326
+Fixed touch-to-cancel support for RPG Atsumare. by ponpokoneruson
+ver1.091:180410
+Updated plugin parameter specifications to 1.5.0.
+ver1.09:170228
+Added a plugin command to change the maximum number of battle participants.
+ver1.08:170105
+Fixed a bug where adding an actor would not work properly when the party size was set to -1.
+ver1.07:
+Fixed a bug where setting Use Menu Formation Scene to false would cause an error.
+ver1.06:
+Added an option to set the width of the parameter display.
+Added an option to set the overall text size.
+Added a function so that clicking outside the window acts as a cancel.
+Fixed a bug where right-clicking would not work properly in plugins installed below this one.
+Fixed a bug where increasing or decreasing the number of players during battle in side view would not display correctly.
+ver1.05:
+Fixed a bug where Window_Formation's checkBlt would loadFace.
+Fixed a bug where the last actor in the battle group could not be selected after selecting a blank space in the standby group.
+Ver 1.04:
+Fixed a bug where Window_FormationName was calling Window_Selectable's initialize.
+Ver 1.03:
+Fixed a bug where clicking was possible even when sorting was not active during battle.
+Ver 1.02:
+Fixed a bug where Stand Members Size and Max Battle Members Size were not working properly.
+Fixed a bug where an error would occur when selecting a blank space and confirming with a blank space.
+Ver 1.01:
+Fixed a bug where addActor was not working properly.
+Ver 1.00:
+Released
+
+@param Stand Members Size
+@text Maximum number of waiting members
+@desc Maximum number of waiting members. If it exceeds 11, the window will be 2 rows.
+@default 8
+@type number
+
+@param Max Battle Members Size
+@text Maximum number of battle members
+@desc This is the maximum number of battle members. You can set it to 3 or less, or 5 or more.
+@default 4
+@type number
+
+@param Use Menu Formation Scene
+@text Reorder Scenes
+@desc This setting determines whether to replace the menu sorting items with sorting scenes. Set this to true or false.
+@default true
+@type boolean
+@on Replace
+@off Do not replace
+
+@param Formation Scene Battle Name
+@text Battle member labels
+@desc This is the text that will be displayed above the battle members.
+@default Battle member
+
+@param Formation Scene Stand Name
+@text Waiting member label
+@desc The text that appears above the waiting member.
+@default Waiting member
+
+@param Use Battle Formation Switch ID
+@text In-battle sorting switch ID
+@desc This is the ID of the switch that allows you to add sorting items to party commands during battle. If none, they will not be added.
+@default 20
+@type switch
+
+@param Battle Command Formation
+@text Party Command Display Command
+@desc This is the text of the sorting item that will be added to the party commands during battle.
+@default Formation
+
+@param Status Window Font Size
+@text Font size
+@desc The text size of the status window.
+@default 24
+@type number
+
+@param Status Block Width
+@text Parameter Display Width
+@desc The width of the parameter display area in the status window.
+@default 372
+@type number
+
+@param Dead Actor Color
+@text Collapse actor background color
+@desc The background color of Collapse actors will be yellow.
+@default true
+@type boolean
+@on Make it yellow
+@off Make colorless
+
+@param Member Space Add
+@text Member blanks
+@desc Add a blank (-) to the member slot.
+@default true
+@type boolean
+@on Add
+@off Do not add
+*/
+
+
+/*:ja
+@plugindesc ver1.098/並び替えシーンを追加します。
+@author Yana
+@url https://github.com/munokura/Yana-MV-plugins
+@license MIT License
+
+@help
+プラグインコマンド
+------------------------------------------------------
+※スペースは必ず半角で入力してください。
+
+・並び替えシーンを呼び出します。
+並び替えシーン 呼び出し
+SceneFormation call
+
+・ID番のアクターの並びを固定します。
+並び替えシーン 固定 ID
+SceneFormation fixed ID
+
+・ID番のアクターの並びの固定を解除します。
+並び替えシーン 固定解除 ID
+SceneFormation unpin ID
+
+・全アクターの並びを固定します。
+並び替えシーン 全固定
+SceneFormation all_fixed
+
+・ID番のアクターの並びを固定します。
+並び替えシーン 全固定解除
+SceneFormation all_unpin
+
+・最大戦闘参加人数を変更します。
+最大戦闘参加人数変更 人数
+MaxBattleMembersSize number
+※戦闘中は変更できません！
+
+------------------------------------------------------
+並び替えの注意点
+------------------------------------------------------
+戦闘メンバー内に生存アクターがいない状態では、
+並び替えシーンから抜けることが出来ません。
+
+------------------------------------------------------
+利用規約
+------------------------------------------------------
+当プラグインはMITライセンスで公開されています。
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+更新履歴:
+ver1.098:250517
+戦闘メンバーの枠から「－」を無くすプラグインパラメーターを追加
+ver1.097:240827
+戦闘不能アクターの背景色を黄色にするプラグインパラメーターを追加
+ver1.096:240825
+アクターの入れ替え条件を修正
+ver1.095:240429
+最大レベルのアクターを扱えない不具合を修正 by Dark Plasma
+ver1.094:210725
+大規模リファクタ by Dark Plasma
+ver1.093:200516
+表示部にパッチを受けられるようWindow_FormationStatusをグローバル化。
+by Dark Plasma
+ついでにプラグインパラメータの表示部分を日本語化 by munokura
+ver1.092:200326
+RPGアツマールのタッチでキャンセルに対応修正。by ponpokoneruson
+ver1.091:180410
+プラグインパラメータの仕様を1.5.0に更新。
+ver1.09:170228
+最大戦闘参加人数を変更するプラグインコマンドを追加。
+ver1.08:170105
+パーティが最大人数-1の時にアクター加入時の動作が正常でなかったバグを修正。
+ver1.07:
+Use Menu Formation Sceneをfalseにするとエラーが発生するバグを修正。
+ver1.06:
+パラメータ表示部の幅を設定する項目を追加。
+全体の文字サイズを設定する項目を追加。
+ウィンドウ外の領域をクリックすることで、
+キャンセルとして働くように機能を追加。
+このプラグインより下に入れたプラグインで
+右クリックが正常に動作しないことのあるバグを修正。
+サイドビューで戦闘中に人数の増減を行った場合、正常に表示されないバグを修正。
+ver1.05:
+Window_FormationのcheckBltがloadFaceしていたバグを修正。
+待機メンバーで空白を選択した後、
+戦闘メンバーの最後のアクターを選択できないバグを修正。
+ver1.04:
+Window_FormationNameがWindow_Selectableのinitializeを呼んでいたバグを修正。
+ver1.03:
+戦闘中、並び替えがアクティブでない時もクリックが可能だったバグを修正。
+ver1.02:
+Stand Members SizeとMax Battle Members Sizeが
+正常に動作していなかったバグを修正。
+空欄を選択して空欄で決定するとエラーが発生するバグを修正。
+ver1.01:
+addActorが正常に動作していなかったバグを修正。
+ver1.00:
+公開
+
+@param Stand Members Size
+@text 待機メンバー最大数
+@desc 待機メンバーの最大数です。 11を超えると、ウィンドウが2行になります。
+@default 8
+@type number
+
+@param Max Battle Members Size
+@text 最大戦闘メンバー人数
+@desc 最大戦闘メンバー人数です。 3人以下や、5人以上にも設定できます。
+@default 4
+@type number
+
+@param Use Menu Formation Scene
+@text 並び替えシーン置換
+@desc メニューの並び替えの項目を、並び替えシーンに 置き換えるかどうかの設定です。true/falseで設定してください。
+@default true
+@type boolean
+@on 置換する
+@off 置換しない
+
+@param Formation Scene Battle Name
+@text 戦闘メンバーのラベル
+@desc 戦闘メンバーの上に表示されるテキストです。
+@default 戦闘メンバー
+
+@param Formation Scene Stand Name
+@text 待機メンバーのラベル
+@desc 待機メンバーの上に表示されるテキストです。
+@default 待機メンバー
+
+@param Use Battle Formation Switch ID
+@text 戦闘中並び替えスイッチID
+@desc 戦闘時にパーティコマンドに並び替え項目追加を許可するスイッチのIDです。なしの場合、追加しません。
+@default 20
+@type switch
+
+@param Battle Command Formation
+@text パーティコマンド表示コマンド
+@desc 戦闘時にパーティコマンドに追加される 並び替えの項目のテキストです。
+@default 戦闘メンバー編成
+
+@param Status Window Font Size
+@text フォントサイズ
+@desc ステータスウィンドウの文字サイズです。
+@default 24
+@type number
+
+@param Status Block Width
+@text パラメータ表示幅
+@desc ステータスウィンドウのパラメータ表示部の横幅です。
+@default 372
+@type number
+
+@param Dead Actor Color
+@text 戦闘不能アクター背景色
+@desc 戦闘不能アクターの背景色を黄色にします。
+@default true
+@type boolean
+@on 黄色にする
+@off 無色にする
+
+@param Member Space Add
+@text メンバーの空欄
+@desc メンバー枠に空欄（－）を追加する。
+@default true
+@type boolean
+@on 追加する
+@off 追加しない
+*/
 
 (function () {
     'use strict';

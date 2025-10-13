@@ -13,354 +13,643 @@
 var Imported = Imported || {};
 Imported['BattleFormation'] = 1.06;
 /*:
- * @plugindesc ver1.06/陣形の仕組みを追加します。
- * @author Yana
- *
- * @param
- * @param 【基本設定】
- *
- * @param BasicFormationText
- * @desc 基本陣形の名称です。
- * @default 基本陣形
- *
- * @param BasicFormationHelp
- * @desc 基本陣形に表示するヘルプです。
- * @default もっとも基本となる陣形。特に特別な効果はない。
- *
- * @param
- * @param 【メニューの設定】
- *
- * @param AddMenuBattleFormation
- * @desc メニューに陣形の項目を追加するかの設定です。
- * @default true
- *
- * @param MenuBattleFormationTitle
- * @desc メニューに表示する陣形の名称です。
- * @default 陣形
- *
- * @param BattleFormationInfoX
- * @desc 陣形を表示するウィンドウのX座標です。evalで評価されます。
- * cw:commandW sw:statusW gw:goldW h:height w:width
- * @default 0
- *
- * @param BattleFormationInfoY
- * @desc 陣形を表示するウィンドウのY座標です。evalで評価されます。
- * cw:commandW sw:statusW gw:goldW h:height w:width
- * @default Graphics.boxHeight - (gw.height + h)
- *
- * @param
- * @param 【シーンの設定】
- *
- * @param FormationListWidth
- * @desc 陣形シーン時のリスト部分の横幅です。
- * @default 320
- *
- * @param LevelSymbol
- * @desc レベルを示すシンボルです。
- * 2文字以上でx:1のようなテキスト、数値でゲージ表示になります。
- * @default ★
- *
- * @param LevelColor
- * @desc レベルを示すシンボルの色です。
- * Window.pngの右下のカラーのインデックスで指定してください。
- * @default 6
- *
- * @param ExpGaugeColor1
- * @desc 経験値ゲージの色1です。rgba(r,g,b,a)で指定してください。
- * r,g,bは0～255の数値、aは0～1.0の数値です。
- * @default rgba(128,128,255,1.0)
- *
- * @param ExpGaugeColor2
- * @desc 経験値ゲージの色2です。rgba(r,g,b,a)で指定してください。
- * r,g,bは0～255の数値、aは0～1.0の数値です。
- * @default rgba(0,0,255,1.0)
- *
- * @param ShowParamWindow
- * @desc 陣形の詳細を表示するためのウィンドウを使用するかの設定です。
- * @default true
- *
- * @param ParamColor
- * @desc 詳細ウィンドウに表示する特徴の色設定です。
- * 順番に基本色、システム色、上昇色、下降色です。
- * @default 6,4,24,2
- *
- * @param AddSkillText
- * @desc 詳細ウィンドウに表示するクラスで習得するスキルの項目名です。
- * @default スキル追加:
- *
- * @param ParamText1
- * @desc 詳細ウィンドウに表示する特徴の表示名です。
- * 1は有効度と無効化です。
- * @default  有効度,弱体有効度,無効化
- *
- * @param ParamText2
- * @desc 詳細ウィンドウに表示する特徴の表示名です。
- * 2は追加能力値です。
- * @default 命中率,回避率,会心率,会心回避,魔法回避,魔法反射率,反撃率,再生率
- *
- * @param ParamText3
- * @desc 詳細ウィンドウに表示する特徴の表示名です。
- * 3は特殊能力値です。
- * @default 狙われ率,防御効果率,回復効果率,薬の知識,消費率,チャージ率,物理ダメージ率,魔法ダメージ率,床ダメージ率,経験値獲得率
- *
- * @param ParamText4
- * @desc 詳細ウィンドウに表示する特徴の表示名です。
- * 4は攻撃タブです。
- * @default 攻撃属性付与:,攻撃時ステート付与:,攻撃速度,攻撃回数
- *
- * @param ParamText5
- * @desc 詳細ウィンドウに表示する特徴の表示名です。
- * 5はスキルタブです。
- * @default スキルタイプ追加:,スキルタイプ封印:,スキル追加:,スキル封印:
- *
- * @param ParamText6
- * @desc 詳細ウィンドウに表示する特徴の表示名です。
- * 6は装備タブです。
- * @default 武器タイプ追加:,防具タイプ追加:,装備固定:,装備封印:,二刀流
- *
- * @param ParamText7
- * @desc 詳細ウィンドウに表示する特徴の表示名です。
- * 7はその他タブです。
- * @default 行動回数追加,自動戦闘,防御,身代わり,持越し,消滅エフェクト,エンカウント半減,エンカウント無効,不意打ち無効,先制率アップ,取得金額倍化,アイテム取得率倍化
- *
- * @param DefeatText
- * @desc 消滅エフェクトで使用するサブテキストです。基本使用しません。
- * @default 通常,ボス,瞬間消去,消えない
- *
- * @param ParamWindowWidth
- * @desc 陣形の詳細を表示するためのウィンドウの横幅です。
- * @default 220
- *
- * @param BasicWinExp
- * @desc 勝利時に加算される陣形経験値の基本値です。
- * @default 1
- *
- * @param MasterText
- * @desc 陣形をマスターした時にNext欄に表示されるテキストです。
- * @default Master!
- *
- * @param LevelUpText
- * @desc 陣形のレベルが上がった時に表示されるテキストです。
- * @default _nameの熟練度が上がった！
- *
- * @param MasterFormText
- * @desc 陣形のレベルが最高値に達した時に表示されるテキストです。
- * @default _nameをマスターした！
- *
- * @param ActiveHelpText
- * @desc ステータスがアクティブなときに表示される操作ヘルプです。
- * @default 決定:並び替え　←,キャンセル:リストに戻る
- *
- * @param DeactiveHelpText
- * @desc ステータスが非アクティブなときに表示される操作ヘルプです。
- * @default 決定:陣形を変更　→:陣形の詳細を確認,並び替え
- *
- * @param
- * @param 【ホームの設定】
- *
- * @param HomePosition1
- * @desc メンバーが1人の時のアクターのホームポジションです。
- * x,yで記述してください。
- * @default 700,267
- *
- * @param HomePosition2
- * @desc メンバーが2人の時のアクターのホームポジションです。
- * x,y x,yで記述してください。
- * @default 640,242 700,292
- *
- * @param HomePosition3
- * @desc メンバーが3人の時のアクターのホームポジションです。
- * x,y x,y x,yで記述してください。
- * @default 640,217 670,267 700,317
- *
- * @param HomePosition4
- * @desc メンバーが4人の時のアクターのホームポジションです。
- * x,y x,y x,y x,yで記述してください。
- * @default 640,192 660,242 680,292 700,342
- *
- * @param HomePosition5
- * @desc メンバーが5人の時のアクターのホームポジションです。
- * x,y x,y x,y x,y x,yで記述してください。
- * @default 630,187 650,227 670,267 690,307 710,347
- *
- * @param HomePosition6
- * @desc メンバーが6人の時のアクターのホームポジションです。
- * x,y x,y x,y x,y x,y x,yで記述してください。
- * @default 620,167 640,207 660,247 680,287 700,327 720,367
- *
- * @param HomePosition7
- * @desc メンバーが7人の時のアクターのホームポジションです。
- * x,y x,y x,y x,y x,y x,y x,yで記述してください。
- * @default 610,177 630,207 650,237 670,267 690,297 710,327 730,357
- *
- * @param HomePosition8
- * @desc メンバーが8人の時のアクターのホームポジションです。
- * x,y x,y x,y x,y x,y x,y x,y x,yで記述してください。
- * @default 600,162 620,192 640,222 660,252 680,282 700,312 720,342 740,372
- *
- * @param HomePosition9
- * @desc メンバーが9人の時のアクターのホームポジションです。
- * x,y x,y x,y x,y x,y x,y x,y x,y x,yで記述してください。
- * @default 590,167 610,192 630,217 650,242 670,267 690,292 710,317 730,342 750,367
- *
- * @param HomePosition10
- * @desc メンバーが10人の時のアクターのホームポジションです。
- * x,y x,y x,y x,y x,y x,y x,y x,y x,y x,yで記述してください。
- * @default 580,159 600,183 620,207 640,231 660,255 680,279 700,303 720,327 740,351 760,375
- *
- * @help ------------------------------------------------------
- * プラグインコマンド
- * ------------------------------------------------------
- * このプラグインには、以下のプラグインコマンドがあります。
- *
- * 陣形 シーン呼び出し
- * BattleFormation callScene
- * ・陣形シーンを呼び出します。
- *
- * 陣形 設定 アイテムID
- * BattleFormation Set アイテムID
- * ・陣形をアイテムIDに設定します。
- *
- * ------------------------------------------------------
- * 使用方法
- * ------------------------------------------------------
- * ―――基本的なこと―――
- * 陣形とは、アクターの位置を特定の位置に設定して、場所によってアクターの能力を強化する機能です。
- * この際一人でも戦闘不能者がいると、陣形崩壊となり陣形効果は無効になります。
- * いずれかの戦闘メンバーの特徴オブジェクトのメモに
- * <陣形無効>
- * <InvalidFormation>
- * のいずれかが記述されている場合、陣形効果は無効となります。
- * また、上記いずれかの要因で陣形が無効化された状態で戦闘が終了すると、陣形経験値は入手できません。
- *
- * ―――陣形を作る―――
- * ・陣形の基本設定
- * アイテムのメモ欄で設定します。
- * 設定したアイテムを入手することで、その陣形が使用可能になります。
- *
- * 以下の設定がある場合、そのアイテムは陣形アイテムとして扱われます。
- * アイテムのメモに
- * <陣形設定>
- * 一人目のX座標,Y座標,使用するクラスID[,配置条件]
- * 二人目のX座標,Y座標,使用するクラスID[,配置条件]
- * 三人目のX座標,Y座標,使用するクラスID[,配置条件]
- * ・・・
- * </陣形設定>
- * と記述します。
- *
- * 一人目までなら一人陣形、二人目までなら二人、三人目までなら三人陣形・・・となります。
- * クラスIDはこの位置に配置されたアクターの能力や特徴にそのクラスで設定したものが追加される設定です。
- * 配置条件の記述は任意です。この部分がevalで判定され、全員がtrueの場合は陣形が有効になります。
- * 省略した場合は、常にtrueとして扱われます。
- *
- * また、アイテム名はそのまま陣形の名前として、アイテムの説明は陣形の説明として使用されます。
- *
- * ・陣形経験値の設定
- * 同じように、アイテムのメモに
- * <陣形経験値設定:Lv2までの必要値,Lv3までの必要値,Lv4までの必要値…>
- * <FormationExpSetting:Lv2までの必要値,Lv3までの必要値,Lv4までの必要値…>
- * と記述することで、陣形にレベルを設定することができます。
- *
- * レベルの最大値は設定した個数+1となります。
- * 陣形の経験値は戦闘に勝利することで蓄積されていきます。
- * 陣形のレベルは、以下で解説するクラスの設定でのレベルによるステータスの補正や、習得スキルで使用されます。
- *
- * ―――陣形の中身を設定する―――
- * 陣形の各ポジションによる補正はクラスを使用して行います。
- * クラスに設定した特徴やステータス値、更に習得するスキルがそのポジションにいるアクターに追加されます。
- * この際、このクラスのレベルの値は、陣形レベルが使用されます。
- *
- * このクラスに設定した名前は、陣形シーンで各ポジションの特徴などを確認するウィンドウに表示されます。
- *
- * 以下のいずれかを記述をすることで、クラスの詳細を確認するウィンドウにテキストを追加することができます。
- *
- * <陣形効果テキスト追加:前:表示したいテキスト>
- * <陣形効果テキスト追加:後:表示したいテキスト>
- * <AddFormationEffectText:F:表示したいテキスト>
- * <AddFormationEffectText:L:表示したいテキスト>
- *
- * この際、前やFを指定した場合はほかの効果よりも前に、
- * 後やLを指定した場合は他の効果より後にテキストが追加されます。
- * また、
- * <陣形効果テキスト追加:前:Lv2:表示したいテキスト>
- * のように、前後の指定の後にLv○:を追加することで、そのレベル以上で追加されるテキストとなります。
- *
- * それに加えて、陣形で設定されたクラスの習得スキルのメモに
- * <陣形非表示>
- * <HideFormation>
- * のいずれかの記述があると、そのスキルは詳細ウィンドウに表示されなくなります。
- *
- * ―――陣形経験値について―――
- * 陣形経験値は基本的には勝利することで1ポイント追加されます。
- * このポイントは、エネミーのメモに
- * <陣形経験値:x>
- * <BattleFormationExp:x>
- * のいずれかを記述することで、そのエネミーを倒した際に追加でxポイントの陣形経験値を加算します。
- *
- * また、アクターやクラス等特徴を持ったオブジェクトのメモ欄に
- * <陣形経験値倍率:x>
- * <BattleFormationExpRate:x>
- * のいずれかを記述すると、最終的に得られる陣形経験値がx倍になります。
- * これらは全てのアクターで個別に反映され、重複して乗算されていくので、設定には注意してください。
- * (アクター5人がそれぞれ2倍の設定を持っていると、最終的に32倍になる)
- *
- * ―――リストの表示について―――
- * 陣形リストで表示される経験値の表記は、アイテムのメモを使ってカスタマイズできます。
- * アイテムのメモに
- * <レベルシンボル:x>
- * <LevelSymbol:x>
- * のいずれかを記述すると、その陣形の経験値のシンボルをxに指定します。
- * この時、xに2文字以上を指定すると、x:1のような数値表示に、
- * xに数値を指定すると、それを目盛りの幅として、||||||||のようなゲージ表示になります。
- *
- * 同じようにアイテムのメモに
- * <シンボルカラー:x>
- * <SymbolColor:x>
- * と記述すると、そのシンボルやゲージ、テキストの色をxに設定します。
- * xはWindow.pngの右下に並んでいるカラーのインデックスで指定してください。
- *
- * 更に、
- * <経験値ゲージカラー1:rgba(r,g,b,a)>
- * <ExpGaugeColor1:rgba(r,g,b,a)>
- * のいずれかを記述することで、経験値カラーの左側をrgbaのカラーに、
- *
- * <経験値ゲージカラー2:rgba(r,g,b,a)>
- * <ExpGaugeColor2:rgba(r,g,b,a)>
- * のいずれかを記述することで、経験値カラーの右側をrgbaのカラーに変更します。
- * r,g,bはそれぞれ、赤、緑、青で0～255の数値を、aは透明度で0～1.0の数値を指定してください。
- *
- * ------------------------------------------------------
- * 利用規約
- * ------------------------------------------------------
- * 当プラグインはMITライセンスで公開されています。
- * 使用に制限はありません。商用、アダルト、いずれにも使用できます。
- * 二次配布も制限はしませんが、サポートは行いません。
- * 著作表示は任意です。行わなくても利用できます。
- * 要するに、特に規約はありません。
- * バグ報告や使用方法等のお問合せはネ実ツクールスレ、または、Twitterにお願いします。
- * https://twitter.com/yanatsuki_
- * 素材利用は自己責任でお願いします。
- * ------------------------------------------------------
- * 更新履歴:
- * ver1.06:
- * Scene_BattleFormation.prototype.isBottomHelpMode を追加。
- * by しぐれん
- * ver1.05:
- * 継承元をWindow_Selectableにするべき場所をWindow_Baseにしているバグを修正。
- * by しぐれん
- * ver1.04:
- * 入手インフォメーションの機能追加に合わせて、一部の処理を修正。
- * ver1.03:
- * 詳細ウィンドウに表示する項目名を設定できるように変更。
- * 経験値のレイアウトに関する設定を追加。
- * ver1.02:
- * 陣形で設定したクラスのパラメータが正常に反映されていないバグを修正。
- * メニュー画面の現在の陣形を表示するウィンドウの座標を設定する項目を追加。
- * ver1.01:
- * 陣形の種類が増えた時、ウィンドウが画面外にはみ出すバグを修正。
- * ver1.00:
- * 公開
- */
+@plugindesc ver1.06/Added formation system.
+@author Yana
+@url https://github.com/munokura/Yana-MV-plugins
+@license MIT License
+
+@help
+English Help Translator: munokura
+This is an unofficial English translation of the plugin help,
+created to support global RPG Maker users.
+Feedback is welcome to improve translation quality
+(see: https://github.com/munokura/Yana-MV-plugins ).
+Original plugin by Yana.
+-----
+Plugin Commands
+--------------------------------------------------------------------
+This plugin has the following plugin commands.
+
+BattleFormation callScene
+- Calls a formation scene.
+
+BattleFormation Set Item ID
+- Sets the formation to an item ID.
+
+-----------------------------------------------------------------
+How to Use
+--------------------------------------------------------------------
+-- Basics--
+A formation is a Traits that positions actors in specific locations and enhances their abilities depending on their location.
+If even one player is Collapse, the formation collapses and the formation effect is invalidated.
+If any battle member's characteristic object contains either
+<InvalidFormation>
+, the formation effect is invalidated.
+Furthermore, if the battle ends with the formation invalidated for any of the above reasons, formation experience points will not be earned.
+
+-- Creating a Formation--
+- Basic Formation Settings
+Set in the item's Note field.
+The formation will become available when you obtain the specified item.
+
+If the following settings are present, the item will be treated as a formation item.
+Write the following in the item's memo:
+<陣形設定>
+First player's X coordinate, Y coordinate, Class ID to be used [, Placement Condition]
+Second player's X coordinate, Y coordinate, Class ID to be used [, Placement Condition]
+Third player's X coordinate, Y coordinate, Class ID to be used [, Placement Condition]
+...
+</陣形設定>
+
+For up to one player, it will be a one-person formation; for up to two players, it will be a two-person formation; for up to three players, it will be a three-person formation, etc.
+The class ID setting will add the abilities and Traits of the actor placed at this position to those set for that class.
+The placement condition setting is optional. This part is evaluated using eval, and if all players evaluate to true, the formation will be enabled.
+If omitted, it will always be treated as true.
+
+The item name will be used as the formation name, and the item description will be used as the formation description.
+
+- Formation Experience Settings
+Similarly, you can set a formation's level by entering the following in the item's notes:
+<FormationExpSetting: Required Value up to Lv2, Required Value up to Lv3, Required Value up to Lv4...>
+
+The maximum level is the number you set + 1.
+Formation experience points accumulate by winning battles.
+The formation's level is used for stat adjustments based on the class level (explained below) and for acquired skills.
+
+--Setting the Contents of the Formation--
+Adjustments for each position in the formation are made using a class.
+The Traits, stats, and acquired skills set for the class are added to the actor in that position.
+In this case, the formation level is used as the level value for this class.
+
+The name you set for this class will be displayed in the window confirming the Traits of each position during the formation scene.
+
+You can add text to the window confirming class details by entering any of the following:
+
+<AddFormationEffectText:F:Desired Text>
+<AddFormationEffectText:L:Desired Text>
+
+If you specify Before or F, the text will be added before other effects.
+If you specify After or L, the text will be added after other effects.
+Also, by adding Lv○ after the before or after specification, such as
+<AddFormationEffectText:F:Lv2:Desired Text>
+, the text will be added at that level or above.
+
+In addition, if the notes for the acquired skills of the class set in the formation include
+<HideFormation>
+, that skill will not be displayed in the details window.
+
+--About Formation Experience--
+
+Formation Experience is generally gained by winning, with 1 point added.
+By writing either
+<BattleFormationExp:x>
+in the enemy's memo, you can add an additional x points of formation EXP when defeating that enemy.
+
+Also, by writing either
+<BattleFormationExpRate:x>
+in the Note field of an actor, class, or other object with special Traits, the final formation EXP gained will be multiplied by x.
+These are Reflectioned individually for all actors and are multiplied together, so be careful when setting them.
+(For example, if five actors each have a 2x setting, the final value will be 32x.)
+
+--About the List Display--
+You can customize the EXP display in the formation list using item memos.
+
+By writing either
+<LevelSymbol:x>
+in the item's memo, the EXP symbol for that formation will be set to x.
+If you specify two or more characters for x, it will be displayed as a number, such as x:1.
+If you specify a number for x, it will use that as the scale width and be displayed as a gauge, such as ||||||||.
+
+Similarly, by entering
+<SymbolColor:x>
+in an item's note, the color of the symbol, gauge, or text will be set to x.
+Specify x using the color index listed in the bottom right of Window.png.
+
+Furthermore, by entering either
+<ExpGaugeColor1:rgba(r,g,b,a)>
+the left side of the experience color will be set to an rgba color.
+
+<ExpGaugeColor2:rgba(r,g,b,a)>
+the right side of the experience color will be set to an rgba color.
+r, g, and b represent red, green, and blue, respectively, and should be values between 0 and 255. a represents transparency, and should be a value between 0 and 1.0.
+
+-----------------------------------------------------
+Terms of Use
+------------------------------------------------------
+This plugin is released under the MIT License.
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+Update History:
+ver 1.06:
+Added Scene_BattleFormation.prototype.isBottomHelpMode.
+by Shiguren
+ver 1.05:
+Fixed a bug where the inheritance source was set to Window_Base when it should have been Window_Selectable.
+by Shiguren
+ver 1.04:
+Fixed some processing changes to accommodate the addition of the Acquisition Information Traits.
+ver 1.03:
+Added the ability to set the item names displayed in the details window.
+Added settings for experience point layout.
+ver 1.02:
+Fixed a bug where class parameters set in the formation were not properly Reflectioned.
+Added an option to set the coordinates of the window that displays the current formation on the menu screen.
+ver1.01:
+Fixed a bug that caused the window to extend off-screen when the number of formation types increased.
+ver1.00:
+Released
+
+@param 【基本設定】
+@text [Basic settings]
+
+@param BasicFormationText
+@desc The name of the basic formation.
+@default 基本陣形
+
+@param BasicFormationHelp
+@desc This is the help displayed for the basic formation.
+@default もっとも基本となる陣形。特に特別な効果はない。
+
+@param 【メニューの設定】
+@text [Menu settings]
+
+@param AddMenuBattleFormation
+@desc This setting determines whether to add a formation item to the menu.
+@default true
+
+@param MenuBattleFormationTitle
+@desc The name of the formation to display in the menu.
+@default 陣形
+
+@param BattleFormationInfoX
+@desc The X coordinate of the window that displays the formation. Evaluated with eval. cw:commandW sw:statusW gw:goldW h:height w:width
+@default 0
+
+@param BattleFormationInfoY
+@desc The Y coordinate of the window that displays the formation. Evaluated with eval. cw:commandW sw:statusW gw:goldW h:height w:width
+@default Graphics.boxHeight - (gw.height + h)
+
+@param 【シーンの設定】
+@text [Scene setting]
+
+@param FormationListWidth
+@desc This is the width of the list section during formation scenes.
+@default 320
+
+@param LevelSymbol
+@desc A symbol that indicates the level. Two or more characters will be used as text, such as x:1, and numbers will be used to display the gauge.
+@default ★
+
+@param LevelColor
+@desc The color of the symbol that indicates the level. Specify it using the color index at the bottom right of Window.png.
+@default 6
+
+@param ExpGaugeColor1
+@desc Experience gauge color 1. Specify using rgba (r,g,b,a). r,g,b are numbers between 0 and 255, and a is a number between 0 and 1.0.
+@default rgba(128,128,255,1.0)
+
+@param ExpGaugeColor2
+@desc Experience gauge color 2. Specify using rgba (r,g,b,a). r,g,b are numbers between 0 and 255, and a is a number between 0 and 1.0.
+@default rgba(0,0,255,1.0)
+
+@param ShowParamWindow
+@desc This setting determines whether to use a window to display formation details.
+@default true
+
+@param ParamColor
+@desc These are the color settings for the Traits displayed in the Details window: Base color, System color, Increase color, Decrease color.
+@default 6,4,24,2
+
+@param AddSkillText
+@desc The name of the skill acquired by the class that will be displayed in the details window.
+@default スキル追加:
+
+@param ParamText1
+@desc The display name of the Traits to show in the details window. 1 is for Enable and Disable.
+@default 有効度,弱体有効度,無効化
+
+@param ParamText2
+@desc This is the display name of the trait to show in the details window. 2 is an additional ability score.
+@default 命中率,回避率,会心率,会心回避,魔法回避,魔法反射率,反撃率,再生率
+
+@param ParamText3
+@desc The display name of the trait to show in the details window. 3 is the special ability value.
+@default 狙われ率,防御効果率,回復効果率,薬の知識,消費率,チャージ率,物理ダメージ率,魔法ダメージ率,床ダメージ率,経験値獲得率
+
+@param ParamText4
+@desc The display name of the Traits to show in the details window. 4 is the attack tab.
+@default 攻撃属性付与:,攻撃時ステート付与:,攻撃速度,攻撃回数
+
+@param ParamText5
+@desc The display name of the trait to show in the details window. 5 is the Skills tab.
+@default スキルタイプ追加:,スキルタイプ封印:,スキル追加:,スキル封印:
+
+@param ParamText6
+@desc The display name of the Traits to display in the details window. 6 is the equipment tab.
+@default 武器タイプ追加:,防具タイプ追加:,装備固定:,装備封印:,二刀流
+
+@param ParamText7
+@desc This is the display name of the Traits to display in the details window. 7 is the Other tab.
+@default 行動回数追加,自動戦闘,防御,身代わり,持越し,消滅エフェクト,エンカウント半減,エンカウント無効,不意打ち無効,先制率アップ,取得金額倍化,アイテム取得率倍化
+
+@param DefeatText
+@desc This is the subtext used in the disappearance effect. It is not generally used.
+@default 通常,ボス,瞬間消去,消えない
+
+@param ParamWindowWidth
+@desc The width of the window for displaying formation details.
+@default 220
+
+@param BasicWinExp
+@desc This is the base value of the formation experience points added upon victory.
+@default 1
+
+@param MasterText
+@desc This is the text that will be displayed in the Next column when you have mastered the formation.
+@default Master!
+
+@param LevelUpText
+@desc This is the text that is displayed when the formation level increases.
+@default _nameの熟練度が上がった！
+
+@param MasterFormText
+@desc This is the text that is displayed when the formation reaches its maximum level.
+@default _nameをマスターした！
+
+@param ActiveHelpText
+@desc This is the operation help that is displayed when the status is active.
+@default 決定:並び替え　←,キャンセル:リストに戻る
+
+@param DeactiveHelpText
+@desc This is the operation help that is displayed when the status is inactive.
+@default 決定:陣形を変更　→:陣形の詳細を確認,並び替え
+
+@param 【ホームの設定】
+@text [Home settings]
+
+@param HomePosition1
+@desc This is the actor's home position when there is only one member. Please enter x,y.
+@default 700,267
+
+@param HomePosition2
+@desc This is the actor's home position when there are two members. Please enter x,y x,y.
+@default 640,242 700,292
+
+@param HomePosition3
+@desc This is the actor's home position when there are three members. Please write it as x,y x,y x,y.
+@default 640,217 670,267 700,317
+
+@param HomePosition4
+@desc This is the actor's home position when there are four members. Please write it as x,y x,y x,y x,y.
+@default 640,192 660,242 680,292 700,342
+
+@param HomePosition5
+@desc This is the actor's home position when there are 5 members. Please write it as x,y x,y x,y x,y x,y.
+@default 630,187 650,227 670,267 690,307 710,347
+
+@param HomePosition6
+@desc This is the actor's home position when there are 6 members. Please describe it as x,y x,y x,y x,y x,y x,y x,y.
+@default 620,167 640,207 660,247 680,287 700,327 720,367
+
+@param HomePosition7
+@desc This is the actor's home position when there are 7 members. Please enter x,y x,y x,y x,y x,y x,y x,y x,y.
+@default 610,177 630,207 650,237 670,267 690,297 710,327 730,357
+
+@param HomePosition8
+@desc This is the actor's home position when there are 8 members. Please describe it as x,y x,y x,y x,y x,y x,y x,y x,y x,y.
+@default 600,162 620,192 640,222 660,252 680,282 700,312 720,342 740,372
+
+@param HomePosition9
+@desc This is the actor's home position when there are 9 members. Please enter x,y x,y x,y x,y x,y x,y x,y x,y x,y x,y.
+@default 590,167 610,192 630,217 650,242 670,267 690,292 710,317 730,342 750,367
+
+@param HomePosition10
+@desc This is the actor's home position when there are 10 members. Please describe as x,y x,y x,y x,y x,y x,y x,y x,y x,y x,y x,y.
+@default 580,159 600,183 620,207 640,231 660,255 680,279 700,303 720,327 740,351 760,375
+*/
+
+
+/*:ja
+@plugindesc ver1.06/陣形の仕組みを追加します。
+@author Yana
+@url https://github.com/munokura/Yana-MV-plugins
+@license MIT License
+
+@help
+プラグインコマンド
+------------------------------------------------------
+このプラグインには、以下のプラグインコマンドがあります。
+
+陣形 シーン呼び出し
+BattleFormation callScene
+・陣形シーンを呼び出します。
+
+陣形 設定 アイテムID
+BattleFormation Set アイテムID
+・陣形をアイテムIDに設定します。
+
+------------------------------------------------------
+使用方法
+------------------------------------------------------
+―――基本的なこと―――
+陣形とは、アクターの位置を特定の位置に設定して、場所によってアクターの能力を強化する機能です。
+この際一人でも戦闘不能者がいると、陣形崩壊となり陣形効果は無効になります。
+いずれかの戦闘メンバーの特徴オブジェクトのメモに
+<陣形無効>
+<InvalidFormation>
+のいずれかが記述されている場合、陣形効果は無効となります。
+また、上記いずれかの要因で陣形が無効化された状態で戦闘が終了すると、陣形経験値は入手できません。
+
+―――陣形を作る―――
+・陣形の基本設定
+アイテムのメモ欄で設定します。
+設定したアイテムを入手することで、その陣形が使用可能になります。
+
+以下の設定がある場合、そのアイテムは陣形アイテムとして扱われます。
+アイテムのメモに
+<陣形設定>
+一人目のX座標,Y座標,使用するクラスID[,配置条件]
+二人目のX座標,Y座標,使用するクラスID[,配置条件]
+三人目のX座標,Y座標,使用するクラスID[,配置条件]
+・・・
+</陣形設定>
+と記述します。
+
+一人目までなら一人陣形、二人目までなら二人、三人目までなら三人陣形・・・となります。
+クラスIDはこの位置に配置されたアクターの能力や特徴にそのクラスで設定したものが追加される設定です。
+配置条件の記述は任意です。この部分がevalで判定され、全員がtrueの場合は陣形が有効になります。
+省略した場合は、常にtrueとして扱われます。
+
+また、アイテム名はそのまま陣形の名前として、アイテムの説明は陣形の説明として使用されます。
+
+・陣形経験値の設定
+同じように、アイテムのメモに
+<陣形経験値設定:Lv2までの必要値,Lv3までの必要値,Lv4までの必要値…>
+<FormationExpSetting:Lv2までの必要値,Lv3までの必要値,Lv4までの必要値…>
+と記述することで、陣形にレベルを設定することができます。
+
+レベルの最大値は設定した個数+1となります。
+陣形の経験値は戦闘に勝利することで蓄積されていきます。
+陣形のレベルは、以下で解説するクラスの設定でのレベルによるステータスの補正や、習得スキルで使用されます。
+
+―――陣形の中身を設定する―――
+陣形の各ポジションによる補正はクラスを使用して行います。
+クラスに設定した特徴やステータス値、更に習得するスキルがそのポジションにいるアクターに追加されます。
+この際、このクラスのレベルの値は、陣形レベルが使用されます。
+
+このクラスに設定した名前は、陣形シーンで各ポジションの特徴などを確認するウィンドウに表示されます。
+
+以下のいずれかを記述をすることで、クラスの詳細を確認するウィンドウにテキストを追加することができます。
+
+<陣形効果テキスト追加:前:表示したいテキスト>
+<陣形効果テキスト追加:後:表示したいテキスト>
+<AddFormationEffectText:F:表示したいテキスト>
+<AddFormationEffectText:L:表示したいテキスト>
+
+この際、前やFを指定した場合はほかの効果よりも前に、
+後やLを指定した場合は他の効果より後にテキストが追加されます。
+また、
+<陣形効果テキスト追加:前:Lv2:表示したいテキスト>
+のように、前後の指定の後にLv○:を追加することで、そのレベル以上で追加されるテキストとなります。
+
+それに加えて、陣形で設定されたクラスの習得スキルのメモに
+<陣形非表示>
+<HideFormation>
+のいずれかの記述があると、そのスキルは詳細ウィンドウに表示されなくなります。
+
+―――陣形経験値について―――
+陣形経験値は基本的には勝利することで1ポイント追加されます。
+このポイントは、エネミーのメモに
+<陣形経験値:x>
+<BattleFormationExp:x>
+のいずれかを記述することで、そのエネミーを倒した際に追加でxポイントの陣形経験値を加算します。
+
+また、アクターやクラス等特徴を持ったオブジェクトのメモ欄に
+<陣形経験値倍率:x>
+<BattleFormationExpRate:x>
+のいずれかを記述すると、最終的に得られる陣形経験値がx倍になります。
+これらは全てのアクターで個別に反映され、重複して乗算されていくので、設定には注意してください。
+(アクター5人がそれぞれ2倍の設定を持っていると、最終的に32倍になる)
+
+―――リストの表示について―――
+陣形リストで表示される経験値の表記は、アイテムのメモを使ってカスタマイズできます。
+アイテムのメモに
+<レベルシンボル:x>
+<LevelSymbol:x>
+のいずれかを記述すると、その陣形の経験値のシンボルをxに指定します。
+この時、xに2文字以上を指定すると、x:1のような数値表示に、
+xに数値を指定すると、それを目盛りの幅として、||||||||のようなゲージ表示になります。
+
+同じようにアイテムのメモに
+<シンボルカラー:x>
+<SymbolColor:x>
+と記述すると、そのシンボルやゲージ、テキストの色をxに設定します。
+xはWindow.pngの右下に並んでいるカラーのインデックスで指定してください。
+
+更に、
+<経験値ゲージカラー1:rgba(r,g,b,a)>
+<ExpGaugeColor1:rgba(r,g,b,a)>
+のいずれかを記述することで、経験値カラーの左側をrgbaのカラーに、
+
+<経験値ゲージカラー2:rgba(r,g,b,a)>
+<ExpGaugeColor2:rgba(r,g,b,a)>
+のいずれかを記述することで、経験値カラーの右側をrgbaのカラーに変更します。
+r,g,bはそれぞれ、赤、緑、青で0～255の数値を、aは透明度で0～1.0の数値を指定してください。
+
+------------------------------------------------------
+利用規約
+------------------------------------------------------
+当プラグインはMITライセンスで公開されています。
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+更新履歴:
+ver1.06:
+Scene_BattleFormation.prototype.isBottomHelpMode を追加。
+by しぐれん
+ver1.05:
+継承元をWindow_Selectableにするべき場所をWindow_Baseにしているバグを修正。
+by しぐれん
+ver1.04:
+入手インフォメーションの機能追加に合わせて、一部の処理を修正。
+ver1.03:
+詳細ウィンドウに表示する項目名を設定できるように変更。
+経験値のレイアウトに関する設定を追加。
+ver1.02:
+陣形で設定したクラスのパラメータが正常に反映されていないバグを修正。
+メニュー画面の現在の陣形を表示するウィンドウの座標を設定する項目を追加。
+ver1.01:
+陣形の種類が増えた時、ウィンドウが画面外にはみ出すバグを修正。
+ver1.00:
+公開
+
+@param 【基本設定】
+@text 【基本設定】
+
+@param BasicFormationText
+@desc 基本陣形の名称です。
+@default 基本陣形
+
+@param BasicFormationHelp
+@desc 基本陣形に表示するヘルプです。
+@default もっとも基本となる陣形。特に特別な効果はない。
+
+@param 【メニューの設定】
+@text 【メニューの設定】
+
+@param AddMenuBattleFormation
+@desc メニューに陣形の項目を追加するかの設定です。
+@default true
+
+@param MenuBattleFormationTitle
+@desc メニューに表示する陣形の名称です。
+@default 陣形
+
+@param BattleFormationInfoX
+@desc 陣形を表示するウィンドウのX座標です。evalで評価されます。 cw:commandW sw:statusW gw:goldW h:height w:width
+@default 0
+
+@param BattleFormationInfoY
+@desc 陣形を表示するウィンドウのY座標です。evalで評価されます。 cw:commandW sw:statusW gw:goldW h:height w:width
+@default Graphics.boxHeight - (gw.height + h)
+
+@param 【シーンの設定】
+@text 【シーンの設定】
+
+@param FormationListWidth
+@desc 陣形シーン時のリスト部分の横幅です。
+@default 320
+
+@param LevelSymbol
+@desc レベルを示すシンボルです。 2文字以上でx:1のようなテキスト、数値でゲージ表示になります。
+@default ★
+
+@param LevelColor
+@desc レベルを示すシンボルの色です。 Window.pngの右下のカラーのインデックスで指定してください。
+@default 6
+
+@param ExpGaugeColor1
+@desc 経験値ゲージの色1です。rgba(r,g,b,a)で指定してください。 r,g,bは0～255の数値、aは0～1.0の数値です。
+@default rgba(128,128,255,1.0)
+
+@param ExpGaugeColor2
+@desc 経験値ゲージの色2です。rgba(r,g,b,a)で指定してください。 r,g,bは0～255の数値、aは0～1.0の数値です。
+@default rgba(0,0,255,1.0)
+
+@param ShowParamWindow
+@desc 陣形の詳細を表示するためのウィンドウを使用するかの設定です。
+@default true
+
+@param ParamColor
+@desc 詳細ウィンドウに表示する特徴の色設定です。 順番に基本色、システム色、上昇色、下降色です。
+@default 6,4,24,2
+
+@param AddSkillText
+@desc 詳細ウィンドウに表示するクラスで習得するスキルの項目名です。
+@default スキル追加:
+
+@param ParamText1
+@desc 詳細ウィンドウに表示する特徴の表示名です。 1は有効度と無効化です。
+@default 有効度,弱体有効度,無効化
+
+@param ParamText2
+@desc 詳細ウィンドウに表示する特徴の表示名です。 2は追加能力値です。
+@default 命中率,回避率,会心率,会心回避,魔法回避,魔法反射率,反撃率,再生率
+
+@param ParamText3
+@desc 詳細ウィンドウに表示する特徴の表示名です。 3は特殊能力値です。
+@default 狙われ率,防御効果率,回復効果率,薬の知識,消費率,チャージ率,物理ダメージ率,魔法ダメージ率,床ダメージ率,経験値獲得率
+
+@param ParamText4
+@desc 詳細ウィンドウに表示する特徴の表示名です。 4は攻撃タブです。
+@default 攻撃属性付与:,攻撃時ステート付与:,攻撃速度,攻撃回数
+
+@param ParamText5
+@desc 詳細ウィンドウに表示する特徴の表示名です。 5はスキルタブです。
+@default スキルタイプ追加:,スキルタイプ封印:,スキル追加:,スキル封印:
+
+@param ParamText6
+@desc 詳細ウィンドウに表示する特徴の表示名です。 6は装備タブです。
+@default 武器タイプ追加:,防具タイプ追加:,装備固定:,装備封印:,二刀流
+
+@param ParamText7
+@desc 詳細ウィンドウに表示する特徴の表示名です。 7はその他タブです。
+@default 行動回数追加,自動戦闘,防御,身代わり,持越し,消滅エフェクト,エンカウント半減,エンカウント無効,不意打ち無効,先制率アップ,取得金額倍化,アイテム取得率倍化
+
+@param DefeatText
+@desc 消滅エフェクトで使用するサブテキストです。基本使用しません。
+@default 通常,ボス,瞬間消去,消えない
+
+@param ParamWindowWidth
+@desc 陣形の詳細を表示するためのウィンドウの横幅です。
+@default 220
+
+@param BasicWinExp
+@desc 勝利時に加算される陣形経験値の基本値です。
+@default 1
+
+@param MasterText
+@desc 陣形をマスターした時にNext欄に表示されるテキストです。
+@default Master!
+
+@param LevelUpText
+@desc 陣形のレベルが上がった時に表示されるテキストです。
+@default _nameの熟練度が上がった！
+
+@param MasterFormText
+@desc 陣形のレベルが最高値に達した時に表示されるテキストです。
+@default _nameをマスターした！
+
+@param ActiveHelpText
+@desc ステータスがアクティブなときに表示される操作ヘルプです。
+@default 決定:並び替え　←,キャンセル:リストに戻る
+
+@param DeactiveHelpText
+@desc ステータスが非アクティブなときに表示される操作ヘルプです。
+@default 決定:陣形を変更　→:陣形の詳細を確認,並び替え
+
+@param 【ホームの設定】
+@text 【ホームの設定】
+
+@param HomePosition1
+@desc メンバーが1人の時のアクターのホームポジションです。 x,yで記述してください。
+@default 700,267
+
+@param HomePosition2
+@desc メンバーが2人の時のアクターのホームポジションです。 x,y x,yで記述してください。
+@default 640,242 700,292
+
+@param HomePosition3
+@desc メンバーが3人の時のアクターのホームポジションです。 x,y x,y x,yで記述してください。
+@default 640,217 670,267 700,317
+
+@param HomePosition4
+@desc メンバーが4人の時のアクターのホームポジションです。 x,y x,y x,y x,yで記述してください。
+@default 640,192 660,242 680,292 700,342
+
+@param HomePosition5
+@desc メンバーが5人の時のアクターのホームポジションです。 x,y x,y x,y x,y x,yで記述してください。
+@default 630,187 650,227 670,267 690,307 710,347
+
+@param HomePosition6
+@desc メンバーが6人の時のアクターのホームポジションです。 x,y x,y x,y x,y x,y x,yで記述してください。
+@default 620,167 640,207 660,247 680,287 700,327 720,367
+
+@param HomePosition7
+@desc メンバーが7人の時のアクターのホームポジションです。 x,y x,y x,y x,y x,y x,y x,yで記述してください。
+@default 610,177 630,207 650,237 670,267 690,297 710,327 730,357
+
+@param HomePosition8
+@desc メンバーが8人の時のアクターのホームポジションです。 x,y x,y x,y x,y x,y x,y x,y x,yで記述してください。
+@default 600,162 620,192 640,222 660,252 680,282 700,312 720,342 740,372
+
+@param HomePosition9
+@desc メンバーが9人の時のアクターのホームポジションです。 x,y x,y x,y x,y x,y x,y x,y x,y x,yで記述してください。
+@default 590,167 610,192 630,217 650,242 670,267 690,292 710,317 730,342 750,367
+
+@param HomePosition10
+@desc メンバーが10人の時のアクターのホームポジションです。 x,y x,y x,y x,y x,y x,y x,y x,y x,y x,yで記述してください。
+@default 580,159 600,183 620,207 640,231 660,255 680,279 700,303 720,327 740,351 760,375
+*/
 
 (function () {
     ////////////////////////////////////////////////////////////////////////////////////
