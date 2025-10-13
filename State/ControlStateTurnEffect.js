@@ -13,73 +13,128 @@
 var Imported = Imported || {};
 Imported['ControlStateTurnEffect'] = 1.01;
 /*:
- * @target MZ MV
- * @plugindesc ver1.01/ステートや強化弱体の効果ターンを操作する効果を設定できるようにします。
- * @author Yana
- *
- * @param StateTurnMax
- * @text ステートターン最大値
- * @desc ステートの加算されるターン数の最大値です。
- * このプラグインで追加されたターンはこの数値以上にはなりません。
- * @default 10
- *
- * @param BuffTurnMax
- * @text 強化ターン最大値
- * @desc 強化の加算されるターン数の最大値です。
- * このプラグインで追加されたターンはこの数値以上にはなりません。
- * @default 10
- *
- * @param DebuffTurnMax
- * @text 弱体ターン最大値
- * @desc 弱体の加算されるターン数の最大値です。
- * このプラグインで追加されたターンはこの数値以上にはなりません。
- * @default 10
- *
- * @help ------------------------------------------------------
- * 使用方法
- * ------------------------------------------------------
- * アイテムやスキルのメモ欄に、
- * <ステートターン追加:x,yターン>
- * または、
- * <AddStateTurn:x,yTurn>
- * と記述すると、そのスキルの使用効果に、IDx番のステートの効果ターンが
- * yターン増加(減少)する効果が追加されます。yには-も指定できます。
- * xに0を指定すると、付与されているすべてステートの効果ターンが操作されます。
- *
- * アイテムやスキルのメモ欄に、
- * <強化ターン追加:x,yターン>
- * または、
- * <AddBuffTurn:x,yTurn>
- * と記述すると、そのスキルの使用効果に、IDx番の強化の効果ターンが
- * yターン増加(減少)する効果が追加されます。yには-も指定できます。
- * xに-1を指定すると、付与されているすべて強化の効果ターンが操作されます。
- *
- * アイテムやスキルのメモ欄に、
- * <弱体ターン追加:x,yターン>
- * または、
- * <AddDebuffTurn:x,yTurn>
- * と記述すると、そのスキルの使用効果に、IDx番の弱体の効果ターンが
- * yターン増加(減少)する効果が追加されます。yには-も指定できます。
- * xに-1を指定すると、付与されているすべて弱体の効果ターンが操作されます。
- *
- * ------------------------------------------------------
- * 利用規約
- * ------------------------------------------------------
- * 当プラグインはMITライセンスで公開されています。
- * 使用に制限はありません。商用、アダルト、いずれにも使用できます。
- * 二次配布も制限はしませんが、サポートは行いません。
- * 著作表示は任意です。行わなくても利用できます。
- * 要するに、特に規約はありません。
- * バグ報告や使用方法等のお問合せはネ実ツクールスレ、または、Twitterにお願いします。
- * https://twitter.com/yanatsuki_
- * 素材利用は自己責任でお願いします。
- * ------------------------------------------------------
- * 更新履歴:
- * ver1.01:
- * 解除タイミングが設定されていないステートが解除されることのあるバグを修正。
- * ver1.00:
- * 公開
- */
+@target MZ MV
+@plugindesc ver1.01/Allows you to set effects that control the effect turn of states and strengthening/weakening.
+@author Yana
+@url https://github.com/munokura/Yana-MV-plugins
+@license MIT License
+
+@help
+English Help Translator: munokura
+This is an unofficial English translation of the plugin help,
+created to support global RPG Maker users.
+Feedback is welcome to improve translation quality
+(see: https://github.com/munokura/Yana-MV-plugins ).
+Original plugin by Yana.
+-----
+How to Use
+---------------------------------------------------------------------
+Writing
+<AddStateTurn:x,yTurn>
+in the Note field of an item or skill will add an effect to the skill's use effect of increasing (decreasing) the turn of effect of the state with ID x by y turns. y can also be set to -.
+Setting x to 0 will control the turn of effect of all applied states.
+
+Writing
+<AddBuffTurn:x,yTurn>
+in the Note field of an item or skill will add an effect to the skill's use effect of increasing (decreasing) the turn of effect of the buff with ID x by y turns. y can also be set to -.
+Setting x to -1 will control the turn of effect of all applied buffs.
+
+Entering
+<AddDebuffTurn:x,yTurn>
+in the Note field of an item or skill will add an effect of increasing (decreasing) the turn of effect of the debuff with ID number x by y turns when using that skill. y can also be set to -.
+Setting x to -1 will adjust the turn of effect of all debuffs.
+
+-----------------------------------------------------
+Terms of Use
+------------------------------------------------------
+This plugin is released under the MIT License.
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+Update History:
+ver 1.01:
+Fixed a bug that could cause states with no release timing to be released.
+ver 1.00:
+Released
+
+@param StateTurnMax
+@text State Turn Maximum
+@desc The maximum number of turns added to the state. The number of turns added by this plugin will not exceed this number.
+@default 10
+
+@param BuffTurnMax
+@text Maximum Strengthening Turn
+@desc The maximum number of turns that can be added for strengthening. The number of turns added by this plugin will not exceed this number.
+@default 10
+
+@param DebuffTurnMax
+@text Maximum weakening turn
+@desc The maximum number of turns that weakening can add. The number of turns added by this plugin will not exceed this number.
+@default 10
+*/
+
+
+/*:ja
+@target MZ MV
+@plugindesc ver1.01/ステートや強化弱体の効果ターンを操作する効果を設定できるようにします。
+@author Yana
+@url https://github.com/munokura/Yana-MV-plugins
+@license MIT License
+
+@help
+使用方法
+------------------------------------------------------
+アイテムやスキルのメモ欄に、
+<ステートターン追加:x,yターン>
+または、
+<AddStateTurn:x,yTurn>
+と記述すると、そのスキルの使用効果に、IDx番のステートの効果ターンが
+yターン増加(減少)する効果が追加されます。yには-も指定できます。
+xに0を指定すると、付与されているすべてステートの効果ターンが操作されます。
+
+アイテムやスキルのメモ欄に、
+<強化ターン追加:x,yターン>
+または、
+<AddBuffTurn:x,yTurn>
+と記述すると、そのスキルの使用効果に、IDx番の強化の効果ターンが
+yターン増加(減少)する効果が追加されます。yには-も指定できます。
+xに-1を指定すると、付与されているすべて強化の効果ターンが操作されます。
+
+アイテムやスキルのメモ欄に、
+<弱体ターン追加:x,yターン>
+または、
+<AddDebuffTurn:x,yTurn>
+と記述すると、そのスキルの使用効果に、IDx番の弱体の効果ターンが
+yターン増加(減少)する効果が追加されます。yには-も指定できます。
+xに-1を指定すると、付与されているすべて弱体の効果ターンが操作されます。
+
+------------------------------------------------------
+利用規約
+------------------------------------------------------
+当プラグインはMITライセンスで公開されています。
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+更新履歴:
+ver1.01:
+解除タイミングが設定されていないステートが解除されることのあるバグを修正。
+ver1.00:
+公開
+
+@param StateTurnMax
+@text ステートターン最大値
+@desc ステートの加算されるターン数の最大値です。 このプラグインで追加されたターンはこの数値以上にはなりません。
+@default 10
+
+@param BuffTurnMax
+@text 強化ターン最大値
+@desc 強化の加算されるターン数の最大値です。 このプラグインで追加されたターンはこの数値以上にはなりません。
+@default 10
+
+@param DebuffTurnMax
+@text 弱体ターン最大値
+@desc 弱体の加算されるターン数の最大値です。 このプラグインで追加されたターンはこの数値以上にはなりません。
+@default 10
+*/
+
 (function () {
     ////////////////////////////////////////////////////////////////////////////////////
 
