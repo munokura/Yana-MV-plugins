@@ -12,30 +12,57 @@
 
 var Imported = Imported || {};
 Imported['Patch_YMC_NameBox'] = 1.00;
-
 /*:
- * @plugindesc ver1.00/YEP_MessageCoreのネームウィンドウの背景の状態を、メッセージウィンドウと同期する処理を追加します。
- * @author Yana
- *
- * @param StandardPadding
- * @desc ウィンドウの縁の幅です。MessageCoreのデフォルト値は18です。
- * @default 8
- *
- * @help------------------------------------------------------
- * 利用規約
- * ------------------------------------------------------
- * 当プラグインはMITライセンスで公開されています。
- * 使用に制限はありません。商用、アダルト、いずれにも使用できます。
- * 二次配布も制限はしませんが、サポートは行いません。
- * 著作表示は任意です。行わなくても利用できます。
- * 要するに、特に規約はありません。
- * バグ報告や使用方法等のお問合せはネ実ツクールスレ、または、Twitterにお願いします。
- * https://twitter.com/yanatsuki_
- * 素材利用は自己責任でお願いします。
- * ------------------------------------------------------
- */
+@plugindesc ver1.00/YEP_MessageCore adds a process to synchronize the background state of the name window with the message window.
+@author Yana
+@url https://github.com/munokura/Yana-MV-plugins
+@license MIT License
 
-(function(){
+@help
+English Help Translator: munokura
+This is an unofficial English translation of the plugin help,
+created to support global RPG Maker users.
+Feedback is welcome to improve translation quality
+(see: https://github.com/munokura/Yana-MV-plugins ).
+Original plugin by Yana.
+-----
+YEP_MessageCore adds a process to synchronize the background state of the name window with the message window.
+
+------------------------------------------------------
+Terms of Use
+------------------------------------------------------
+This plugin is released under the MIT License.
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+
+@param StandardPadding
+@desc The width of the window border. The default value for MessageCore is 18.
+@default 8
+*/
+
+
+/*:ja
+@plugindesc ver1.00/YEP_MessageCoreのネームウィンドウの背景の状態を、メッセージウィンドウと同期する処理を追加します。
+@author Yana
+@url https://github.com/munokura/Yana-MV-plugins
+@license MIT License
+
+@help
+YEP_MessageCoreのネームウィンドウの背景の状態を、メッセージウィンドウと同期する処理を追加します。
+
+------------------------------------------------------
+利用規約
+------------------------------------------------------
+当プラグインはMITライセンスで公開されています。
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+
+@param StandardPadding
+@desc ウィンドウの縁の幅です。MessageCoreのデフォルト値は18です。
+@default 8
+*/
+
+(function () {
 
     var parameters = PluginManager.parameters('Patch_YMC_NameBox');
     var standardPadding = parameters['StandardPadding'];
@@ -51,7 +78,7 @@ Imported['Patch_YMC_NameBox'] = 1.00;
     };
 
     var __WNBox_update = Window_NameBox.prototype.update;
-    Window_NameBox.prototype.update = function() {
+    Window_NameBox.prototype.update = function () {
         __WNBox_update.call(this);
         this.updateBackground();
     };

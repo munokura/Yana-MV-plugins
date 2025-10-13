@@ -12,38 +12,67 @@
 
 var Imported = Imported || {};
 Imported['AddMenuSceneDistribution'] = 1.00;
-
 /*:
- * @plugindesc ver1.00/メニューコマンドにSceneDistributionを追加します。
- * @author Yana
- * 
- * @param Distribution Name
- * @desc メニューに表示される項目名です。
- * @default ステータス振分
- *
- * 
- * @help ------------------------------------------------------
- * 使用方法
- * ------------------------------------------------------
- * 
- * プラグインパラメータを設定すれば動作します。
- * 
- * ------------------------------------------------------
- * 利用規約
- * ------------------------------------------------------
- * 当プラグインはMITライセンスで公開されています。
- * 使用に制限はありません。商用、アダルト、いずれにも使用できます。
- * 二次配布も制限はしませんが、サポートは行いません。
- * 著作表示は任意です。行わなくても利用できます。
- * 要するに、特に規約はありません。
- * バグ報告や使用方法等のお問合せはネ実ツクールスレ、または、Twitterにお願いします。
- * https://twitter.com/yanatsuki_
- * 素材利用は自己責任でお願いします。
- * ------------------------------------------------------
- * 更新履歴:
- * ver1.00:
- * 公開
- */
+@plugindesc ver1.00/Add SceneDistribution to the menu commands.
+@author Yana
+@url https://github.com/munokura/Yana-MV-plugins
+@license MIT License
+
+@help
+English Help Translator: munokura
+This is an unofficial English translation of the plugin help,
+created to support global RPG Maker users.
+Feedback is welcome to improve translation quality
+(see: https://github.com/munokura/Yana-MV-plugins ).
+Original plugin by Yana.
+-----
+How to Use
+--------------------------------------------------------------------
+
+Set the plugin parameters to run it.
+
+------------------------------------------------------
+Terms of Use
+--------------------------------------------------------------------
+This plugin is released under the MIT License.
+http://opensource.org/licenses/mit-license.php
+--------------------------------------------------------------------
+Update History:
+ver. 1.00:
+Released
+
+@param Distribution Name
+@desc The item name that will be displayed in the menu.
+@default ステータス振分
+*/
+
+
+/*:ja
+@plugindesc ver1.00/メニューコマンドにSceneDistributionを追加します。
+@author Yana
+@url https://github.com/munokura/Yana-MV-plugins
+@license MIT License
+
+@help
+使用方法
+------------------------------------------------------
+
+プラグインパラメータを設定すれば動作します。
+
+------------------------------------------------------
+利用規約
+------------------------------------------------------
+当プラグインはMITライセンスで公開されています。
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+更新履歴:
+ver1.00:
+公開
+
+@param Distribution Name
+@desc メニューに表示される項目名です。
+@default ステータス振分
+*/
 
 (function(){    
     ////////////////////////////////////////////////////////////////////////////////////    

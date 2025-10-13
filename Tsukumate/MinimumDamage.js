@@ -13,41 +13,78 @@
 var Imported = Imported || {};
 Imported['MinimumDamage'] = 1.00;
 /*:
- * @target MZ MV
- * @url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Tsukumate/MinimumDamage.js
- * @plugindesc ver1.00/ダメージの最低値を設定します。
- * @author Yana
- * 
- * @param MinimumHpDamage
- * @text HPダメージ最低値
- * @type number
- * @desc HPダメージの最低値です。
- * @default 1
- * 
- * @param MinimumMpDamage
- * @text MPダメージ最低値
- * @type number
- * @desc MPダメージの最低値です。
- * @default 1
- * 
- * @help
- * ------------------------------------------------------
- * 利用規約
- * ------------------------------------------------------
- * 当プラグインはMITライセンスで公開されています。
- * 使用に制限はありません。商用、アダルト、いずれにも使用できます。
- * 二次配布も制限はしませんが、サポートは行いません。
- * 著作表示は任意です。行わなくても利用できます。
- * 要するに、特に規約はありません。
- * バグ報告や使用方法等のお問合せはネ実ツクールスレ、
- * または、Twitterにお願いします。
- * https://twitter.com/yanatsuki_/
- * 素材利用は自己責任でお願いします。
- * ------------------------------------------------------
- * 更新履歴:
- * ver1.00:
- * 公開
- */
+@target MZ MV
+@plugindesc ver1.00/Sets the minimum damage value.
+@author Yana
+@url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Tsukumate/MinimumDamage.js
+@license MIT License
+
+@help
+English Help Translator: munokura
+This is an unofficial English translation of the plugin help,
+created to support global RPG Maker users.
+Feedback is welcome to improve translation quality
+(see: https://github.com/munokura/Yana-MV-plugins ).
+Original plugin by Yana.
+-----
+Sets the minimum damage value.
+
+------------------------------------------------------
+Terms of Use
+------------------------------------------------------
+This plugin is released under the MIT License.
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+Update History:
+ver. 1.00:
+Released
+
+@param MinimumHpDamage
+@text Minimum HP damage
+@desc This is the minimum HP damage.
+@default 1
+@type number
+
+@param MinimumMpDamage
+@text MP Damage Minimum
+@desc This is the minimum MP damage.
+@default 1
+@type number
+*/
+
+
+/*:ja
+@target MZ MV
+@plugindesc ver1.00/ダメージの最低値を設定します。
+@author Yana
+@url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Tsukumate/MinimumDamage.js
+@license MIT License
+
+@help
+ダメージの最低値を設定します。
+
+------------------------------------------------------
+利用規約
+------------------------------------------------------
+当プラグインはMITライセンスで公開されています。
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+更新履歴:
+ver1.00:
+公開
+
+@param MinimumHpDamage
+@text HPダメージ最低値
+@desc HPダメージの最低値です。
+@default 1
+@type number
+
+@param MinimumMpDamage
+@text MPダメージ最低値
+@desc MPダメージの最低値です。
+@default 1
+@type number
+*/
 
 // プラグインパラメータやエイリアスを使うため、グローバル汚染回避のためクロージャーとして定義
 
