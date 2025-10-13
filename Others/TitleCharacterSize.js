@@ -12,48 +12,85 @@
 
 var Imported = Imported || {};
 Imported['TitleCharacterSize'] = 1.001;
-
 /*:
- * @target MZ MV
- * @url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Others/TitleCharacterSize.js
- * @plugindesc ver1.001/タイトルの文字サイズを変更します。
- * @author Yana
- *
- * @param FontSize
- * @text タイトルのフォントサイズ
- * @desc タイトルのフォントサイズです。
- * @default 72
- * @type number
- *
- * @help
- * ------------------------------------------------------
- * 使い方
- * ------------------------------------------------------
- * 導入することで動作します。
- * ただし、タイトルでは変数は使用できません。
- * ------------------------------------------------------
- *  プラグインコマンドはありません。
- * ------------------------------------------------------
- *
- * ------------------------------------------------------
- * 利用規約
- * ------------------------------------------------------
- * 当プラグインはMITライセンスで公開されています。
- * 使用に制限はありません。商用、アダルト、いずれにも使用できます。
- * 二次配布も制限はしませんが、サポートは行いません。
- * 著作表示は任意です。行わなくても利用できます。
- * 要するに、特に規約はありません。
- * バグ報告や使用方法等のお問合せはネ実ツクールスレ、
- * または、Twitterにお願いします。
- * https://twitter.com/yanatsuki_
- * 素材利用は自己責任でお願いします。
- * ------------------------------------------------------
- * 更新履歴:
- * ver1.001:180410
- * プラグインパラメータの仕様を1.5.0に更新。
- * ver1.00:
- * 公開
- */
+@target MZ MV
+@plugindesc ver1.001/Change the title font size.
+@author Yana
+@url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Others/TitleCharacterSize.js
+@license MIT License
+
+@help
+English Help Translator: munokura
+This is an unofficial English translation of the plugin help,
+created to support global RPG Maker users.
+Feedback is welcome to improve translation quality
+(see: https://github.com/munokura/Yana-MV-plugins ).
+Original plugin by Yana.
+-----
+------------------------------------------------------
+How to Use
+------------------------------------------------------
+It will work once installed.
+However, variables cannot be used in titles.
+-----------------------------------------------------
+There are no plugin commands.
+-----------------------------------------------------
+
+------------------------------------------------------
+Terms of Use
+------------------------------------------------------
+This plugin is released under the MIT License.
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+Update History:
+ver1.001:180410
+Plugin parameter specifications updated to 1.5.0.
+ver1.00:
+Released
+
+@param FontSize
+@text Title font size
+@desc The font size of the title.
+@default 72
+@type number
+*/
+
+
+/*:ja
+@target MZ MV
+@plugindesc ver1.001/タイトルの文字サイズを変更します。
+@author Yana
+@url https://raw.githubusercontent.com/munokura/Yana-MV-plugins/master/Others/TitleCharacterSize.js
+@license MIT License
+
+@help
+------------------------------------------------------
+使い方
+------------------------------------------------------
+導入することで動作します。
+ただし、タイトルでは変数は使用できません。
+------------------------------------------------------
+ プラグインコマンドはありません。
+------------------------------------------------------
+
+------------------------------------------------------
+利用規約
+------------------------------------------------------
+当プラグインはMITライセンスで公開されています。
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+更新履歴:
+ver1.001:180410
+プラグインパラメータの仕様を1.5.0に更新。
+ver1.00:
+公開
+
+@param FontSize
+@text タイトルのフォントサイズ
+@desc タイトルのフォントサイズです。
+@default 72
+@type number
+*/
 
 (function () {
 

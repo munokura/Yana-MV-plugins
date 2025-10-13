@@ -13,30 +13,42 @@
 var Imported = Imported || {};
 Imported['EraseReloadAlert'] = 1.00;
 /*:
- * @plugindesc ver1.00/F5を押した時に表示されるアラートを無効化します。
- * @author Yana
- * ------------------------------------------------------
- * 利用規約
- * ------------------------------------------------------
- * 当プラグインはMITライセンスで公開されています。
- * 使用に制限はありません。商用、アダルト、いずれにも使用できます。
- * 二次配布も制限はしませんが、サポートは行いません。
- * 著作表示は任意です。行わなくても利用できます。
- * 要するに、特に規約はありません。
- * バグ報告や使用方法等のお問合せはネ実ツクールスレ、または、Twitterにお願いします。
- * https://twitter.com/yanatsuki_
- * 素材利用は自己責任でお願いします。
- * ------------------------------------------------------
- * 更新履歴:
- * ver1.00:
- * 公開
- */
+@plugindesc ver1.00/Disables the alert that appears when you press F5.
+@author Yana
+@url https://github.com/munokura/Yana-MV-plugins
+@license MIT License
+@help
+Disables the alert that appears when you press F5.
 
-(function() {
+--------------------------------------------------------------------
+Terms of Use
+------------------------------------------------------
+This plugin is released under the MIT License.
+http://opensource.org/licenses/mit-license.php
+*/
+
+
+/*:ja
+@plugindesc ver1.00/F5を押した時に表示されるアラートを無効化します。
+@author Yana
+@url https://github.com/munokura/Yana-MV-plugins
+@license MIT License
+@help
+F5を押した時に表示されるアラートを無効化します。
+
+------------------------------------------------------
+利用規約
+------------------------------------------------------
+当プラグインはMITライセンスで公開されています。
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+*/
+
+(function () {
     ////////////////////////////////////////////////////////////////////////////////////
 
     // 再定義
-    SceneManager.onKeyDown = function(event) {
+    SceneManager.onKeyDown = function (event) {
         if (!event.ctrlKey && !event.altKey) {
             switch (event.keyCode) {
                 case 116:   // F5

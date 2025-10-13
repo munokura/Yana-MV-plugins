@@ -12,42 +12,77 @@
 
 var Imported = Imported || {};
 Imported['VariableSizeAnimation'] = 1.01;
-
 /*:
- * @plugindesc ver1.01/アニメーションで設定する画像サイズをアニメの名称に合わせて可変にします。
- * @author Yana
- *
- * @help ------------------------------------------------------
- * 使用方法
- * ------------------------------------------------------
- * アニメーションのファイル名に(size)または、(width,height)を追加することで、
- * そのアニメーションの1セルのサイズを変更することができます。
- *
- * サイズを変更することで、より大きなアニメを使用したり、より小さなアニメで軽量化したりといったことができます。
- *
- * 使い方手順
- * 1．まず、通常サイズの画像でアニメーションを作成します。この際、アニメの座標が画像の中心であることに注意します。
- * 2．作成したアニメの画像を(size)また、(width,height)を含むものに変更します。
- * (この際、下のアニメセル欄の表示とアニメのテスト再生が正常でなくなりますが、ゲーム中は正常に動作します)
- *
- * ------------------------------------------------------
- * 利用規約
- * ------------------------------------------------------
- * 当プラグインはMITライセンスで公開されています。
- * 使用に制限はありません。商用、アダルト、いずれにも使用できます。
- * 二次配布も制限はしませんが、サポートは行いません。
- * 著作表示は任意です。行わなくても利用できます。
- * 要するに、特に規約はありません。
- * バグ報告や使用方法等のお問合せはネ実ツクールスレ、または、Twitterにお願いします。
- * https://twitter.com/yanatsuki_
- * 素材利用は自己責任でお願いします。
- * ------------------------------------------------------
- * 更新履歴:
- * ver1.01:
- * アニメ画像1とアニメ画像2でサイズ指定が違う時、片方のサイズが正常でないバグを修正
- * ver1.00:
- * 公開
- */
+@plugindesc ver1.01/The image size set in animation can be changed to match the name of the animation.
+@author Yana
+@url https://github.com/munokura/Yana-MV-plugins
+@license MIT License
+
+@help
+English Help Translator: munokura
+This is an unofficial English translation of the plugin help,
+created to support global RPG Maker users.
+Feedback is welcome to improve translation quality
+(see: https://github.com/munokura/Yana-MV-plugins ).
+Original plugin by Yana.
+-----
+How to Use
+--------------------------------------------------------------------
+By adding (size) or (width, height) to the animation filename,
+you can change the size of each cell in that animation.
+
+Changing the size allows you to use larger animations or smaller animations for lighter performance.
+
+How to Use
+1. First, create an animation using a normal-sized image. Be sure to center the animation coordinates at the center of the image.
+2. Change the image of the created animation to one that includes (size) or (width, height).
+(This will cause the display in the animation cell column below and the animation test playback to behave abnormally, but the game will function normally.)
+
+------------------------------------------------------
+Terms of Use
+------------------------------------------------------
+This plugin is released under the MIT License.
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+Update History:
+ver 1.01:
+Fixed a bug where one of the sizes was incorrect when the size specifications for Animated Image 1 and Animated Image 2 were different.
+ver 1.00:
+Released
+*/
+
+
+/*:ja
+@plugindesc ver1.01/アニメーションで設定する画像サイズをアニメの名称に合わせて可変にします。
+@author Yana
+@url https://github.com/munokura/Yana-MV-plugins
+@license MIT License
+
+@help
+使用方法
+------------------------------------------------------
+アニメーションのファイル名に(size)または、(width,height)を追加することで、
+そのアニメーションの1セルのサイズを変更することができます。
+
+サイズを変更することで、より大きなアニメを使用したり、より小さなアニメで軽量化したりといったことができます。
+
+使い方手順
+1．まず、通常サイズの画像でアニメーションを作成します。この際、アニメの座標が画像の中心であることに注意します。
+2．作成したアニメの画像を(size)また、(width,height)を含むものに変更します。
+(この際、下のアニメセル欄の表示とアニメのテスト再生が正常でなくなりますが、ゲーム中は正常に動作します)
+
+------------------------------------------------------
+利用規約
+------------------------------------------------------
+当プラグインはMITライセンスで公開されています。
+http://opensource.org/licenses/mit-license.php
+------------------------------------------------------
+更新履歴:
+ver1.01:
+アニメ画像1とアニメ画像2でサイズ指定が違う時、片方のサイズが正常でないバグを修正
+ver1.00:
+公開
+*/
 
 (function() {
 
